@@ -7,31 +7,31 @@
       "title": "ALEPH Arena",
       "images": [
         {
-          "url": "/assets/arena/web-main.png",
+          "url": "/assets/arena/web-main-v2.jpg",
           "title": "01 · 게임 웹사이트 메인",
           "width": 1513,
           "height": 1039
         },
         {
-          "url": "/assets/arena/web-login.png",
+          "url": "/assets/arena/web-login-v2.jpg",
           "title": "02 · 로그인 화면",
           "width": 1513,
           "height": 1039
         },
         {
-          "url": "/assets/arena/web-signup.png",
+          "url": "/assets/arena/web-signup-v2.jpg",
           "title": "03 · 회원가입 화면",
           "width": 1514,
           "height": 1039
         },
         {
-          "url": "/assets/arena/game-main.png",
+          "url": "/assets/arena/game-main-v2.jpg",
           "title": "04 · 게임 클라이언트 메인",
           "width": 1278,
           "height": 748
         },
         {
-          "url": "/assets/arena/game-play.png",
+          "url": "/assets/arena/game-play-v2.jpg",
           "title": "05 · 인게임 플레이",
           "width": 1276,
           "height": 746
