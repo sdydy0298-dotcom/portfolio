@@ -19,7 +19,7 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_PUBLISHABLE_KEY) {
 // Detailed project records remain in the original content source.
 content = { version: local.version, updatedAt: local.updatedAt, projects: local.projects.map(versioned => {
   const published = content.projects.find(item => item.id === versioned.id);
-  return { id: versioned.id, title: published?.title || versioned.title, images: versioned.images || [] };
+  return { id: versioned.id, title: published?.title || versioned.title, images: versioned.images || [], topologies: versioned.topologies || [] };
 }) };
 await mkdir('dist', { recursive: true });
 for (const file of ['index.html', 'styles.css', 'app.js']) await copyFile(file, `dist/${file}`);

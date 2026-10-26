@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-26",
+  "updatedAt": "2026-10-27",
   "projects": [
     {
       "id": "aleph-arena",
@@ -35,6 +35,16 @@
           "title": "05 · 인게임 플레이",
           "width": 1276,
           "height": 746
+        }
+      ],
+      "topologies": [
+        {
+          "url": "/assets/arena/topology.png",
+          "title": "전체 토폴로지",
+          "caption": "한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC의 연결 구조",
+          "width": 2500,
+          "height": 1550,
+          "overview": true
         }
       ]
     },
@@ -71,12 +81,48 @@
           "title": "05 · 로그인 성공 후 사용자 표시",
           "width": 1917,
           "height": 952
-        },
+        }
+      ],
+      "topologies": [
         {
           "url": "/assets/enterprise/topology.png",
-          "title": "06 · 전체 네트워크 토폴로지",
+          "title": "전체 토폴로지",
+          "caption": "본사·지사·IDC·FTTH 고객망을 ISP·IX 구간으로 연결한 전체 구성",
           "width": 2048,
-          "height": 1831
+          "height": 1832,
+          "overview": true
+        },
+        {
+          "url": "/assets/enterprise/topology-idc.png",
+          "title": "IDC",
+          "caption": "Spine–Leaf와 WEB·WAS·DB·인프라·관리망 구성",
+          "width": 972,
+          "height": 722,
+          "overview": false
+        },
+        {
+          "url": "/assets/enterprise/topology-head-office.png",
+          "title": "본사 · Head Office",
+          "caption": "서버팜·사무망·관리망 분리와 UTM·DHCP 구성",
+          "width": 687,
+          "height": 622,
+          "overview": false
+        },
+        {
+          "url": "/assets/enterprise/topology-branch-office.png",
+          "title": "지사 · Branch Office",
+          "caption": "지사 WAN 연결과 UTM·DHCP 기반 사무망 구성",
+          "width": 557,
+          "height": 632,
+          "overview": false
+        },
+        {
+          "url": "/assets/enterprise/topology-ftth.png",
+          "title": "FTTH · 가정 고객망",
+          "caption": "가정별 Home Router와 ISP 연결 구조",
+          "width": 892,
+          "height": 727,
+          "overview": false
         }
       ]
     }
