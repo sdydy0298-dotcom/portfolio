@@ -5,7 +5,7 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_PUBLISHABLE_KEY) {
   const base = new URL(process.env.SUPABASE_URL);
   if (base.protocol !== 'https:' || !base.hostname.endsWith('.supabase.co')) throw new Error('Invalid Supabase URL');
   const response = await fetch(new URL('/rest/v1/se_portfolio_content?id=eq.main&is_published=eq.true&select=payload', base), {
-    headers: { apikey: process.env.SUPABASE_PUBLISHABLE_KEY }, signal: AbortSignal.timeout(12000)
+    headers: { apikey: process.env.SUPABASE_PUBLISHABLE_KEY, 'Accept-Profile': 'defense' }, signal: AbortSignal.timeout(12000)
   });
   if (!response.ok) throw new Error(`Portfolio content fetch failed (${response.status})`);
   const rows = await response.json();

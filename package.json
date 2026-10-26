@@ -9,6 +9,6 @@
     "sync:sql": "node scripts/sync-content.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": "24.x"
   }
 }

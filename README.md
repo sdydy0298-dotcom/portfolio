@@ -6,7 +6,7 @@ Version **1.0.0** · 기준일 2026-10-26
 
 ## 로컬 확인
 
-Node.js 22 이상. 외부 런타임 의존성 없이 동작합니다.
+Node.js 24.x. 외부 런타임 의존성 없이 동작합니다.
 
 ```bash
 npm run check
@@ -27,7 +27,7 @@ python3 -m http.server 8000 --directory dist
 
 ## GitHub → Vercel → Supabase
 
-GitHub `main` 변경을 Vercel이 배포합니다. Vercel은 빌드 시 Supabase `aleph_common`의 `public.se_portfolio_content`에서 `id=main`, `is_published=true`의 `payload`를 읽습니다. 브라우저는 빌드된 정적 JSON만 읽으며 Supabase 키를 전달받지 않습니다.
+GitHub `main` 변경을 Vercel이 배포합니다. Vercel은 빌드 시 Supabase `aleph_common`의 `defense.se_portfolio_content`에서 `id=main`, `is_published=true`의 `payload`를 읽습니다. REST 조회에는 `Accept-Profile: defense`를 명시합니다. 기존 API가 defense만 노출하므로 다른 스키마의 노출 설정을 변경하지 않습니다. 브라우저는 빌드된 정적 JSON만 읽으며 Supabase 키를 전달받지 않습니다.
 
 Vercel 환경 변수:
 
