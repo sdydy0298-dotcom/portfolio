@@ -15,6 +15,12 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_PUBLISHABLE_KEY) {
 } else {
   console.log('Local preview: using versioned content.json');
 }
+// Only the public two-page presentation fields are shipped to browsers.
+// Detailed project records remain in the original content source.
+content = { version: local.version, updatedAt: local.updatedAt, projects: local.projects.map(versioned => {
+  const published = content.projects.find(item => item.id === versioned.id);
+  return { id: versioned.id, title: published?.title || versioned.title, images: versioned.images || [] };
+}) };
 await mkdir('dist', { recursive: true });
 for (const file of ['index.html', 'styles.css', 'app.js']) await copyFile(file, `dist/${file}`);
 await cp('assets', 'dist/assets', { recursive: true });

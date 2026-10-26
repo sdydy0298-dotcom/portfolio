@@ -4,290 +4,81 @@
   "projects": [
     {
       "id": "aleph-arena",
-      "number": "01",
-      "label": "TEAM PROJECT",
       "title": "ALEPH Arena",
-      "subtitle": "게임 서버·네트워크 설계 및 구축",
-      "status": "핵심 서비스 동작 확인",
-      "period": "2026.09.17 — 09.23",
-      "team": "5인 팀 프로젝트",
-      "role": "전체 네트워크 공통 설계 주도 · 한국 IDC 구축 · 서비스 배포 및 통합 검증",
-      "summary": "한국과 일본 거점을 연결한 게임 회사 인프라. 직접 구축한 한국 IDC에서 웹사이트를 제공하고, Windows 클라이언트와 Linux 게임 서버를 연결해 실제 플레이를 확인했습니다.",
-      "tags": [
-        "Rocky Linux 9",
-        "VLAN · OSPF",
-        "Nginx · Tomcat",
-        "MariaDB · BIND",
-        "Godot"
-      ],
-      "diagram": [
-        [
-          "한국 본사",
-          "개발 · QA",
-          "일본 거점"
-        ],
-        [
-          "WAN · ISP"
-        ],
-        [
-          "한국 IDC"
-        ],
-        [
-          "WEB · WAS",
-          "GAME",
-          "DB · DNS"
-        ]
-      ],
-      "diagramCaption": "전체 거점의 공통 설계와 한국 IDC를 중심으로 재구성한 개념도입니다. 한국 본사·개발/QA·일본 지사·일본 IDC의 개별 구축은 팀원이 담당했습니다.",
-      "overview": "한국·일본 거점을 둔 게임 회사를 가정해 네트워크와 서비스를 함께 구축했습니다. 전체 토폴로지, IP·VLAN·WAN 연결 기준을 설계하고, 한국 IDC의 Linux 서버 설치부터 웹·게임 배포까지 담당했습니다.",
-      "decisions": [
-        "거점별 IP 대역을 구분하고 VLSM으로 조직·서비스별 서브넷을 배분했습니다.",
-        "서비스·DB·DNS·관리망을 VLAN으로 나누고 Distribution SVI를 게이트웨이로 구성했습니다.",
-        "일정에 맞춰 초기 이중화 계획을 단일 3-Tier로 조정하고, 거점 연결과 실제 서비스 동작을 우선 검증했습니다.",
-        "각 팀원의 GNS3 환경을 UDP Tunnel로 연결하고 목적지와 반환 경로를 함께 점검했습니다."
-      ],
-      "components": [
-        [
-          "네트워크",
-          "VLAN·SVI·OSPF·정적 라우팅 적용, IDC와 다른 거점의 경로 점검",
-          "IDC Core의 OSPF 학습·정적 경로 확인"
-        ],
-        [
-          "Web / Nginx",
-          "웹 파일 배포, 경로·권한 설정, /api/ 요청의 Tomcat 프록시 구성",
-          "메인 화면 및 서비스 주소의 Tomcat HTTP 200 확인"
-        ],
-        [
-          "WAS / Tomcat",
-          "OpenJDK 11·Tomcat 설치, JAVA_HOME 설정, Java WAR 배포",
-          "Web–WAS 프록시 응답 확인"
-        ],
-        [
-          "DB / MariaDB",
-          "애플리케이션 DB·계정·권한 및 수신 주소·TCP 3306 접근 범위 설정",
-          "WAS 접속에 필요한 DB 환경 준비"
-        ],
-        [
-          "DNS / BIND",
-          "Authoritative·Cache DNS 분리, 내부 Zone·A 레코드·전달 설정",
-          "Auth 직접 응답 확인, Cache SERVFAIL 진단"
-        ],
-        [
-          "Game / Godot",
-          "Linux 전용 서버 Export·배포, 실행 권한과 ENet UDP 7000 설정",
-          "Windows 클라이언트 연결 및 실제 게임 실행"
-        ],
-        [
-          "Client / Launcher",
-          "Windows 게임 Export, .NET SDK로 C# 런처 빌드, 배포 경로 설정",
-          "런처 빌드·클라이언트 실행 확인"
-        ]
-      ],
-      "troubles": [
+      "images": [
         {
-          "title": "웹 배포 후 403 Forbidden",
-          "symptom": "웹 파일을 배포했지만 메인 페이지에 접근할 수 없었습니다.",
-          "investigation": "파일 존재와 권한을 확인한 뒤 ls -Z로 SELinux 타입을 확인했습니다. 콘텐츠에 user_tmp_t가 적용돼 있었습니다.",
-          "action": "배포 경로에 httpd_sys_content_t를 등록하고 restorecon으로 적용했습니다. 디렉터리 755·파일 644와 Nginx 설정을 함께 점검했습니다.",
-          "result": "조치 후 ALEPH Arena 메인 페이지가 정상 출력됐습니다."
+          "url": "/assets/arena/web-main.png",
+          "title": "01 · 게임 웹사이트 메인",
+          "width": 1513,
+          "height": 1039
         },
         {
-          "title": "접속 주소에 따라 달랐던 /api/ 응답",
-          "symptom": "localhost/api/는 404, 실제 Web IP의 /api/는 Tomcat HTTP 200을 반환했습니다.",
-          "investigation": "curl -v로 요청 경로를 비교해 localhost 요청이 IPv6 ::1:80의 기본 server block으로 들어가는 것을 확인했습니다.",
-          "action": "요청 주소·IP 버전·server block을 나눠 확인해 실제 서비스 주소의 프록시 경로를 검증했습니다.",
-          "result": "실제 Web IPv4 주소의 Web–WAS 연결이 정상임을 확인했습니다."
+          "url": "/assets/arena/web-login.png",
+          "title": "02 · 로그인 화면",
+          "width": 1513,
+          "height": 1039
         },
         {
-          "title": "Cache DNS의 SERVFAIL 범위 진단",
-          "symptom": "Authoritative DNS 직접 질의는 정상이지만 Cache DNS 경유 시 SERVFAIL이 발생했습니다.",
-          "investigation": "같은 이름의 일반 질의와 +cdflag 질의를 비교했습니다.",
-          "action": "검증을 비활성화한 질의에서 NOERROR·10.30.0.10 A 레코드가 반환되는 것을 확인했습니다.",
-          "result": "Cache DNS의 검증 단계로 원인 범위를 좁혔습니다."
+          "url": "/assets/arena/web-signup.png",
+          "title": "03 · 회원가입 화면",
+          "width": 1514,
+          "height": 1039
+        },
+        {
+          "url": "/assets/arena/game-main.png",
+          "title": "04 · 게임 클라이언트 메인",
+          "width": 1278,
+          "height": 748
+        },
+        {
+          "url": "/assets/arena/game-play.png",
+          "title": "05 · 인게임 플레이",
+          "width": 1276,
+          "height": 746
         }
-      ],
-      "results": [
-        "Windows 게임 클라이언트와 Linux 전용 서버를 연결해 실제 게임 플레이를 확인했습니다.",
-        "한국 IDC의 웹 메인 화면 및 Web–WAS 프록시 응답을 확인했습니다.",
-        "거점 간 연결과 목적지·반환 경로를 팀원들과 단계적으로 점검했습니다."
-      ],
-      "scopeNote": "전체 네트워크의 공통 설계는 주도했고 한국 IDC는 직접 구축했습니다. 타 거점의 개별 구축은 팀원의 역할입니다. Web–WAS HTTP 응답 확인과 회원가입·로그인·DB 통합 검증은 구분합니다.",
-      "next": [
-        "실제 GNS3 구축 화면, 인게임 화면과 웹 화면을 증빙 이미지로 추가할 예정입니다."
-      ],
-      "images": [],
-      "source": "https://app.notion.com/p/ALEPH-Arena-40252dec520181ea839df4f672e51800"
+      ]
     },
     {
       "id": "smdc",
-      "number": "02",
-      "label": "PERSONAL PROJECT",
       "title": "Enterprise Network",
-      "subtitle": "온라인 쇼핑몰 기업의 네트워크·서버 구축",
-      "status": "구축·검증 진행 중",
-      "period": "2026.10 — 진행 중",
-      "team": "개인 프로젝트",
-      "role": "전체 네트워크 설계 · 본사·지사·데이터센터 구축 · 웹·DB·운영 서버 연결 및 통신 확인",
-      "summary": "온라인 쇼핑몰 StarMall을 운영하는 가상의 기업을 바탕으로, 본사와 지사, 데이터센터, 가정의 인터넷 이용 환경을 연결하는 개인 프로젝트입니다. 업무용 네트워크를 나누고 웹·DB 서버 등을 구축하며, 외부 사용자도 쇼핑몰에 접속할 수 있도록 구성하고 있습니다.",
-      "tags": [
-        "본사 · 지사 · 데이터센터",
-        "가정 고객망 연결",
-        "웹 · DB 서버",
-        "Spine–Leaf · SLB",
-        "DNS · NTP · 로그"
-      ],
-      "diagram": [
-        [
-          "SPINE 01",
-          "SPINE 02"
-        ],
-        [
-          "BORDER",
-          "FR · SLB",
-          "WEB 1",
-          "APP 1"
-        ],
-        [
-          "DB · FW2",
-          "INF",
-          "MGMT"
-        ]
-      ],
-      "diagramCaption": "본사와 지사, IDC, FTTH 고객망을 ISP·IX 구간으로 연결한 전체 구성 개념도입니다. 본사·지사에는 UTM과 업무·관리망을, IDC에는 FW·IDS/IPS·Spine–Leaf·서버 서비스를 배치합니다. 상세 장비 배치와 주소는 실제 전체 토폴로지를 기준으로 관리합니다.",
-      "overview": "온라인 쇼핑몰 StarMall을 운영하며 본사와 지사를 둔 가상의 기업을 설정했습니다. 직원들이 사용하는 사내 네트워크와 쇼핑몰을 제공하는 데이터센터를 만들고, 가정의 사용자가 쇼핑몰에 접속하는 환경까지 함께 구축하고 있습니다. 전체 네트워크 설계부터 서버 설치, 접근 설정과 연결 확인을 직접 진행하는 개인 프로젝트입니다.",
-      "decisions": [
-        "본사·지사·IDC·FTTH 고객망의 역할을 나누고, 각 구간의 주소·게이트웨이·라우팅 경계를 설계했습니다.",
-        "본사의 서버팜·업무망·관리망을 분리하고, 본사·지사의 UTM 경계와 내부 접근 경로를 구성합니다.",
-        "ISP 라우터와 IX를 통해 거점을 연결하고, FTTH 고객의 DHCP·홈 라우터 NAT에서 IDC 서비스까지 이어지는 왕복 경로를 점검합니다.",
-        "IDC는 전체 프로젝트의 서버 서비스 영역이며, Spine 2대와 BORDER·FR·WEB·APP·DB·INF·MGMT의 7 Leaf를 기준으로 구성합니다.",
-        "IDC의 외부 경계에 FW1·IDS/IPS를, DB 접근 경계에 FW2를 배치하고 서비스·관리 트래픽의 접근 범위를 나눕니다.",
-        "StarMall WEB–WAS–DB, SLB VIP, DNS·NTP·메일·중앙 로그·Jump 관리 경로를 전체 네트워크와 연동합니다. 서비스별 구축과 최종 검증은 단계적으로 진행합니다."
-      ],
-      "components": [
-        [
-          "본사 / Head Office",
-          "서버팜·업무망·관리망 분리, UTM·내부 라우팅과 DHCP·DNS 환경 구성",
-          "영역별 구축·통신 검증 진행"
-        ],
-        [
-          "지사 / Branch Office",
-          "지사 라우터·UTM·업무망, 클라이언트 주소 할당과 상위망 연결",
-          "본사·IDC 방향 왕복 경로 검증 대상"
-        ],
-        [
-          "ISP / IX",
-          "거점 라우터·통신사업자 라우터·IX 연결과 경로 구성",
-          "목적지·반환 경로를 구간별 점검"
-        ],
-        [
-          "FTTH 고객망",
-          "홈 라우터·고객망 DHCP·NAT, 외부 고객의 IDC 서비스 접근",
-          "가정 PC의 주소·게이트웨이, 쇼핑몰 접속·로그인 후 화면 확인"
-        ],
-        [
-          "IDC / Spine–Leaf",
-          "Spine 2대·Leaf 7대, /30 Underlay와 /32 Loopback, OSPF 경로 설계",
-          "FR과 두 Spine의 OSPF FULL 확인 기록"
-        ],
-        [
-          "IDC / SLB",
-          "Rocky Linux 기반 HAProxy·Keepalived, Front·Backend VIP 구성",
-          "두 VIP의 동시 절체 확인 기록"
-        ],
-        [
-          "IDC / WEB·APP",
-          "WEB1~3 Nginx, WAS1·2 Java 11·Tomcat 9, WAR 배포·연동",
-          "단계별 구축·서비스 검증 진행"
-        ],
-        [
-          "IDC / DB·FW2",
-          "MariaDB DB1·DB2, APP→DB 접근 정책, Primary–Replica 및 수동 전환",
-          "구축·복제·전환 결과를 순차 확인"
-        ],
-        [
-          "IDC / INF",
-          "NS1·NS2·CNS1·NTP1·MX1·FTP1 가이드, Chrony 로컬 시간원 구성",
-          "NTP1 리스닝·로컬 시간원 상태 확인"
-        ],
-        [
-          "IDC / MGMT·LOG",
-          "Jump 경유 SSH 관리 경로와 rsyslog 중앙 수집 환경",
-          "접속 허용·차단 및 로그 수신 검증 대상"
-        ]
-      ],
-      "troubles": [
-        {
-          "title": "전체 네트워크와 IDC 내부 확장 범위 정리",
-          "symptom": "본사·지사·ISP/IX·FTTH까지 포함한 전체 설계와 IDC 내부의 랙 증설 목표를 함께 관리할 필요가 있었습니다.",
-          "investigation": "전체 거점의 연결 관계와 IDC의 100대 수용 목표·1차 서버 랙 범위를 나눠 검토했습니다.",
-          "action": "전체 토폴로지를 기준으로 거점 간 연결을 유지하면서, IDC는 7 Leaf·첫 번째 서버 랙 중심의 단계별 구축 범위로 정리했습니다.",
-          "result": "전체 네트워크 구축과 IDC의 단계별 구현·확장 계획을 구분해 관리하고 있습니다."
-        },
-        {
-          "title": "NTP 서버 상태와 실제 동기화 구분",
-          "symptom": "NTP 서비스가 실행 중이어도 외부 표준시각이나 클라이언트 동기화 성공까지 의미하지는 않았습니다.",
-          "investigation": "Reference ID·Stratum·Leap status와 UDP 123 리스닝, 클라이언트 수신 패킷 상태를 확인했습니다.",
-          "action": "NTP1의 로컬 시간원 동작과 각 클라이언트의 실제 응답 수신·동기화를 별도 검증 항목으로 나눴습니다.",
-          "result": "NTP1 서버의 로컬 시간원 상태를 확인했습니다. 전체 서버 동기화는 실제 수신 결과를 확인한 뒤 완료 처리합니다."
-        }
-      ],
-      "results": [
-        "FR Leaf에서 두 Spine과 OSPF FULL 상태를 확인한 기록이 있습니다.",
-        "SLB의 Front·Backend VIP가 함께 절체되는 동작을 확인한 기록이 있습니다.",
-        "NTP1의 로컬 시간원 상태와 UDP 123 리스닝을 확인했습니다. 외부 표준시각 동기화와는 구분합니다.",
-        "가정 PC의 IP 자동 할당 설정과 주소·게이트웨이를 확인하고, starmall.com 접속 및 로그인 후 사용자명·로그아웃 버튼 표시를 캡처했습니다."
-      ],
-      "scopeNote": "전체 구현 범위는 본사·지사·IDC·ISP/IX·FTTH 고객망입니다. 현재 프로젝트는 구축·검증 진행 중이며, 아래 확인 결과는 기록이 있는 IDC 항목을 중심으로 정리했습니다. 100대는 IDC의 논리적 수용 목표이고, 서비스별 장애 전환은 실제 검증 결과에 따라 갱신합니다.",
-      "next": [
-        "본사·지사 업무망·관리망과 DHCP·DNS의 통신·접근 정책 검증",
-        "ISP·IX를 통한 거점 간 라우팅과 반환 경로 확인",
-        "FTTH 고객망에서 서비스 접속 경로와 장애 발생·복구 동작을 추가 검증",
-        "IDC WEB–WAS–DB 연동·WAS 세션 복제·DB 수동 장애 전환 검증",
-        "DNS·NTP·메일·Jump·중앙 로그와 보안 경계의 통합 검증"
-      ],
       "images": [
         {
           "url": "/assets/enterprise/homepc-dhcp.png",
           "title": "01 · 가정 PC의 주소 자동 할당",
-          "caption": "IP 자동 할당 설정과 ipconfig에서 IPv4 192.168.211.101, 기본 게이트웨이 192.168.211.1을 확인했습니다. 이 화면은 주소 설정 확인 기록입니다.",
-          "layout": "wide",
           "width": 1917,
           "height": 950
         },
         {
           "url": "/assets/enterprise/homepc-web.png",
           "title": "02 · 가정 PC에서 쇼핑몰 접속",
-          "caption": "가정 PC의 브라우저에서 starmall.com으로 접속해 StarMall 메인 화면이 표시되는 것을 확인했습니다.",
-          "layout": "wide",
           "width": 1010,
           "height": 841
         },
         {
           "url": "/assets/enterprise/homepc-join.png",
           "title": "03 · 회원가입 화면",
-          "caption": "쇼핑몰의 회원가입 화면이 열리고 아이디·비밀번호 입력 항목이 표시되는 것을 확인했습니다.",
-          "layout": "half",
           "width": 1917,
           "height": 947
         },
         {
           "url": "/assets/enterprise/homepc-login.png",
           "title": "04 · 로그인 요청",
-          "caption": "테스트 계정을 입력한 로그인 화면입니다. 로그인 후 결과는 다음 화면에서 확인했습니다.",
-          "layout": "half",
           "width": 1917,
           "height": 961
         },
         {
           "url": "/assets/enterprise/homepc-login-success.png",
           "title": "05 · 로그인 성공 후 사용자 표시",
-          "caption": "로그인 후 test님 인사말과 로그아웃 버튼, 환영 메시지가 표시되는 것을 확인했습니다.",
-          "layout": "wide",
           "width": 1917,
           "height": 952
+        },
+        {
+          "url": "/assets/enterprise/topology.png",
+          "title": "06 · 전체 네트워크 토폴로지",
+          "width": 2048,
+          "height": 1831
         }
-      ],
-      "source": "https://app.notion.com/p/40352dec5201810a81f2f4eebc17eb01"
+      ]
     }
   ]
 }
