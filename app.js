@@ -1,12 +1,214 @@
 'use strict';
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const safeURL=value=>{if(typeof value!=='string'||!value.trim())return '';try{const url=new URL(value,location.origin);return ['https:','http:'].includes(url.protocol)?url.href:'';}catch{return '';}};
-const compact={
- 'aleph-arena':{type:'팀 프로젝트 · 5인',period:'2026.09.17 — 09.23',cover:'/assets/arena/web-main-v2.jpg',coverWidth:1513,coverHeight:1039,coverAlt:'ALEPH Arena 웹사이트 메인 화면',coverLabel:'웹사이트 · 게임 클라이언트',subtitle:'한국·일본 거점을 연결한 게임 회사 인프라',role:'전체 네트워크 공통 설계 주도, 한국 IDC 구축과 웹·게임 서버 배포',fix:'웹 403 오류의 SELinux 컨텍스트를 확인하고 수정해 접근 복구',result:'웹 메인·Web–WAS 응답 확인, Windows 클라이언트와 Linux 서버 간 실제 게임 플레이',stack:'Rocky Linux · Nginx · Tomcat · MariaDB · BIND · VLAN · OSPF · Static Route · Godot',work:[['네트워크 설계','거점별 IP·VLAN과 내부·WAN 연결 기준 설계, 구간별 통신 점검'],['한국 IDC 구축','Linux 웹·WAS·DB·DNS 환경 구성 및 게임 서버 배포'],['동작 검증','Web–WAS 응답과 게임 클라이언트 접속·플레이 확인']],network:[['거점 연결','한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 WAN으로 연결'],['망 분리','사용자·서비스·DB/스토리지·인프라·운영관리망을 VLAN으로 구분'],['라우팅','한국 IDC의 OSPF 학습·정적 경로를 확인하고, 거점 연결에 필요한 기본·반환 경로를 점검'],['팀 환경 연동','서로 다른 실습 환경을 UDP Tunnel과 WAN 인계 주소로 연결']],teamResult:'팀 전체 결과에는 일본 IDC의 Nginx–Tomcat–MariaDB 연동, Health API 응답, Game Token 발급·검증과 사용 기록 반영이 포함됩니다.',note:'한국 IDC 구축과 웹·게임 서버 배포는 직접 맡았으며, 다른 거점의 개별 구축은 팀원이 담당했습니다. 한국 환경의 게임 플레이 확인과 일본 IDC 외부 클라이언트의 UDP 접속 전체 시험은 별개입니다. 일본 IDC의 전체 게임 접속 시험과 게이트웨이·회선 이중화는 후속 검증·확장 범위입니다.',troubles:[{title:'웹 배포 후 403 Forbidden',symptom:'파일이 존재하고 권한도 설정했지만 웹페이지에 접근할 수 없었습니다.',action:'ls -Z로 user_tmp_t 컨텍스트를 확인했습니다. 배포 경로에 httpd_sys_content_t를 등록하고 restorecon으로 적용했습니다.',result:'SELinux를 유지한 상태에서 메인 페이지 접근을 복구했습니다.'},{title:'주소에 따라 달랐던 /api/ 응답',symptom:'localhost/api/는 404, 실제 Web IP에서는 Tomcat HTTP 200이 반환됐습니다.',action:'curl -v로 IPv6 ::1의 기본 server block과 실제 IPv4 서비스 요청을 구분했습니다.',result:'실제 서비스 주소의 Web–WAS 프록시 응답이 정상임을 확인했습니다.'}]},
- 'smdc':{type:'개인 프로젝트 · 진행 중',period:'2026.10 — 현재',cover:'/assets/enterprise/homepc-login-success.png',coverWidth:1917,coverHeight:952,coverAlt:'가정 PC에서 StarMall 로그인 후 사용자명이 표시된 화면',coverLabel:'StarMall · 고객망 접속 확인',subtitle:'본사·지사·IDC·가정 고객망을 연결한 기업 네트워크',role:'전체 네트워크 설계, Linux 서버·서비스 구축 및 고객망 접속 검증',fix:'Spine–Leaf로 IDC 구성, HAProxy·Keepalived로 부하 분산과 VIP 절체 구현',result:'OSPF FULL·Front/Backend VIP 동시 절체 확인, 가정 PC에서 쇼핑몰 접속·로그인 확인',stack:'OSPF · pfSense · HAProxy · Keepalived · Nginx · Tomcat · MariaDB · Chrony',work:[['전체 망 설계','본사·지사·ISP/IX·FTTH·IDC의 주소와 연결 경로 구성'],['IDC 구축','Spine–Leaf·SLB·WEB–WAS–DB와 운영 서비스 구성'],['검증 기록','두 Spine의 OSPF FULL, VIP 절체와 고객망 쇼핑몰 접속 확인']],network:[['IDC','Spine–Leaf에 WEB·WAS·DB·인프라·관리망을 배치'],['본사·지사','서버팜·사무망·관리망을 나누고 WAN 구간과 연결'],['FTTH 고객망','가정 PC → Home Router → ISP/IX → IDC 서비스의 접속 경로 구성']],note:'구축·검증 진행 중입니다. DB 복제·장애 전환, WAS 세션 복제와 전체 운영 서비스의 통합 검증은 후속 작업입니다. 100대는 IDC의 설계상 수용 목표입니다.',troubles:[{title:'NTP 서비스 실행과 실제 동기화 구분',symptom:'서비스가 실행 중이어도 클라이언트가 실제로 시간을 동기화했는지는 별도 확인이 필요했습니다.',action:'Reference ID·Stratum·Leap status·UDP 123 리스닝을 확인하고 클라이언트 응답 수신을 별도 점검 항목으로 분리했습니다.',result:'NTP1의 로컬 시간원 동작을 확인했습니다. 외부 표준시각·전체 클라이언트 동기화는 추가 검증 대상으로 남겼습니다.'}]}
+const compact = {
+  "aleph-arena": {
+    "type": "팀 프로젝트 · 5인",
+    "period": "2026.09.17 — 09.23",
+    "cover": "/assets/arena/web-main-v2.jpg",
+    "coverWidth": 1513,
+    "coverHeight": 1039,
+    "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
+    "coverLabel": "웹사이트 · 게임 클라이언트",
+    "subtitle": "한국·일본 거점을 연결한 게임 회사 인프라",
+    "role": "전체 공통 설계 주도, 한국 IDC 네트워크·서버 구축과 웹·게임 배포",
+    "fix": "웹 403 오류의 SELinux 컨텍스트를 확인하고 수정해 접근 복구",
+    "result": "웹 메인·Web–WAS 응답 확인, Windows 클라이언트와 Linux 서버 간 실제 게임 플레이",
+    "stack": "Rocky Linux · Nginx · Tomcat · MariaDB · BIND · VLAN · OSPF · Static Route · Godot",
+    "work": [
+      [
+        "네트워크 설계",
+        "거점별 IP·VLAN과 내부·WAN 연결 기준 설계, 구간별 통신 점검"
+      ],
+      [
+        "한국 IDC 구축",
+        "Linux 웹·WAS·DB·DNS 환경 구성 및 게임 서버 배포"
+      ],
+      [
+        "동작 검증",
+        "Web–WAS 응답과 게임 클라이언트 접속·플레이 확인"
+      ]
+    ],
+    "network": [
+      [
+        "거점 연결",
+        "한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 WAN으로 연결"
+      ],
+      [
+        "망 분리",
+        "사용자·서비스·DB/스토리지·인프라·운영관리망을 VLAN으로 구분"
+      ],
+      [
+        "라우팅",
+        "한국 IDC의 OSPF 학습·정적 경로를 확인하고, 거점 연결에 필요한 기본·반환 경로를 점검"
+      ],
+      [
+        "팀 환경 연동",
+        "서로 다른 실습 환경을 UDP Tunnel과 WAN 인계 주소로 연결"
+      ]
+    ],
+    "teamResult": "공통 IP·VLAN·WAN 기준을 맞춘 뒤 각자의 환경을 UDP Tunnel로 연결했습니다. 거점 간 라우팅, 목적지·반환 경로, IDC 서비스 접근은 팀이 함께 점검했습니다.",
+    "note": "팀은 일정에 맞춰 단일 3-Tier 구조를 먼저 구현했습니다. 웹 메인과 Web–WAS 응답, 한국 IDC의 실제 게임 플레이를 직접 확인했으며, 일본 IDC의 별도 게임 접속 전체 시험과 구분했습니다.",
+    "troubles": [
+      {
+        "title": "웹 배포 후 403 Forbidden",
+        "symptom": "파일이 존재하고 권한도 설정했지만 웹페이지에 접근할 수 없었습니다.",
+        "action": "ls -Z로 user_tmp_t 컨텍스트를 확인했습니다. 배포 경로에 httpd_sys_content_t를 등록하고 restorecon으로 적용했습니다.",
+        "result": "SELinux를 유지한 상태에서 메인 페이지 접근을 복구했습니다."
+      },
+      {
+        "title": "주소에 따라 달랐던 /api/ 응답",
+        "symptom": "localhost/api/는 404, 실제 Web IP에서는 Tomcat HTTP 200이 반환됐습니다.",
+        "action": "curl -v로 IPv6 ::1의 기본 server block과 실제 IPv4 서비스 요청을 구분했습니다.",
+        "result": "실제 서비스 주소의 Web–WAS 프록시 응답이 정상임을 확인했습니다."
+      },
+      {
+        "title": "DNS 질의 경로에 따른 SERVFAIL",
+        "symptom": "Auth DNS에 직접 질의하면 내부 서버 레코드가 응답했지만, Cache DNS를 거치면 SERVFAIL이 발생했습니다.",
+        "action": "같은 이름에 대한 Auth DNS 직접 질의, Cache DNS 일반 질의, +cdflag 질의 결과를 비교했습니다.",
+        "result": "+cdflag에서 NOERROR와 A 레코드가 반환되어 Cache DNS의 검증 단계로 원인 범위를 좁혔습니다."
+      }
+    ],
+    "scope": "한국 IDC 담당",
+    "coverView": "images",
+    "technologies": [
+      "java",
+      "csharp",
+      "godot",
+      "mariadb",
+      "nginx",
+      "linux"
+    ],
+    "roleSummary": "5개 거점으로 나눈 팀 프로젝트에서 한국 IDC를 맡았습니다. 공통 네트워크 설계를 조율하고, 한국 IDC의 서버 환경과 웹·게임 서비스를 직접 구축·배포했습니다.",
+    "teamRoles": [
+      {
+        "area": "한국 본사",
+        "scope": "본사 사용자·관리망과 상위 회선·WAN 연결",
+        "owner": "팀원"
+      },
+      {
+        "area": "개발 / QA 센터",
+        "scope": "개발·테스트망 분리와 부서 VLAN·라우팅",
+        "owner": "팀원"
+      },
+      {
+        "area": "한국 IDC",
+        "scope": "서버망·관리망, DNS·WEB·WAS·DB·게임 서버 구축과 서비스 배포",
+        "owner": "본인",
+        "mine": true
+      },
+      {
+        "area": "일본 지사",
+        "scope": "일본 사용자·관리망과 한국 IDC 접근 경로",
+        "owner": "팀원"
+      },
+      {
+        "area": "일본 IDC · ISP",
+        "scope": "일본 IDC 구성과 ISP·WAN 회선·라우팅 연결",
+        "owner": "팀원"
+      }
+    ],
+    "contributions": [
+      {
+        "title": "공통 네트워크 설계",
+        "body": "거점별 IP·VLAN·게이트웨이와 WAN 연결 기준을 설계·조율했습니다. 팀원이 각 영역을 구현한 뒤 목적지·반환 경로를 함께 점검했습니다."
+      },
+      {
+        "title": "한국 IDC 네트워크·서버 구축",
+        "body": "서비스·DB·DNS·관리망을 VLAN으로 나누고 SVI·고정 IP를 설정했습니다. Rocky Linux에 Nginx·Tomcat·MariaDB·BIND를 설치·구성했습니다."
+      },
+      {
+        "title": "웹·게임 서비스 배포",
+        "body": "Nginx의 /api/ 요청을 Tomcat으로 연결하고 Java WAR를 배포했습니다. Godot의 Windows 클라이언트·Linux 전용 서버를 Export하고 C# 런처를 빌드했습니다."
+      },
+      {
+        "title": "장애 해결과 실제 동작 검증",
+        "body": "SELinux 컨텍스트 오류를 해결해 웹 접근을 복구했습니다. Web–WAS HTTP 200 응답, DNS 질의 경로와 한국 IDC 게임 서버의 실제 플레이를 확인했습니다."
+      }
+    ]
+  },
+  "smdc": {
+    "type": "개인 프로젝트 · 진행 중",
+    "period": "2026.10 — 현재",
+    "cover": "/assets/enterprise/overview.svg",
+    "coverWidth": 960,
+    "coverHeight": 600,
+    "coverAlt": "본사·지사 VPN, ISP·IX, 고객망과 IDC를 연결하고 UTM·DMZ·HA 구축 범위를 요약한 개념도",
+    "coverLabel": "기업망 · 보안 · IDC 구성 요약",
+    "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크",
+    "role": "본사·지사·IDC·고객망 설계, 보안 경계와 Linux 서버 환경 구축",
+    "fix": "UTM·DMZ·본사–지사 VPN, Spine–Leaf와 SLB/VIP 이중화 구성",
+    "result": "OSPF FULL·Front/Backend VIP 동시 절체 확인, 가정 PC에서 쇼핑몰 접속·로그인 확인",
+    "stack": "OSPF · pfSense · HAProxy · Keepalived · Nginx · Tomcat · MariaDB · Chrony",
+    "work": [
+      [
+        "기업망 설계",
+        "본사·지사·IDC·ISP/IX·FTTH의 주소·VLAN·연결 경로 구성"
+      ],
+      [
+        "보안·거점 연결",
+        "UTM 배치와 DMZ 구성, 본사–지사 VPN 연결"
+      ],
+      [
+        "IDC 서비스",
+        "Spine–Leaf·HAProxy/Keepalived·WEB–WAS–DB와 운영 서비스 구성"
+      ],
+      [
+        "검증",
+        "OSPF FULL, Front/Backend VIP 절체와 가정 PC의 쇼핑몰 접속·로그인 확인"
+      ]
+    ],
+    "network": [
+      [
+        "본사·지사",
+        "서버팜·사무망·관리망을 구분하고 UTM·VPN으로 거점 연결"
+      ],
+      [
+        "보안 경계",
+        "DMZ와 접근 경계를 구성하고 내부 업무망·서비스망을 분리"
+      ],
+      [
+        "IDC",
+        "역할별 Leaf에 WEB·WAS·DB·인프라·관리망 배치"
+      ],
+      [
+        "고객 접근",
+        "가정 PC → Home Router → ISP/IX → IDC 서비스의 접속 경로 구성"
+      ]
+    ],
+    "note": "구축·검증 진행 중입니다. DB 복제·장애 전환, WAS 세션 복제와 전체 운영 서비스의 통합 검증은 후속 작업입니다. 100대는 IDC의 설계상 수용 목표입니다.",
+    "troubles": [
+      {
+        "title": "NTP 서비스 실행과 실제 동기화 구분",
+        "symptom": "서비스가 실행 중이어도 클라이언트가 실제로 시간을 동기화했는지는 별도 확인이 필요했습니다.",
+        "action": "Reference ID·Stratum·Leap status·UDP 123 리스닝을 확인하고 클라이언트 응답 수신을 별도 점검 항목으로 분리했습니다.",
+        "result": "NTP1의 로컬 시간원 동작을 확인했습니다. 외부 표준시각·전체 클라이언트 동기화는 추가 검증 대상으로 남겼습니다."
+      }
+    ],
+    "scope": "전 구간 설계·구축",
+    "coverView": "topology",
+    "technologies": [
+      "java",
+      "nginx",
+      "tomcat",
+      "mariadb",
+      "haproxy",
+      "linux"
+    ]
+  }
+};
+const technologyNames = {
+  java: 'Java',
+  csharp: 'C#',
+  godot: 'Godot',
+  mariadb: 'MariaDB',
+  nginx: 'Nginx',
+  linux: 'Linux',
+  tomcat: 'Tomcat',
+  haproxy: 'HAProxy'
 };
 const detailViews = [
-  { id: 'notes', label: '구축·문제 해결' },
+  { id: 'notes', label: '역할·구축 기록' },
   { id: 'topology', label: '토폴로지' },
   { id: 'images', label: '서비스 화면' }
 ];
@@ -30,26 +232,33 @@ function projectRow(project) {
   const c = compact[project.id];
   if (!c) return '';
   const id = escapeHTML(project.id);
+  const coverView = c.coverView || 'images';
+  const coverAction = coverView === 'topology' ? '구성도 보기' : '서비스 화면 보기';
   return `<article class="project-row">
     <div class="project-art">
-      <button class="cover-button" type="button" data-project="${id}" data-view="images" aria-label="${escapeHTML(project.title)} 서비스 화면 보기">
+      <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
         <img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">
       </button>
-      <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="images">사진 모아보기 ↗</button></p>
+      <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
     </div>
     <div class="project-copy">
       <div class="project-topline"><span class="project-type">${c.type}</span><span>${c.period}</span></div>
       <h2>${escapeHTML(project.title)}</h2>
       <p class="project-subtitle">${c.subtitle}</p>
+      <p class="project-scope">${escapeHTML(c.scope)}</p>
       <dl class="project-facts">
         <div><dt>내 역할</dt><dd>${c.role}</dd></div>
         <div><dt>${project.id === 'smdc' ? '주요 구현' : '문제 해결'}</dt><dd>${c.fix}</dd></div>
         <div><dt>확인 결과</dt><dd>${c.result}</dd></div>
       </dl>
-      <p class="project-stack">${c.stack}</p>
+      <section class="project-technologies" aria-label="프로젝트 사용 기술">
+        <h3>사용 기술</h3>
+        <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
+      </section>
       <div class="project-actions">
-        <button type="button" data-project="${id}" data-view="notes">구축·문제 해결 ↗</button>
+        <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
         <button type="button" data-project="${id}" data-view="topology">토폴로지 보기 ↗</button>
+        <button type="button" data-project="${id}" data-view="images">서비스 화면 ↗</button>
       </div>
     </div>
   </article>`;
@@ -59,12 +268,27 @@ function workList(items) {
   return `<ul class="work-list">${items.map(([title, body]) => `<li><b>${escapeHTML(title)}</b> ${escapeHTML(body)}</li>`).join('')}</ul>`;
 }
 
+function responsibilities(c) {
+  return `<section class="role-summary" aria-label="본인 담당 영역">
+      <span>MY ROLE</span><h3>한국 IDC · 네트워크와 서비스 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
+    </section>
+    <h3 class="detail-section-title">팀 업무 분담과 나의 담당</h3>
+    <table class="team-table" aria-label="5인 팀의 거점별 업무 분담">
+      <thead><tr><th scope="col">담당 영역</th><th scope="col">주요 업무</th></tr></thead>
+      <tbody>${c.teamRoles.map(row => `<tr${row.mine ? ' class="my-role"' : ''}>
+        <th scope="row">${escapeHTML(row.area)}<span>${row.mine ? '서동연 · 본인 담당' : '팀원 담당'}</span></th>
+        <td>${escapeHTML(row.scope)}</td></tr>`).join('')}</tbody>
+    </table>
+    <h3 class="detail-section-title">직접 수행한 작업</h3>
+    <ol class="contribution-list">${c.contributions.map(item => `<li><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.body)}</p></li>`).join('')}</ol>`;
+}
+
 function notes(project) {
   const c = compact[project.id];
-  return `<p class="detail-role"><b>직접 맡은 범위</b>${c.role}</p>
+  return `${c.teamRoles ? responsibilities(c) : `<p class="detail-role"><b>직접 맡은 범위</b>${c.role}</p>
     <h3 class="detail-section-title">수행한 작업</h3>${workList(c.work)}
-    <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}
-    ${c.teamResult ? `<h3 class="detail-section-title">팀 전체 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
+    <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
+    ${c.teamResult ? `<h3 class="detail-section-title">팀 공동 통합 검증</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
     <h3 class="detail-section-title">문제를 확인하고 해결한 과정</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
       <h4>${trouble.title}</h4><dl>
@@ -82,10 +306,12 @@ function imageFigure(item, topology = false) {
   const height = Math.max(1, Number(item.height) || 1080);
   const figureClass = topology ? `topology-figure${item.overview ? ' topology-overview' : ''}` : 'gallery-figure';
   return `<figure class="${figureClass}">
-    <a href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${title} 원본 보기">
+    <a class="${topology ? 'topology-image' : 'gallery-image'}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${title} 원본 보기">
       <img src="${url}" alt="${escapeHTML(item.caption || item.title)}" width="${width}" height="${height}" decoding="async" loading="lazy">
     </a>
-    <figcaption><strong>${title}</strong>${topology && item.caption ? `<span>${escapeHTML(item.caption)}</span>` : ''}</figcaption>
+    <figcaption><strong>${title}</strong>${topology && item.caption ? `<span>${escapeHTML(item.caption)}</span>` : ''}
+      ${topology && Array.isArray(item.details) ? `<dl class="topology-details">${item.details.map(detail => `<div><dt>${escapeHTML(detail.label)}</dt><dd>${escapeHTML(detail.text)}</dd></div>`).join('')}</dl>` : ''}
+    </figcaption>
   </figure>`;
 }
 
@@ -97,7 +323,8 @@ function gallery(project) {
 
 function topology(project) {
   const items = (project.topologies || []).filter(item => safeURL(item.url));
-  return `<p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 구간별 상세 구성입니다.' : '한국·일본 거점과 게임 서비스의 연결 구조입니다.'} 그림을 누르면 원본 크기로 볼 수 있습니다.</p>
+  return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>공통 토폴로지·IP·VLAN·WAN 설계를 주도하고 한국 IDC의 네트워크·서버·서비스를 직접 구축했습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
+    <p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 구간별 구축 내용입니다.' : '팀 전체 연결 구조와 담당 범위입니다.'} 그림을 누르면 원본 크기로 볼 수 있습니다.</p>
     <div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`;
 }
 
