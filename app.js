@@ -245,15 +245,31 @@ const compact = {
       [
         "고객 접속",
         "가정 PC에서 Home Router와 ISP/IX를 거쳐 쇼핑몰에 접속하도록 DHCP·NAT·라우팅을 설정했습니다."
+      ],
+      [
+        "관리망",
+        "관리망에 Jump Server를 배치했습니다. 관리자 PC에서 서버를 관리하고 있으며, Jump Server를 통한 접속 경유 및 ACL 기반 접근 통제는 검증 예정입니다."
       ]
     ],
     "note": "100대 수용을 기준으로 설계하고, 실습 환경에서는 역할별 대표 장비와 서버로 구성했습니다.",
     "troubles": [
       {
-        "title": "가정 라우터가 WAN 주소를 받지 못한 문제",
-        "symptom": "Home Router가 WAN DHCP 주소를 수신하지 못했습니다.",
-        "action": "상위 L3 스위치의 DHCP 설정을 확인하다 서비스가 꺼져 있는 것을 발견했습니다. service dhcp를 적용한 뒤 주소 할당을 다시 확인했습니다.",
-        "result": "Home Router WAN DHCP와 가정 PC 주소 할당을 확인했습니다."
+        "title": "SELinux로 인한 Keepalived 장애 감시 실패",
+        "symptom": "HAProxy 상태를 감시하는 Keepalived 스크립트가 실행 코드 126으로 실패해 FAULT 상태가 발생했습니다.",
+        "action": "systemctl을 호출하는 감시 스크립트가 SELinux 정책으로 차단되는 것을 확인했습니다. 상태 확인 방식을 /proc 기반으로 변경하고 Keepalived를 재시작했습니다.",
+        "result": "SLB2가 Front VIP(192.168.30.18)와 Backend VIP(192.168.20.1)를 인계받는 것을 확인했습니다."
+      },
+      {
+        "title": "FTTH 고객망의 쇼핑몰 접속 경로 장애",
+        "symptom": "가정 고객 PC에서 쇼핑몰 도메인 조회 및 HTTP 접속이 정상적으로 이루어지지 않았습니다.",
+        "action": "FW1에서 DNS망(192.168.80.0/24)과 서비스 VIP망(192.168.30.0/24)의 반환 경로를 점검해 누락된 정적 라우트를 확인했습니다. Border Gateway(113.61.104.125)를 다음 홉으로 경로를 추가했습니다.",
+        "result": "가정 고객 PC에서 starmall.com의 IP 조회(113.61.104.254), curl HTTP 200 응답과 브라우저 접속을 확인했습니다."
+      },
+      {
+        "title": "Postfix SMTP 수신 인터페이스 설정 오류",
+        "symptom": "Postfix의 inet_interfaces 설정 중복 경고와 localhost 바인딩을 확인해 외부 호스트의 SMTP 접속을 받을 수 없는 상태였습니다.",
+        "action": "중복 설정을 정리하고 inet_interfaces=all로 변경해 재시작한 뒤 SMTP 25번 포트와 Dovecot IMAPS 993번 포트 수신 상태를 확인했습니다.",
+        "result": "메일 전달 후 Maildir 파일 생성과 대기 큐 비어 있음을 확인했으며, IMAPS 로그인 및 INBOX에서 수신 메일을 조회했습니다."
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
@@ -289,6 +305,10 @@ const compact = {
       [
         "공통 서비스",
         "BIND9 DNS · Postfix SMTP · Dovecot IMAP · Chrony NTP1 서버 시간 동기화 · rsyslog LOG1(TCP 514) 중앙 로그"
+      ],
+      [
+        "관리망",
+        "MGMT VLAN · Jump Server 배치 · PuTTY(SSH) · FileZilla(SFTP) · 관리 접속 경유·ACL 검증 예정"
       ]
     ],
     "components": [
@@ -299,7 +319,8 @@ const compact = {
         "points": [
           "100대 수용 기준으로 설계하고 Spine 2대와 역할별 Leaf, VLAN·OSPF 경로를 구성",
           "본사–지사 Site-to-Site VPN과 ISP/IX·FTTH 고객망의 통신 경로 구성",
-          "Home Router WAN DHCP·가정 LAN DHCP·NAT/PAT를 설정하고 쇼핑몰 접속 경로 점검"
+          "Home Router WAN DHCP·가정 LAN DHCP·NAT/PAT를 설정하고 쇼핑몰 접속 경로 점검",
+          "관리망에 Jump Server를 배치했으며 관리 접속 경유·접근 제어 정책은 추후 검증 대상으로 구분"
         ]
       },
       {
