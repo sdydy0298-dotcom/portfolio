@@ -360,7 +360,7 @@ function projectRow(project) {
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
         ${project.id === 'smdc' ? `<span class="enterprise-cover-title"><span>NETWORK · SECURITY · IDC</span><strong>StarMall<br>Infrastructure<span class="cover-dot">.</span></strong></span><span class="enterprise-cover-evidence"><img class="cover-network-capture" src="/assets/enterprise/gns_idc_topology.png" alt="직접 구축한 IDC의 GNS3 원본 구성" width="980" height="727" decoding="async"><img class="cover-service-capture" src="/assets/enterprise/homepc-web.png" alt="FTTH 고객 PC의 StarMall 실제 접속 화면" width="1010" height="841" decoding="async"></span>` : `<img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">`}
       </button>
-      <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
+      <p class="cover-caption"><span>${c.coverLabel}</span></p>
     </div>
     <div class="project-copy">
       <div class="project-topline"><span class="project-type">${c.type}</span></div>
@@ -387,17 +387,10 @@ function workList(items) {
 
 function responsibilities(c) {
   return `<section class="role-summary" aria-label="본인 담당 영역">
-      <span>MY ROLE</span><h3>웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
+      <span>MY ROLE · 5인 팀 프로젝트</span><h3>한국 IDC 구축 · 웹사이트·런처·게임 개발</h3>
+      <p>${escapeHTML(c.roleSummary)} 다른 거점은 팀원이 구축했습니다.</p>
     </section>
-    ${Array.isArray(c.components) ? `<div class="build-scope-grid">${c.components.map(item => `<section class="build-scope-card"><h4>${escapeHTML(item.title)}</h4><strong>${escapeHTML(item.tech)}</strong><p>${escapeHTML(item.body)}</p></section>`).join('')}</div>` : ''}
-    <h3 class="detail-section-title">팀 업무 분담과 나의 담당</h3>
-    <table class="team-table" aria-label="5인 팀의 거점별 업무 분담">
-      <thead><tr><th scope="col">담당 영역</th><th scope="col">주요 업무</th></tr></thead>
-      <tbody>${c.teamRoles.map(row => `<tr${row.mine ? ' class="my-role"' : ''}>
-        <th scope="row">${escapeHTML(row.area)}<span>${row.mine ? '서동연 · 본인 담당' : '팀원 담당'}</span></th>
-        <td>${escapeHTML(row.scope)}</td></tr>`).join('')}</tbody>
-    </table>
-    <h3 class="detail-section-title">담당 작업</h3>
+    <h3 class="detail-section-title">직접 수행한 작업</h3>
     <ol class="contribution-list">${c.contributions.map(item => `<li><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.body)}</p></li>`).join('')}</ol>`;
 }
 
@@ -409,9 +402,7 @@ function notes(project) {
     ${project.id === 'aleph-arena' ? `<h3 class="detail-section-title">한국 IDC의 3-Tier 구성</h3>${workList(c.network)}` : ''}
     ${c.teamResult ? `<h3 class="detail-section-title">팀 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
     ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${workList(c.checks)}` : ''}
-    <h3 class="detail-section-title">사용 기술·도구</h3>
-    <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>
-    <p class="detail-intro"><b>사용 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
+
     <h3 class="detail-section-title">문제 해결</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
       <h4>${trouble.title}</h4><dl>
