@@ -437,10 +437,15 @@ function projectRow(project) {
   const id = escapeHTML(project.id);
   const coverView = c.coverView || 'images';
   const coverAction = '실제 구현 화면 보기';
+  const isMall = project.id === 'smdc';
+  const thumbnailSrc = isMall ? '/assets/enterprise/homepc-web.png' : '/assets/arena/web-main-v2.jpg';
+  const thumbnailAlt = isMall ? 'StarMall 쇼핑몰 메인 화면' : 'ALEPH Arena 게임 웹사이트 메인 화면';
+  const thumbnailWidth = isMall ? 1010 : 1513;
+  const thumbnailHeight = isMall ? 841 : 1039;
   return `<article class="project-row">
-    <div class="project-art${project.id === 'smdc' ? ' enterprise-art' : ''}">
+    <div class="project-art project-art-screenshot ${isMall ? 'enterprise-art' : 'arena-art'}">
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
-        ${project.id === 'smdc' ? `<span class="enterprise-cover-title"><span>NETWORK · SECURITY · IDC</span><strong>StarMall<br>Infrastructure<span class="cover-dot">.</span></strong></span><span class="enterprise-cover-evidence"><img class="cover-network-capture" src="/assets/enterprise/gns_idc_topology.png" alt="직접 구축한 IDC의 GNS3 원본 구성" width="980" height="727" decoding="async"><img class="cover-service-capture" src="/assets/enterprise/homepc-web.png" alt="FTTH 고객 PC의 StarMall 실제 접속 화면" width="1010" height="841" decoding="async"></span>` : `<img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">`}
+        <img class="project-cover project-cover-screenshot" src="${thumbnailSrc}" alt="${thumbnailAlt}" width="${thumbnailWidth}" height="${thumbnailHeight}" decoding="async">
       </button>
       <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
     </div>
