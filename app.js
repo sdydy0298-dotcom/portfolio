@@ -14,7 +14,7 @@ const compact = {
     "subtitle": "게임 서비스를 제공하기 위해 한국·일본의 본사·지사·데이터센터와 개발·QA 센터를 연결하는 네트워크 및 서비스 환경을 설계하고 구축한 프로젝트입니다.",
     "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
     "fix": "웹·게임 개발과 IDC 배포, SELinux 403 오류 해결",
-    "result": "Web–WAS 응답, Windows 클라이언트↔Linux 게임 서버 실제 플레이 확인",
+    "result": "웹·WAS 서비스 응답과 Windows 클라이언트↔Linux 게임 서버의 방 참가·매치 시작 확인",
     "stack": "Rocky Linux · Nginx · Tomcat · MariaDB · BIND · VLAN · OSPF · Static Route · Godot",
     "work": [
       [
@@ -68,22 +68,16 @@ const compact = {
     "note": "담당 범위는 한국 IDC와 웹·런처·게임 개발입니다. 다른 거점은 팀원이 구축하고, 거점 연결과 서비스 접근은 함께 점검했습니다.",
     "troubles": [
       {
-        "title": "웹사이트 접속 차단",
-        "symptom": "웹사이트를 배포한 뒤 접근 권한 오류로 페이지가 열리지 않았습니다.",
-        "action": "일반 파일 권한 외에 서버의 보안 정책을 확인하고, 웹 서비스가 배포 파일에 접근할 수 있도록 설정을 수정했습니다.",
-        "result": "보안 기능을 끄지 않고 웹사이트 접속을 복구했습니다."
+        "title": "SELinux 때문에 웹사이트가 403으로 차단된 문제",
+        "symptom": "Nginx 설정과 일반 파일 권한을 확인했지만, 배포한 게임 웹사이트가 HTTP 403 오류로 열리지 않았습니다.",
+        "action": "SELinux 파일 컨텍스트가 user_tmp_t로 설정되어 웹 서버의 접근이 제한되는 것을 확인했습니다. 배포 파일에 httpd_sys_content_t 컨텍스트를 적용했습니다.",
+        "result": "SELinux를 비활성화하지 않고도 웹사이트가 정상적으로 열리는 것을 확인했습니다."
       },
       {
-        "title": "접속 주소에 따라 달랐던 응답",
-        "symptom": "같은 서버에서도 접속 주소에 따라 웹과 WAS의 응답이 달랐습니다.",
-        "action": "요청이 전달되는 웹 서버 설정을 비교해 기본 접속 경로와 실제 서비스 경로를 구분했습니다.",
-        "result": "실제 서비스 주소에서 웹과 WAS가 정상적으로 연결되는 것을 확인했습니다."
-      },
-      {
-        "title": "내부 도메인 조회 실패",
-        "symptom": "DNS 서버에 직접 요청하면 응답했지만, 캐시 DNS를 거치면 조회에 실패했습니다.",
-        "action": "요청 경로와 응답을 비교해 DNS 검증 과정에서 문제가 발생하는 것을 확인했습니다.",
-        "result": "장애 원인을 캐시 DNS의 검증 설정으로 좁혔습니다. 최종 해결까지 확인한 사례와 구분해 기록했습니다."
+        "title": "같은 웹 서버인데 접속 주소에 따라 404가 나타난 문제",
+        "symptom": "같은 /api/ 경로인데 localhost에서는 HTTP 404가 발생하고 웹 서버 IPv4 주소에서는 정상 응답이 나왔습니다.",
+        "action": "localhost가 IPv6(::1)로 연결되어 Nginx의 기본 서버 설정을 사용한다는 것을 확인했습니다. IPv4 서비스 주소로 호출해 실제 WAS 프록시 경로와 비교했습니다.",
+        "result": "서비스 IPv4 주소의 /api/ 요청이 Tomcat으로 전달되어 HTTP 200 응답을 반환하는 것을 확인했습니다. localhost의 404는 IPv6 기본 서버로 요청된 결과였습니다."
       }
     ],
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
@@ -114,7 +108,7 @@ const compact = {
         "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"
       ]
     ],
-    "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트, Windows 런처, Godot 게임을 만들어 한국 IDC에 배포하고 웹 접속과 게임 플레이를 확인했습니다.",
+    "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트·Windows 런처·Godot 게임을 개발하고, Linux 게임 서버의 2인 방 생성·참가·게임 시작 흐름을 검증했습니다.",
     "teamRoles": [
       {
         "area": "한국 본사",
@@ -154,7 +148,7 @@ const compact = {
       },
       {
         "title": "Godot 게임 직접 개발",
-        "body": "Godot 게임 클라이언트와 Linux 전용 게임 서버를 구축했습니다. AI·로컬 플레이, 온라인 방 접속·READY·시작 흐름과 Windows↔Linux 실제 플레이를 확인했습니다."
+        "body": "Godot 게임 클라이언트와 Linux Dedicated Server를 구성하고 ENet/UDP 7000 기반 2인 방 참가·준비·게임 시작 흐름을 구현했습니다. 서버에서 게임 상태를 처리하고 클라이언트로 동기화하는 구조를 적용했습니다."
       },
       {
         "title": "한국 IDC와 네트워크 구축",
@@ -178,8 +172,13 @@ const compact = {
       },
       {
         "title": "게임 클라이언트·서버",
-        "tech": "Godot · ENet/UDP",
-        "body": "게임 클라이언트·Linux Dedicated Server 구현과 실제 접속·플레이 검증"
+        "tech": "Godot · Linux Dedicated Server · ENet/UDP 7000",
+        "body": "Windows 게임 클라이언트와 한국 IDC의 Linux 게임 서버를 연결하는 1:1 온라인 멀티플레이 구조를 구성했습니다.",
+        "points": [
+          "플레이어 1 방 생성 → 플레이어 2 참가 → 양측 READY → 방장 START_MATCH로 매치 시작",
+          "클라이언트 입력을 서버에서 처리하고 이동·물풍선·피격·승패를 서버 기준으로 계산하는 방식",
+          "게임 상태를 약 30Hz로 클라이언트에 동기화하도록 구현"
+        ]
       },
       {
         "title": "한국 IDC",
@@ -187,7 +186,24 @@ const compact = {
         "body": "네트워크·DNS·WEB·WAS·DB·게임 서버 환경 구축과 연동"
       }
     ],
-    "checks": []
+    "checks": [
+      [
+        "웹·WAS 연동",
+        "게임 웹사이트 접속과 IPv4 서비스 주소의 /api/ 프록시를 통한 Tomcat HTTP 200 응답을 확인했습니다."
+      ],
+      [
+        "Windows 런처",
+        "C#/.NET 8 기반 Windows 런처의 빌드·배포와 게임 ZIP 다운로드·실행 흐름을 구성했습니다."
+      ],
+      [
+        "온라인 멀티플레이",
+        "ENet/UDP 7000에서 CONNECT → ROOM CREATE → JOIN → READY → MATCH START 흐름을 확인했습니다."
+      ],
+      [
+        "거점 연동",
+        "팀별 거점의 UDP Tunnel 연결 후 한국 IDC 서비스 접근과 거점 간 경로를 확인했습니다."
+      ]
+    ]
   },
   "smdc": {
     "type": "개인 프로젝트",
@@ -254,22 +270,16 @@ const compact = {
     "note": "100대 수용을 기준으로 설계하고, 실습 환경에서는 역할별 대표 장비와 서버로 구성했습니다.",
     "troubles": [
       {
-        "title": "SELinux로 인한 Keepalived 장애 감시 실패",
-        "symptom": "HAProxy 상태를 감시하는 Keepalived 스크립트가 실행 코드 126으로 실패해 FAULT 상태가 발생했습니다.",
-        "action": "systemctl을 호출하는 감시 스크립트가 SELinux 정책으로 차단되는 것을 확인했습니다. 상태 확인 방식을 /proc 기반으로 변경하고 Keepalived를 재시작했습니다.",
-        "result": "SLB2가 Front VIP(192.168.30.18)와 Backend VIP(192.168.20.1)를 인계받는 것을 확인했습니다."
+        "title": "SELinux 때문에 SLB 장애 전환이 실패한 문제",
+        "symptom": "HAProxy는 실행 중이었지만 Keepalived의 HAProxy 감시 스크립트가 실행 오류(코드 126)를 내면서 FAULT 상태에 진입했습니다.",
+        "action": "SELinux가 감시 스크립트의 systemctl 실행을 차단하는 것을 확인했습니다. SELinux를 끄지 않고 프로세스를 /proc에서 확인하는 방식으로 감시 스크립트를 변경했습니다.",
+        "result": "감시 스크립트가 정상 동작하고, SLB1의 Keepalived 중지 시 SLB2가 Front·Backend VIP를 인계받는 것을 확인했습니다."
       },
       {
-        "title": "FTTH 고객망의 쇼핑몰 접속 경로 장애",
-        "symptom": "가정 고객 PC에서 쇼핑몰 도메인 조회 및 HTTP 접속이 정상적으로 이루어지지 않았습니다.",
-        "action": "FW1에서 DNS망(192.168.80.0/24)과 서비스 VIP망(192.168.30.0/24)의 반환 경로를 점검해 누락된 정적 라우트를 확인했습니다. Border Gateway(113.61.104.125)를 다음 홉으로 경로를 추가했습니다.",
-        "result": "가정 고객 PC에서 starmall.com의 IP 조회(113.61.104.254), curl HTTP 200 응답과 브라우저 접속을 확인했습니다."
-      },
-      {
-        "title": "Postfix SMTP 수신 인터페이스 설정 오류",
-        "symptom": "Postfix의 inet_interfaces 설정 중복 경고와 localhost 바인딩을 확인해 외부 호스트의 SMTP 접속을 받을 수 없는 상태였습니다.",
-        "action": "중복 설정을 정리하고 inet_interfaces=all로 변경해 재시작한 뒤 SMTP 25번 포트와 Dovecot IMAPS 993번 포트 수신 상태를 확인했습니다.",
-        "result": "메일 전달 후 Maildir 파일 생성과 대기 큐 비어 있음을 확인했으며, IMAPS 로그인 및 INBOX에서 수신 메일을 조회했습니다."
+        "title": "이중화 장비 두 대가 모두 MASTER가 된 문제",
+        "symptom": "SLB1과 SLB2가 서로의 VRRP 신호를 받지 못해 두 장비가 동시에 MASTER 상태가 되고 동일한 VIP를 보유했습니다.",
+        "action": "Keepalived 설정만이 아니라 SLB가 연결된 스위치의 VLAN30·VLAN31 포트 구성을 점검하고 수정해 VRRP 신호가 정상적으로 전달되도록 했습니다.",
+        "result": "SLB1은 MASTER, SLB2는 BACKUP으로 정상 분리됐습니다. SLB1 중지 후 SLB2가 Front VIP(192.168.30.18)와 Backend VIP(192.168.31.1)를 인계받는 것까지 확인했습니다."
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
