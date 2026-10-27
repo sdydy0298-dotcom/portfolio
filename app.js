@@ -80,9 +80,31 @@ const compact = {
     ],
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
     "coverView": "images",
-    "technologies": ["java", "javascript", "csharp", "dotnet", "godot", "mariadb", "nginx", "tomcat", "linux"],
-    "tools": ["GNS3", "Oracle VirtualBox"],
-    "techAreas": [["네트워크", "VLAN · OSPF · Static Route · DHCP · UDP Tunnel"], ["인프라", "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"]],
+    "technologies": [
+      "java",
+      "javascript",
+      "csharp",
+      "dotnet",
+      "godot",
+      "mariadb",
+      "nginx",
+      "tomcat",
+      "linux"
+    ],
+    "tools": [
+      "GNS3",
+      "Oracle VirtualBox"
+    ],
+    "techAreas": [
+      [
+        "네트워크",
+        "VLAN · OSPF · Static Route · DHCP · UDP Tunnel"
+      ],
+      [
+        "인프라",
+        "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"
+      ]
+    ],
     "roleSummary": "5인 팀의 한국 IDC 담당자로 네트워크·서버를 구축했습니다. 이에 더해 웹사이트, Windows C#/.NET 런처, Godot 게임을 직접 개발·배포하고 한국 IDC에서 서비스를 연동했습니다.",
     "teamRoles": [
       {
@@ -159,38 +181,46 @@ const compact = {
   },
   "smdc": {
     "type": "개인 프로젝트 · 구축 완료",
-    "period": "2026.10",
-    "sortDate": "2026-10-01",
+    "period": "2026.10.14 — 10.26",
+    "sortDate": "2026-10-14",
     "cover": "/assets/enterprise/gns_all_topology.png",
     "coverWidth": 1600,
     "coverHeight": 1556,
     "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
-    "coverLabel": "실제 IDC 구축 · 고객망 서비스 검증",
-    "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크·서비스 구축 프로젝트",
-    "role": "본사·지사 VPN, UTM·DMZ·IPS, Spine–Leaf, Linux·DNS·MX·중앙 로그 서버 구축",
+    "coverLabel": "StarMall 쇼핑몰 · 서비스 인프라·이중화",
+    "subtitle": "쇼핑몰 StarMall 서비스를 위한 네트워크·서버·보안 인프라 구축 및 이중화 프로젝트",
+    "role": "쇼핑몰 IDC의 Spine–Leaf·WEB–WAS–DB·SLB 이중화, 본사·지사 VPN과 고객 접속망, DNS·메일·NTP·중앙 로그 서버 구축",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
     "result": "OSPF·VIP 절체, FTTH 쇼핑몰 로그인, MX1→Thunderbird 메일 수신 확인",
-    "stack": "OSPF · pfSense · HAProxy · Keepalived · Nginx · Tomcat · MariaDB · Chrony",
+    "stack": "Linux · Nginx · Tomcat · MariaDB · HAProxy · Keepalived · pfSense · Suricata · BIND9 · Postfix · Dovecot · Chrony · rsyslog",
     "work": [
       [
-        "기업망",
-        "본사·지사 VLAN·OSPF·VPN과 ISP/IX·FTTH 고객망 구축"
+        "쇼핑몰 서비스",
+        "Nginx–Tomcat–MariaDB를 연동하고 StarMall 회원가입·로그인 서비스를 배포"
       ],
       [
-        "보안망",
-        "pfSense FW/UTM·DMZ·IPS/IDS 및 서비스 NAT·접근 정책"
+        "서비스 이중화",
+        "HAProxy 부하 분산과 Keepalived VRRP로 SLB 이중화 및 Front·Backend VIP 구성"
       ],
       [
-        "IDC",
-        "Spine–Leaf·HAProxy·Keepalived Front/Backend VIP, WEB–WAS–DB 구성"
+        "IDC 네트워크",
+        "Spine–Leaf와 OSPF, 역할별 VLAN으로 WEB·WAS·DB·인프라·관리망 분리"
+      ],
+      [
+        "거점·고객망",
+        "본사·지사 VPN, ISP/IX·FTTH 고객망과 DHCP·NAT/PAT 구성"
+      ],
+      [
+        "보안 경계",
+        "pfSense FW/UTM·DMZ·Suricata IPS/IDS 및 서비스 접근 정책 구성"
       ],
       [
         "공통 서비스",
-        "BIND9 DNS, Postfix·Dovecot MX, Chrony NTP, rsyslog 중앙 로그 수집"
+        "BIND9 DNS, Postfix·Dovecot 메일, Chrony NTP, rsyslog 중앙 로그 수집"
       ],
       [
         "검증",
-        "VIP 절체·OSPF·FTTH 접속·로그인·Thunderbird IMAP 수신 확인"
+        "OSPF·VIP 절체 점검, 가정 PC의 쇼핑몰 접속·로그인과 Thunderbird 메일 수신 확인"
       ]
     ],
     "network": [
@@ -238,20 +268,35 @@ const compact = {
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
     "coverView": "images",
-    "technologies": ["pfsense", "haproxy", "linux", "nginx", "tomcat", "mariadb"],
-    "tools": ["GNS3", "Oracle VirtualBox"],
+    "technologies": [
+      "pfsense",
+      "haproxy",
+      "linux",
+      "nginx",
+      "tomcat",
+      "mariadb",
+      "java"
+    ],
+    "tools": [
+      "GNS3",
+      "Oracle VirtualBox"
+    ],
     "techAreas": [
       [
         "네트워크",
-        "Spine–Leaf · VLAN · OSPF · NAT/PAT · Site-to-Site VPN"
+        "Spine–Leaf · VLAN · OSPF · Static Route · DHCP · NAT/PAT · Site-to-Site VPN"
       ],
       [
-        "보안·가용성",
-        "pfSense · FW/UTM · DMZ · Suricata IPS · Keepalived · VIP"
+        "보안·이중화",
+        "pfSense FW/UTM · DMZ · Suricata IPS/IDS · HAProxy · Keepalived · VRRP/VIP"
       ],
       [
-        "운영 서비스",
-        "BIND9 · Postfix · Dovecot · Chrony · rsyslog"
+        "쇼핑몰 서버",
+        "Linux · Nginx · Tomcat · Java Servlet · MariaDB · WEB–WAS–DB"
+      ],
+      [
+        "공통 서비스",
+        "BIND9 DNS · Postfix·Dovecot 메일 · Chrony NTP · rsyslog 중앙 로그"
       ]
     ]
   }
@@ -312,7 +357,7 @@ function projectRow(project) {
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
-        <dl class="technology-areas"><div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
+        <dl class="technology-areas">${project.id === 'smdc' ? c.techAreas.filter(([label]) => label !== '쇼핑몰 서버').map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('') : ''}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
@@ -383,7 +428,7 @@ function gallery(project) {
   const network = (project.topologies || []).filter(item => item.kind === 'implementation' && safeURL(item.url));
   return `<p class="gallery-intro">직접 구현한 서비스와 네트워크 환경입니다. 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
     <section class="evidence-section"><h3 class="detail-section-title">서비스 동작 · 실제 확인 화면</h3><div class="gallery">${service.map(item => imageFigure(item)).join('')}</div></section>
-    ${network.length ? `<section class="evidence-section"><h3 class="detail-section-title">네트워크 · GNS3 실제 구성</h3><p class="detail-intro">IDC·본사·지사·고객망을 직접 연결한 환경입니다. 설계도 탭의 구성과 비교해 볼 수 있습니다.</p><div class="gallery implementation-gallery">${network.map(item => imageFigure(item)).join('')}</div></section>` : ''}`;
+    ${network.length ? `<section class="evidence-section"><h3 class="detail-section-title">네트워크 · GNS3 실제 구성</h3><p class="detail-intro">${project.id === 'aleph-arena' ? '직접 구축한 한국 IDC의 실제 GNS3 구성입니다. 초기 설계도와 장비·주소 배치에 차이가 있습니다.' : 'IDC·본사·지사·고객망을 직접 연결한 환경입니다. 설계도 탭의 구성과 비교해 볼 수 있습니다.'}</p><div class="gallery implementation-gallery">${network.map(item => imageFigure(item)).join('')}</div></section>` : ''}`;
 }
 
 function topology(project) {
