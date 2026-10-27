@@ -268,6 +268,34 @@
           "width": 2500,
           "height": 1550,
           "overview": true
+        },
+        {
+          "url": "/assets/arena/idc-gns-original.png",
+          "width": 1098,
+          "height": 786,
+          "overview": false,
+          "title": "실제 구성 · 한국 IDC · GNS3",
+          "kind": "implementation",
+          "caption": "직접 구축한 한국 IDC 원본 화면입니다. Core1–Dist1/Dist2와 VLAN 210·220·230·240·250, WEB·WAS·GAME·DB·NS1·CNS1·관리 PC의 실제 배치를 확인할 수 있습니다."
+        },
+        {
+          "url": "/assets/arena/idc-design-original.png",
+          "width": 1536,
+          "height": 1024,
+          "overview": false,
+          "title": "초기 설계도 · 한국 IDC · 3-Tier",
+          "kind": "design",
+          "caption": "한국 IDC의 역할별 망 분리와 서버 배치를 정리한 초기 설계도입니다. 단일 Distribution 구성과 제안 IP 계획은 실제 GNS3 구성의 Dist1/Dist2 및 주소 배치와 다릅니다.",
+          "details": [
+            {
+              "label": "설계 범위",
+              "text": "서비스·DB/스토리지·인프라·운영관리·관리망을 VLAN으로 구분한 3-Tier 설계입니다."
+            },
+            {
+              "label": "실제 구성과 차이",
+              "text": "초기 설계는 Distribution 1대와 제안 서브넷을 표시합니다. 실제 구현은 Dist1/Dist2로 나뉘며, GNS3 원본에 표시된 주소와 서버 배치를 기준으로 설명합니다. 설계도상의 모든 서버를 실제 구축 성과로 포함하지 않습니다."
+            }
+          ]
         }
       ]
     }
