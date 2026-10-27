@@ -74,10 +74,11 @@ const compact = {
         "result": "SELinux를 비활성화하지 않고 웹사이트 정상 접속을 확인했습니다."
       },
       {
-        "title": "같은 웹 서버인데 접속 주소에 따라 404가 나타난 문제",
-        "symptom": "같은 /api/ 경로인데 localhost에서는 HTTP 404가 발생하고 웹 서버 IPv4 주소에서는 정상 응답이 나왔습니다.",
-        "action": "localhost가 IPv6(::1)로 연결되어 Nginx의 기본 서버 설정을 사용한다는 것을 확인했습니다. IPv4 서비스 주소로 호출해 실제 WAS 프록시 경로와 비교했습니다.",
-        "result": "서비스 IPv4 주소의 /api/ 요청이 Tomcat으로 전달되어 HTTP 200 응답을 반환하는 것을 확인했습니다. localhost의 404는 IPv6 기본 서버로 요청된 결과였습니다."
+        "kind": "collaboration",
+        "title": "거점별 네트워크를 연결하기 위한 팀 협업",
+        "symptom": "5인 팀에서 한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 나누어 구축했습니다. 서로 다른 거점을 연결하기 위해 공통 네트워크 기준을 맞춰야 했습니다.",
+        "action": "팀원들과 IP·VLAN·WAN 연결 기준을 공유했습니다. 한국 IDC의 네트워크와 서버를 구성하고 각 거점을 UDP Tunnel로 연결하는 과정에서 통신 경로와 IDC 서비스 접근을 함께 점검했습니다.",
+        "result": "팀원들이 구축한 거점을 연결한 뒤 거점 간 통신과 한국 IDC의 서비스 접근을 확인했습니다."
       }
     ],
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
@@ -519,10 +520,10 @@ function recordImplementation(project,c) {
 
 function recordTroubles(c) {
   return `<div class="execution-issues">${c.troubles.map((issue,i)=>`<article class="execution-issue">
-    <header><span>CASE ${String(i+1).padStart(2,'0')}</span><h4>${cleanProjectText(issue.title)}</h4></header>
+    <header><span>CASE ${String(i+1).padStart(2,'0')}${issue.kind==='collaboration'?' · 팀 협업':''}</span><h4>${cleanProjectText(issue.title)}</h4></header>
     <dl><div><dt>상황</dt><dd>${cleanProjectText(issue.symptom)}</dd></div>
-        <div><dt>분석·조치</dt><dd>${cleanProjectText(issue.action)}</dd></div>
-        <div><dt>확인 결과</dt><dd>${cleanProjectText(issue.result)}</dd></div></dl>
+        <div><dt>${issue.kind==='collaboration'?'협업 과정':'분석·조치'}</dt><dd>${cleanProjectText(issue.action)}</dd></div>
+        <div><dt>${issue.kind==='collaboration'?'결과':'확인 결과'}</dt><dd>${cleanProjectText(issue.result)}</dd></div></dl>
   </article>`).join('')}</div>`;
 }
 
@@ -544,7 +545,7 @@ function notes(project) {
   return `<div class="execution-record">
     ${recordHeading('01','담당 역할','담당 범위와 역할 구분',recordRoles(c))}
     ${recordHeading('02','주요 구현 내용','구현한 기능과 인프라를 영역별로 정리',recordImplementation(project,c))}
-    ${recordHeading('03','문제 해결','상황 · 분석 및 조치 · 확인 결과',recordTroubles(c))}
+    ${recordHeading('03',project.id==='aleph-arena'?'문제 해결·팀 협업':'문제 해결',project.id==='aleph-arena'?'웹사이트 장애 해결과 거점 연동 협업':'상황 · 분석 및 조치 · 확인 결과',recordTroubles(c))}
     ${recordHeading('04','검증 결과','구축 후 실제 확인한 기능과 서비스',recordResults(project,c))}
   </div>`;
 }
