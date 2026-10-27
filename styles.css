@@ -465,3 +465,71 @@ body.dialog-open { overflow: hidden; }
 @media print {
   .career-design { padding: 9px 12px; font-size: 10px; }
 }
+
+
+/* Shared execution record: same four-stage flow for team and individual projects. */
+.execution-record { min-width: 0; }
+.execution-record .record-section + .record-section { margin-top: 30px; padding-top: 27px; border-top: 1px solid #dce7f7; }
+.record-heading { display: flex; align-items: center; gap: 13px; margin: 0 0 18px; }
+.record-number { flex: 0 0 42px; width: 42px; height: 42px; display: grid; place-items: center; background: #e9f1ff; border: 1px solid #d0e1ff; border-radius: 10px; color: #205bce; font-size: 14px; font-weight: 850; }
+.record-heading h3 { margin: 0 0 3px; font-size: 19px; font-weight: 800; color: #173968; letter-spacing: -.4px; }
+.record-heading p { margin: 0; font-size: 11px; color: #68809e; line-height: 1.65; }
+.execution-record .record-role { position: relative; isolation: isolate; overflow: hidden; margin: 0 0 18px; padding: 22px 24px; border: 1px solid #cbddfa; border-left: 4px solid #2765e1; border-radius: 10px; background: linear-gradient(115deg,#e8f2ff 0%,#f6f9ff 85%); }
+.execution-record .record-role::after { pointer-events: none; z-index: -1; content: ""; position: absolute; right: -62px; top: -95px; width: 250px; height: 250px; border: 30px solid #cbdfff55; border-radius: 50%; }
+.record-role-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 10px; }
+.record-role-meta strong { font-size: 10px; letter-spacing: 1.6px; font-weight: 850; color: #225cbb; }
+.record-role-meta span { padding: 4px 8px; font-size: 10px; font-weight: 700; background: #fff9; border: 1px solid #cbdcf6; border-radius: 4px; color: #38619a; }
+.execution-record .record-role h4 { margin: 0 0 9px; color: #163d78; font-size: 23px; letter-spacing: -.5px; line-height: 1.35; }
+.execution-record .record-role p { margin: 0; color: #456184; font-size: 12px; line-height: 1.85; }
+.record-team { margin-top: 12px; }
+.record-team h4,.execution-tech h4 { margin: 0 0 10px; font-size: 14px; color: #173a6b; }
+.record-team .team-table { margin: 0; }
+.execution-cards { margin: 0 0 17px; gap: 14px; }
+.execution-cards .build-scope-card { position: relative; padding: 18px 17px; border: 1px solid #dbe7fa; border-radius: 9px; background: linear-gradient(145deg,#f4f8ff,#fff 90%); box-shadow: 0 4px 16px #235eab08; }
+.execution-cards .build-scope-card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 9px 9px 0 0; background: linear-gradient(90deg,#2868e4,#9cbfff); }
+.execution-card-index { display: block; margin-bottom: 8px; font-size: 10px; font-weight: 850; color: #7b9acb; letter-spacing: 1.2px; }
+.execution-cards .build-scope-card h4 { font-size: 15px; font-weight: 800; margin: 0 0 6px; color: #153a70; }
+.execution-cards .build-scope-card strong { display: block; font-size: 11px; line-height: 1.7; color: #2860c5; }
+.execution-cards .build-scope-card p { margin: 10px 0 0; font-size: 12px; line-height: 1.8; color: #516983; }
+.execution-build-note { margin: 0 0 15px; padding: 10px 14px; border-left: 3px solid #8caef4; background: #f3f7ff; font-size: 11px; line-height: 1.8; color: #506b8d; }
+.execution-build-note b { margin-right: 8px; color: #2256a5; }
+.execution-tech { padding: 16px 19px; background: #fcfdff; border: 1px solid #e2eaf7; border-radius: 9px; }
+.execution-tech .technology-areas { margin: 0; padding: 0; border-top: 0; }
+.execution-tech .technology-areas>div { grid-template-columns: 98px minmax(0,1fr); gap: 12px; padding: 6px 0; }
+.execution-tech .technology-areas>div+div { border-top: 1px solid #edf2fa; }
+.execution-network { margin-top: 13px; border: 1px solid #e1eaf7; border-radius: 8px; overflow: hidden; }
+.execution-network summary { padding: 12px 17px; background: #f8fbff; font-size: 12px; font-weight: 700; color: #2258a9; cursor: pointer; }
+.execution-network summary:hover { background: #eef5ff; }
+.execution-network[open] summary { border-bottom: 1px solid #e1eaf7; }
+.execution-network dl { margin: 0; padding: 5px 17px 10px; }
+.execution-network dl>div { display: grid; grid-template-columns: 124px minmax(0,1fr); gap: 12px; padding: 10px 0; font-size: 12px; line-height: 1.8; }
+.execution-network dl>div+div { border-top: 1px solid #edf2fa; }
+.execution-network dt { color: #315a9b; font-weight: 750; }
+.execution-network dd { margin: 0; color: #526b88; }
+.execution-issues { display: grid; gap: 13px; }
+.execution-issue { min-width: 0; overflow: hidden; border: 1px solid #dfe8f7; border-radius: 9px; }
+.execution-issue header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 13px; padding: 12px 16px; background: #f4f8ff; border-bottom: 1px solid #e2eaf7; }
+.execution-issue header span { font-size: 10px; font-weight: 850; color: #2c67d1; letter-spacing: 1px; }
+.execution-issue h4 { font-size: 14px; line-height: 1.6; margin: 0; color: #183e71; }
+.execution-issue dl { margin: 0; padding: 7px 18px 10px; }
+.execution-issue dl>div { display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 14px; padding: 9px 0; font-size: 12px; line-height: 1.8; }
+.execution-issue dl>div+div { border-top: 1px solid #edf1f8; }
+.execution-issue dt { color: #315d9c; font-weight: 750; }
+.execution-issue dd { margin: 0; color: #4b6382; }
+.execution-results { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+.execution-result { min-width: 0; padding: 17px 18px 18px; border: 1px solid #dce7f8; border-left: 3px solid #4f82ed; border-radius: 8px; background: #f7faff; }
+.execution-result>span { display: block; font-size: 10px; font-weight: 850; color: #3c6cc2; letter-spacing: 1.1px; margin-bottom: 8px; }
+.execution-result h4 { margin: 0 0 6px; font-size: 14px; color: #173967; }
+.execution-result p { margin: 0; color: #526b87; font-size: 12px; line-height: 1.8; }
+.execution-results-tip { margin: 14px 0 0; font-size: 11px; line-height: 1.7; color: #687e9c; }
+@media screen and (max-width:700px) {
+  .record-number { width: 36px; height: 36px; flex-basis: 36px; font-size: 12px; }
+  .record-heading { gap: 10px; }
+  .record-heading h3 { font-size: 17px; }
+  .execution-record .record-role { padding: 17px 17px; }
+  .execution-record .record-role h4 { font-size: 19px; }
+  .execution-tech { padding: 14px; }
+  .execution-tech .technology-areas>div,.execution-network dl>div { grid-template-columns: minmax(0,1fr); gap: 4px; }
+  .execution-issue dl>div { grid-template-columns: 62px minmax(0,1fr); gap: 8px; }
+  .execution-results { grid-template-columns: minmax(0,1fr); }
+}

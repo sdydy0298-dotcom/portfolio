@@ -329,7 +329,7 @@ const technologyNames = {
   haproxy: 'HAProxy'
 };
 const detailViews = [
-  { id: 'notes', label: '역할·구축 기록' },
+  { id: 'notes', label: '수행 내용' },
   { id: 'topology', label: '설계도' },
   { id: 'images', label: '실제 구현 화면' }
 ];
@@ -373,7 +373,7 @@ function projectRow(project) {
         <dl class="technology-areas"><div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
       </section>
       <div class="project-actions">
-        <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
+        <button type="button" data-project="${id}" data-view="notes">수행 내용 ↗</button>
         <button type="button" data-project="${id}" data-view="topology">설계도 ↗</button>
         <button type="button" data-project="${id}" data-view="images">실제 구현 화면 ↗</button>
       </div>
@@ -381,48 +381,88 @@ function projectRow(project) {
   </article>`;
 }
 
-function workList(items) {
-  return `<ul class="work-list">${items.map(([title, body]) => `<li><b>${escapeHTML(title)}</b> ${escapeHTML(body)}</li>`).join('')}</ul>`;
+function cleanProjectText(value) {
+  return escapeHTML(String(value ?? '').replace(/직접\s*/g, ''));
 }
 
-function checksList(items) {
-  return `<ul class="work-list checks-list">${items.map(([title, body]) => `<li><b>${escapeHTML(title)}</b><span>${escapeHTML(body)}</span></li>`).join('')}</ul>`;
+function recordHeading(number,title,description,body) {
+  return `<section class="record-section" aria-labelledby="record-title-${number}">
+    <header class="record-heading"><span class="record-number" aria-hidden="true">${number}</span>
+    <div><h3 id="record-title-${number}">${escapeHTML(title)}</h3><p>${escapeHTML(description)}</p></div></header>
+    ${body}</section>`;
 }
 
-function responsibilities(c) {
-  return `<section class="role-summary" aria-label="본인 담당 영역">
-      <span>MY ROLE</span><h3>웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
+function recordRoles(c) {
+  const hasTeam=Array.isArray(c.teamRoles)&&c.teamRoles.length>0;
+  const title=c.scope;
+  const description=hasTeam?c.roleSummary:c.role;
+  const team=hasTeam?`<section class="record-team" aria-labelledby="record-team-title">
+    <h4 id="record-team-title">팀 업무 분담</h4>
+    <table class="team-table" aria-label="5인 팀 역할 분담"><thead><tr><th scope="col">담당 영역</th><th scope="col">주요 업무</th></tr></thead>
+    <tbody>${c.teamRoles.map(item=>`<tr${item.mine?' class="my-role"':''}>
+      <th scope="row">${cleanProjectText(item.area)}<span>${item.mine?'서동연 · 본인 담당':'팀원 담당'}</span></th>
+      <td>${cleanProjectText(item.scope)}</td></tr>`).join('')}</tbody></table></section>`:'';
+  return `<div class="role-summary record-role"><div class="record-role-meta"><strong>MY ROLE</strong><span>${escapeHTML(c.type)}</span></div>
+    <h4>${cleanProjectText(title)}</h4><p>${cleanProjectText(description)}</p></div>${team}`;
+}
+
+function recordCards(project,c) {
+  const cards=project.id==='aleph-arena'
+    ? c.components.map((x,i)=>({...x,body:c.contributions?.[i]?.body||x.body}))
+    : [
+      {title:'기업 네트워크',tech:'Spine–Leaf · OSPF · VLAN · VPN · NAT/PAT',body:'IDC의 Spine 2대와 역할별 Leaf, VLAN·OSPF 경로를 구성했습니다. 본사·지사 VPN과 ISP/IX·FTTH 고객망의 DHCP·NAT/PAT를 설정했습니다.'},
+      {title:'쇼핑몰 서버·서비스',tech:'Rocky Linux · Ubuntu · Nginx · Tomcat · MariaDB',body:'WEB–WAS–DB 서비스를 연동하고 StarMall 회원가입·로그인 환경을 구축·배포했습니다.'},
+      {title:'보안·이중화',tech:'pfSense · Suricata · HAProxy · Keepalived',body:'FW/UTM·DMZ·IPS/IDS 및 서비스 접근 정책을 구성하고, HAProxy·Keepalived로 SLB와 Front·Backend VIP를 이중화했습니다.'},
+      {title:'공통 인프라',tech:'BIND9 · Postfix · Dovecot · Chrony · rsyslog',body:'DNS·메일·NTP·중앙 로그 수집 환경을 구성했습니다.'}
+    ];
+  return `<div class="build-scope-grid execution-cards">${cards.map((item,i)=>`<article class="build-scope-card">
+    <span class="execution-card-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</span>
+    <h4>${cleanProjectText(item.title)}</h4>
+    <strong>${cleanProjectText(item.tech)}</strong>
+    <p>${cleanProjectText(item.body)}</p></article>`).join('')}</div>`;
+}
+
+function recordImplementation(project,c) {
+  const tech=c.techAreas.map(([label,value])=>`<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('');
+  const network=c.network.map(([label,value])=>`<div><dt>${cleanProjectText(label)}</dt><dd>${cleanProjectText(value)}</dd></div>`).join('');
+  const note=project.id==='smdc'?`<p class="execution-build-note"><b>설계 범위</b>${cleanProjectText(c.note)}</p>`:'';
+  return `${recordCards(project,c)}${note}
+    <section class="execution-tech" aria-label="상세 사용 기술과 도구">
+      <h4>사용 기술·도구</h4><dl class="technology-areas">${tech}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
     </section>
-    ${Array.isArray(c.components) ? `<div class="build-scope-grid">${c.components.map(item => `<section class="build-scope-card"><h4>${escapeHTML(item.title)}</h4><strong>${escapeHTML(item.tech)}</strong><p>${escapeHTML(item.body)}</p></section>`).join('')}</div>` : ''}
-    <h3 class="detail-section-title">팀 업무 분담과 나의 담당</h3>
-    <table class="team-table" aria-label="5인 팀의 거점별 업무 분담">
-      <thead><tr><th scope="col">담당 영역</th><th scope="col">주요 업무</th></tr></thead>
-      <tbody>${c.teamRoles.map(row => `<tr${row.mine ? ' class="my-role"' : ''}>
-        <th scope="row">${escapeHTML(row.area)}<span>${row.mine ? '서동연 · 본인 담당' : '팀원 담당'}</span></th>
-        <td>${escapeHTML(row.scope)}</td></tr>`).join('')}</tbody>
-    </table>
-    <h3 class="detail-section-title">담당 작업</h3>
-    <ol class="contribution-list">${c.contributions.map(item => `<li><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.body)}</p></li>`).join('')}</ol>`;
+    <details class="execution-network"><summary>네트워크 구성 상세 보기</summary><dl>${network}</dl></details>`;
+}
+
+function recordTroubles(c) {
+  return `<div class="execution-issues">${c.troubles.map((issue,i)=>`<article class="execution-issue">
+    <header><span>CASE ${String(i+1).padStart(2,'0')}</span><h4>${cleanProjectText(issue.title)}</h4></header>
+    <dl><div><dt>상황</dt><dd>${cleanProjectText(issue.symptom)}</dd></div>
+        <div><dt>분석·조치</dt><dd>${cleanProjectText(issue.action)}</dd></div>
+        <div><dt>확인 결과</dt><dd>${cleanProjectText(issue.result)}</dd></div></dl>
+  </article>`).join('')}</div>`;
+}
+
+function recordResults(project,c) {
+  const items=c.checks?.length?c.checks:[
+    ['웹·WAS 연동','게임 웹사이트 접속과 Java WAS /api/ 요청, 데이터베이스 연동을 확인했습니다.'],
+    ['Windows 런처','C#/.NET 8 런처 실행 파일을 빌드·배포하고 게임 실행 흐름을 구현했습니다.'],
+    ['온라인 게임','Windows 게임 클라이언트에서 Linux Dedicated Server에 접속해 실제 게임 플레이를 확인했습니다.'],
+    ['거점 연결',c.teamResult]
+  ];
+  return `<div class="execution-results">${items.map(([label,value],i)=>`<article class="execution-result">
+    <span>CHECK ${String(i+1).padStart(2,'0')}</span><h4>${cleanProjectText(label)}</h4><p>${cleanProjectText(value)}</p>
+  </article>`).join('')}</div>
+  <p class="execution-results-tip">관련 증빙은 ‘설계도’ 및 ‘실제 구현 화면’ 탭에서 확인할 수 있습니다.</p>`;
 }
 
 function notes(project) {
-  const c = compact[project.id];
-  return `${c.teamRoles ? responsibilities(c) : `<p class="detail-role"><b>직접 맡은 범위</b>${c.role}</p>
-    <h3 class="detail-section-title">수행한 작업</h3>${workList(c.work)}
-    <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
-    ${project.id === 'aleph-arena' ? `<h3 class="detail-section-title">한국 IDC의 3-Tier 구성</h3>${workList(c.network)}` : ''}
-    ${c.teamResult ? `<h3 class="detail-section-title">팀 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
-    ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${checksList(c.checks)}` : ''}
-    <h3 class="detail-section-title">사용 기술·도구</h3>
-    <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
-    <h3 class="detail-section-title">문제 해결</h3>
-    ${c.troubles.map(trouble => `<article class="trouble-note">
-      <h4>${trouble.title}</h4><dl>
-        <div><dt>상황</dt><dd>${trouble.symptom}</dd></div>
-        <div><dt>조치</dt><dd>${trouble.action}</dd></div>
-        <div><dt>결과</dt><dd>${trouble.result}</dd></div>
-      </dl></article>`).join('')}
-    <p class="detail-note">${c.note}</p>`;
+  const c=compact[project.id];
+  return `<div class="execution-record">
+    ${recordHeading('01','담당 역할','담당 범위와 역할 구분',recordRoles(c))}
+    ${recordHeading('02','주요 구현 내용','구현한 기능과 인프라를 영역별로 정리',recordImplementation(project,c))}
+    ${recordHeading('03','문제 해결','상황 · 분석 및 조치 · 확인 결과',recordTroubles(c))}
+    ${recordHeading('04','검증 결과','구축 후 실제 확인한 기능과 서비스',recordResults(project,c))}
+  </div>`;
 }
 
 function imageFigure(item, topology = false) {
@@ -444,14 +484,14 @@ function imageFigure(item, topology = false) {
 function gallery(project) {
   const service = (project.images || []).filter(item => safeURL(item.url));
   const network = (project.topologies || []).filter(item => item.kind === 'implementation' && safeURL(item.url));
-  return `<p class="gallery-intro">직접 구현한 서비스와 네트워크 환경입니다. 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
+  return `<p class="gallery-intro">구현한 서비스와 네트워크 환경입니다. 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
     <section class="evidence-section"><h3 class="detail-section-title">서비스 동작 · 실제 확인 화면</h3><div class="gallery">${service.map(item => imageFigure(item)).join('')}</div></section>
-    ${network.length ? `<section class="evidence-section"><h3 class="detail-section-title">네트워크 · GNS3 실제 구성</h3><p class="detail-intro">${project.id === 'aleph-arena' ? '직접 구축한 한국 IDC의 실제 GNS3 구성입니다. 초기 설계도와 장비·주소 배치에 차이가 있습니다.' : 'IDC·본사·지사·고객망을 직접 연결한 환경입니다. 설계도 탭의 구성과 비교해 볼 수 있습니다.'}</p><div class="gallery implementation-gallery">${network.map(item => imageFigure(item)).join('')}</div></section>` : ''}`;
+    ${network.length ? `<section class="evidence-section"><h3 class="detail-section-title">네트워크 · GNS3 실제 구성</h3><p class="detail-intro">${project.id === 'aleph-arena' ? '한국 IDC의 실제 GNS3 구성입니다. 초기 설계도와 장비·주소 배치에 차이가 있습니다.' : 'IDC·본사·지사·고객망을 직접 연결한 환경입니다. 설계도 탭의 구성과 비교해 볼 수 있습니다.'}</p><div class="gallery implementation-gallery">${network.map(item => imageFigure(item)).join('')}</div></section>` : ''}`;
 }
 
 function topology(project) {
   const items = (project.topologies || []).filter(item => item.kind !== 'implementation' && safeURL(item.url));
-  return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>팀의 공통 IP·VLAN·연결 기준을 맞추고 한국 IDC의 네트워크·서버·서비스를 직접 구축했습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
+  return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>팀의 공통 IP·VLAN·연결 기준을 맞추고 한국 IDC의 네트워크·서버·서비스 구축을 맡았습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
     <p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 영역별 설계입니다. 실제 GNS3 구성과 서비스 검증 캡처는 실제 구현 화면 탭에서 볼 수 있습니다.' : '팀 전체 네트워크와 본인 담당 영역을 보여주는 구성도입니다.'} 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
     <div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`;
 }
