@@ -421,3 +421,36 @@ body.dialog-open { overflow: hidden; }
 .career-design b { color: #315587; }
 @media(max-width:650px) { .intro { padding: 18px 16px 3px; } .intro h1 { font-size: 32px; } .career-design { grid-template-columns: 1fr; gap: 4px; } }
 @media print { .intro { padding: 12px 16px 0; } .intro h1 { font-size: 28px; } .career-row { padding: 9px 12px; } }
+
+
+/* Editorial simplification: keep the navigation centered without an external CTA. */
+.masthead { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+.masthead .wordmark { grid-column: 1; justify-self: start; font-size: 21px; letter-spacing: -.6px; white-space: nowrap; }
+.masthead nav { grid-column: 2; justify-self: center; }
+.profile-grid { grid-template-columns: 180px minmax(0, 1fr); }
+.identity { padding-top: 7px; }
+.english-name { text-align: center; margin: 18px 0 0; }
+.intro-text span { display: block; }
+.intro-text span + span { margin-top: 9px; }
+.intro-text strong { color: var(--ink); }
+@media screen and (max-width: 1050px) {
+  .profile-grid { grid-template-columns: 150px minmax(0, 1fr); }
+}
+@media screen and (max-width: 700px) {
+  .masthead { display: flex; justify-content: space-between; gap: 10px; }
+  .masthead .wordmark { font-size: 14px; letter-spacing: -.25px; }
+  .masthead nav { margin-left: auto; gap: 12px; }
+  .masthead nav a { font-size: 10px; }
+  .profile-grid { grid-template-columns: minmax(0, 1fr); }
+  .identity { min-height: 115px; padding: 5px 104px 0 0; }
+  .english-name { text-align: left; margin: 5px 0 0; }
+  .intro-text span + span { margin-top: 11px; }
+}
+@media screen and (max-width: 360px) {
+  .masthead .wordmark { font-size: 12px; }
+  .masthead nav { gap: 8px; }
+  .masthead nav a { font-size: 9px; }
+}
+@media print {
+  .intro-text span + span { margin-top: 4px; }
+}
