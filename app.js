@@ -11,7 +11,7 @@ const compact = {
     "coverHeight": 1039,
     "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
     "coverLabel": "게임 서비스 · 글로벌 거점 네트워크",
-    "subtitle": "게임회사의 한국·일본 거점과 게임 서비스를 연결한 네트워크 구축 프로젝트",
+    "subtitle": "한국·일본 거점을 연결한 팀 프로젝트입니다. 한국 IDC를 맡아 웹·게임 서비스를 개발하고 서버에 배포했습니다.",
     "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
     "fix": "웹·게임 개발과 IDC 배포, SELinux 403 오류 해결",
     "result": "Web–WAS 응답, Windows 클라이언트↔Linux 게임 서버 실제 플레이 확인",
@@ -40,42 +40,50 @@ const compact = {
     ],
     "network": [
       [
-        "거점 연결",
-        "한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 WAN으로 연결"
+        "Core · IDC-Core1",
+        "상위 라우터와 Distribution을 연결해 IDC 안팎의 트래픽을 전달합니다."
       ],
       [
-        "망 분리",
-        "사용자·서비스·DB/스토리지·인프라·운영관리망을 VLAN으로 구분"
+        "Distribution · IDC-Dist1·2",
+        "역할별 VLAN의 게이트웨이와 망 간 라우팅을 담당합니다."
       ],
       [
-        "라우팅",
-        "한국 IDC의 OSPF 학습·정적 경로를 확인하고, 거점 연결에 필요한 기본·반환 경로를 점검"
+        "Access · IDC-Acc1",
+        "서비스 서버망의 WEB·WAS·GAME 서버를 연결합니다."
       ],
       [
-        "팀 환경 연동",
-        "서로 다른 실습 환경을 UDP Tunnel과 WAN 인계 주소로 연결"
+        "Access · IDC-Acc2",
+        "DB·스토리지망의 DB 서버를 연결합니다."
+      ],
+      [
+        "Access · IDC-Acc3",
+        "인프라 서버망의 NS1·CNS1을 연결합니다."
+      ],
+      [
+        "Access · IDC-Acc4",
+        "관리망의 관리자 PC를 연결합니다."
       ]
     ],
-    "teamResult": "공통 IP·VLAN·WAN 기준을 맞춘 뒤 각자의 환경을 UDP Tunnel로 연결했습니다. 거점 간 라우팅, 목적지·반환 경로, IDC 서비스 접근은 팀이 함께 점검했습니다.",
-    "note": "웹사이트·런처·게임·한국 IDC는 본인이 직접 개발·구축했습니다. 타 거점의 개별 네트워크는 팀원 담당이며, 일본 IDC 게임 서버의 미확인 통합 시험을 본인 검증 실적으로 포함하지 않습니다.",
+    "teamResult": "각자 구축한 환경을 공통 IP·VLAN·WAN 기준에 맞춰 UDP Tunnel로 연결했습니다. 이후 거점 간 경로와 IDC 서비스 접근을 함께 확인했습니다.",
+    "note": "담당 범위는 한국 IDC와 웹·런처·게임 개발입니다. 다른 거점은 팀원이 구축하고, 거점 연결과 서비스 접근은 함께 점검했습니다.",
     "troubles": [
       {
-        "title": "웹 배포 후 403 Forbidden",
-        "symptom": "파일이 존재하고 권한도 설정했지만 웹페이지에 접근할 수 없었습니다.",
-        "action": "ls -Z로 user_tmp_t 컨텍스트를 확인했습니다. 배포 경로에 httpd_sys_content_t를 등록하고 restorecon으로 적용했습니다.",
-        "result": "SELinux를 유지한 상태에서 메인 페이지 접근을 복구했습니다."
+        "title": "웹사이트 접속 차단",
+        "symptom": "웹사이트를 배포한 뒤 접근 권한 오류로 페이지가 열리지 않았습니다.",
+        "action": "일반 파일 권한 외에 서버의 보안 정책을 확인하고, 웹 서비스가 배포 파일에 접근할 수 있도록 설정을 수정했습니다.",
+        "result": "보안 기능을 끄지 않고 웹사이트 접속을 복구했습니다."
       },
       {
-        "title": "주소에 따라 달랐던 /api/ 응답",
-        "symptom": "localhost/api/는 404, 실제 Web IP에서는 Tomcat HTTP 200이 반환됐습니다.",
-        "action": "curl -v로 IPv6 ::1의 기본 server block과 실제 IPv4 서비스 요청을 구분했습니다.",
-        "result": "실제 서비스 주소의 Web–WAS 프록시 응답이 정상임을 확인했습니다."
+        "title": "접속 주소에 따라 달랐던 응답",
+        "symptom": "같은 서버에서도 접속 주소에 따라 웹과 WAS의 응답이 달랐습니다.",
+        "action": "요청이 전달되는 웹 서버 설정을 비교해 기본 접속 경로와 실제 서비스 경로를 구분했습니다.",
+        "result": "실제 서비스 주소에서 웹과 WAS가 정상적으로 연결되는 것을 확인했습니다."
       },
       {
-        "title": "DNS 질의 경로에 따른 SERVFAIL",
-        "symptom": "Auth DNS에 직접 질의하면 내부 서버 레코드가 응답했지만, Cache DNS를 거치면 SERVFAIL이 발생했습니다.",
-        "action": "같은 이름에 대한 Auth DNS 직접 질의, Cache DNS 일반 질의, +cdflag 질의 결과를 비교했습니다.",
-        "result": "+cdflag에서 NOERROR와 A 레코드가 반환되어 Cache DNS의 검증 단계로 원인 범위를 좁혔습니다."
+        "title": "내부 도메인 조회 실패",
+        "symptom": "DNS 서버에 직접 요청하면 응답했지만, 캐시 DNS를 거치면 조회에 실패했습니다.",
+        "action": "요청 경로와 응답을 비교해 DNS 검증 과정에서 문제가 발생하는 것을 확인했습니다.",
+        "result": "장애 원인을 캐시 DNS의 검증 설정으로 좁혔습니다. 최종 해결까지 확인한 사례와 구분해 기록했습니다."
       }
     ],
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
@@ -105,7 +113,7 @@ const compact = {
         "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"
       ]
     ],
-    "roleSummary": "5인 팀의 한국 IDC 담당자로 네트워크·서버를 구축했습니다. 이에 더해 웹사이트, Windows C#/.NET 런처, Godot 게임을 직접 개발·배포하고 한국 IDC에서 서비스를 연동했습니다.",
+    "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트, Windows 런처, Godot 게임을 만들어 한국 IDC에 배포하고 웹 접속과 게임 플레이를 확인했습니다.",
     "teamRoles": [
       {
         "area": "한국 본사",
@@ -177,10 +185,11 @@ const compact = {
         "tech": "Linux · Nginx · Tomcat · MariaDB",
         "body": "네트워크·DNS·WEB·WAS·DB·게임 서버 환경 구축과 연동"
       }
-    ]
+    ],
+    "checks": []
   },
   "smdc": {
-    "type": "개인 프로젝트 · 구축 완료",
+    "type": "개인 프로젝트",
     "period": "2026.10.14 — 10.26",
     "sortDate": "2026-10-14",
     "cover": "/assets/enterprise/gns_all_topology.png",
@@ -188,10 +197,10 @@ const compact = {
     "coverHeight": 1556,
     "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
     "coverLabel": "StarMall 쇼핑몰 · 서비스 인프라·이중화",
-    "subtitle": "쇼핑몰 StarMall 서비스를 위한 네트워크·서버·보안 인프라 구축 및 이중화 프로젝트",
-    "role": "쇼핑몰 IDC의 Spine–Leaf·WEB–WAS–DB·SLB 이중화, 본사·지사 VPN과 고객 접속망, DNS·메일·NTP·중앙 로그 서버 구축",
+    "subtitle": "외부 고객이 StarMall 쇼핑몰에 접속할 수 있도록 서버와 네트워크를 구성하고, 로드밸런서를 이중화했습니다.",
+    "role": "네트워크 설계부터 Linux 서버 설치, 쇼핑몰 배포, 보안 정책과 공통 서비스 설정까지 전체 구간을 구성했습니다.",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
-    "result": "OSPF·VIP 절체, FTTH 쇼핑몰 로그인, MX1→Thunderbird 메일 수신 확인",
+    "result": "가정 PC의 쇼핑몰 접속·로그인, SLB VIP 절체, Thunderbird 메일 수신 확인",
     "stack": "Linux · Nginx · Tomcat · MariaDB · HAProxy · Keepalived · pfSense · Suricata · BIND9 · Postfix · Dovecot · Chrony · rsyslog",
     "work": [
       [
@@ -225,45 +234,25 @@ const compact = {
     ],
     "network": [
       [
-        "본사·지사",
-        "서버팜·사무망·관리망을 구분하고 UTM·VPN으로 거점 연결"
+        "거점 연결",
+        "본사와 지사는 VPN으로 연결하고, IDC·외부 고객망은 ISP/IX 구간으로 연결했습니다."
       ],
       [
-        "보안 경계",
-        "DMZ와 접근 경계를 구성하고 내부 업무망·서비스망을 분리"
+        "IDC 내부",
+        "Spine 2대와 역할별 Leaf를 연결했습니다. OSPF로 경로를 구성하고 WEB·WAS·DB·인프라·관리망을 분리했습니다."
       ],
       [
-        "IDC",
-        "역할별 Leaf에 WEB·WAS·DB·인프라·관리망 배치"
-      ],
-      [
-        "고객 접근",
-        "가정 PC → Home Router → ISP/IX → IDC 서비스의 접속 경로 구성"
-      ],
-      [
-        "메일·로그",
-        "MX1 Postfix·Dovecot 메일 전달과 Thunderbird IMAP 수신 확인, rsyslog 중앙 로그 수집 구성"
+        "고객 접속",
+        "가정 PC에서 Home Router와 ISP/IX를 거쳐 쇼핑몰에 접속하도록 DHCP·NAT·라우팅을 설정했습니다."
       ]
     ],
-    "note": "개인 프로젝트 구축을 완료했습니다. 100대는 데이터센터 수용 목표 설계이지 실제 서버 100대 가동 기록은 아닙니다. DB3/Galera 등 별도 심화 설계는 구축 완료 성과에 포함하지 않습니다.",
+    "note": "100대 수용을 기준으로 설계하고, 실습 환경에서는 역할별 대표 장비와 서버로 구성했습니다.",
     "troubles": [
       {
-        "title": "NTP 서비스 실행과 실제 동기화 구분",
-        "symptom": "서비스가 실행 중이어도 클라이언트가 실제로 시간을 동기화했는지는 별도 확인이 필요했습니다.",
-        "action": "Reference ID·Stratum·Leap status·UDP 123 리스닝을 확인하고 클라이언트 응답 수신을 별도 점검 항목으로 분리했습니다.",
-        "result": "NTP1의 로컬 시간원 동작을 확인했습니다. 외부 표준시각·전체 클라이언트 동기화는 추가 검증 대상으로 남겼습니다."
-      },
-      {
-        "title": "FTTH WAN DHCP 장애 해결",
+        "title": "가정 라우터가 WAN 주소를 받지 못한 문제",
         "symptom": "Home Router가 WAN DHCP 주소를 수신하지 못했습니다.",
-        "action": "LG-L3-1 설정에서 비활성화된 DHCP 서비스를 확인해 service dhcp를 활성화했습니다.",
+        "action": "상위 L3 스위치의 DHCP 설정을 확인하다 서비스가 꺼져 있는 것을 발견했습니다. service dhcp를 적용한 뒤 주소 할당을 다시 확인했습니다.",
         "result": "Home Router WAN DHCP와 가정 PC 주소 할당을 확인했습니다."
-      },
-      {
-        "title": "MX1 메일 수신 검증",
-        "symptom": "서버 프로세스 실행만으로 실제 클라이언트 수신을 입증하기 어려웠습니다.",
-        "action": "Postfix로 mailuser1→mailuser2 메일을 로컬 전달하고 Dovecot IMAP을 구성했습니다. Windows 가상 PC의 Thunderbird에서 받은 편지함을 조회했습니다.",
-        "result": "mailuser2@starmall.com 받은 편지함에서 mailuser1@starmall.com의 MX1 test 메일과 Hello from SMDC-MX1! 본문을 확인했습니다."
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
@@ -297,6 +286,24 @@ const compact = {
       [
         "공통 서비스",
         "BIND9 DNS · Postfix·Dovecot 메일 · Chrony NTP · rsyslog 중앙 로그"
+      ]
+    ],
+    "checks": [
+      [
+        "쇼핑몰",
+        "가정 PC에서 StarMall 접속, 회원가입 화면과 로그인 후 사용자명 표시를 확인했습니다."
+      ],
+      [
+        "이중화",
+        "HAProxy·Keepalived로 Front·Backend VIP를 구성하고 SLB 장애 시 VIP 절체를 확인했습니다."
+      ],
+      [
+        "메일",
+        "Postfix의 사용자 간 메일 전달과 Dovecot IMAP을 설정하고 Thunderbird에서 수신을 확인했습니다."
+      ],
+      [
+        "운영",
+        "rsyslog 중앙 로그 수집을 구성했습니다. Chrony는 로컬 시간원 동작을 확인했으며 외부 표준시각과 전체 단말의 동기화는 추가 확인이 필요합니다."
       ]
     ]
   }
@@ -353,7 +360,7 @@ function projectRow(project) {
       <div class="project-topline"><span class="project-type">${c.type}</span></div>
       <h2>${escapeHTML(project.title)}</h2>
       <p class="project-period"><span>프로젝트 기간</span><strong>${c.period}</strong></p>
-      <p class="project-subtitle">${c.subtitle}</p>
+      <p class="project-subtitle">${c.subtitle}</p><p class="project-outcome"><b>확인한 결과</b> ${escapeHTML(c.result)}</p>
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
@@ -384,7 +391,7 @@ function responsibilities(c) {
         <th scope="row">${escapeHTML(row.area)}<span>${row.mine ? '서동연 · 본인 담당' : '팀원 담당'}</span></th>
         <td>${escapeHTML(row.scope)}</td></tr>`).join('')}</tbody>
     </table>
-    <h3 class="detail-section-title">직접 수행한 작업</h3>
+    <h3 class="detail-section-title">담당 작업</h3>
     <ol class="contribution-list">${c.contributions.map(item => `<li><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.body)}</p></li>`).join('')}</ol>`;
 }
 
@@ -393,11 +400,13 @@ function notes(project) {
   return `${c.teamRoles ? responsibilities(c) : `<p class="detail-role"><b>직접 맡은 범위</b>${c.role}</p>
     <h3 class="detail-section-title">수행한 작업</h3>${workList(c.work)}
     <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
-    ${c.teamResult ? `<h3 class="detail-section-title">팀 공동 통합 검증</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
+    ${project.id === 'aleph-arena' ? `<h3 class="detail-section-title">한국 IDC의 3-Tier 구성</h3>${workList(c.network)}` : ''}
+    ${c.teamResult ? `<h3 class="detail-section-title">팀 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
+    ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${workList(c.checks)}` : ''}
     <h3 class="detail-section-title">사용 기술·도구</h3>
     <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>
-    <p class="detail-intro"><b>구축·검증 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
-    <h3 class="detail-section-title">문제를 확인하고 해결한 과정</h3>
+    <p class="detail-intro"><b>사용 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
+    <h3 class="detail-section-title">문제 해결</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
       <h4>${trouble.title}</h4><dl>
         <div><dt>상황</dt><dd>${trouble.symptom}</dd></div>

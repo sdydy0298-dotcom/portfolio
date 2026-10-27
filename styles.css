@@ -405,3 +405,7 @@ body.dialog-open { overflow: hidden; }
 
 /* Keep the keyboard skip link hidden without offscreen painting artifacts. */
 .skip:not(:focus) { top: 0; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Keep the project summary focused on the observed outcome. */
+.project-outcome { margin: 0 0 14px; font-size: 12px; line-height: 1.75; color: var(--body); }
+.project-outcome b { color: var(--ink); margin-right: 6px; font-weight: 650; }
