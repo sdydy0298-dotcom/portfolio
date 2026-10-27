@@ -410,8 +410,7 @@ function notes(project) {
     ${c.teamResult ? `<h3 class="detail-section-title">팀 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
     ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${workList(c.checks)}` : ''}
     <h3 class="detail-section-title">사용 기술·도구</h3>
-    <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>
-    <p class="detail-intro"><b>사용 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
+    <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
     <h3 class="detail-section-title">문제 해결</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
       <h4>${trouble.title}</h4><dl>

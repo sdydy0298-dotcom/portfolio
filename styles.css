@@ -21,8 +21,8 @@ h1, h2, h3, p { margin-top: 0; }
 .masthead { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .wordmark { flex-shrink: 0; font-size: 25px; font-weight: 850; letter-spacing: -1.4px; }
 .wordmark span, .accent { color: var(--blue); }
-.masthead nav { display: flex; min-width: 0; align-self: stretch; gap: 28px; }
-.masthead nav a { display: flex; align-items: center; gap: 8px; padding: 4px 2px 0; border-bottom: 3px solid transparent; font-weight: 650; font-size: 13px; color: var(--muted); }
+.masthead nav { display: flex; min-width: 0; align-self: center; gap: 28px; }
+.masthead nav a { display: flex; align-items: center; gap: 8px; padding: 6px 2px 3px; border-bottom: 3px solid transparent; font-weight: 650; font-size: 13px; color: var(--muted); }
 .masthead nav a span { font-size: 10px; letter-spacing: 1px; }
 .masthead nav a[aria-current] { color: var(--blue); border-bottom-color: var(--blue); }
 .masthead nav a:hover { color: var(--blue); }
@@ -241,7 +241,7 @@ body.dialog-open { overflow: hidden; }
   .portrait-frame { box-shadow: 4px 4px 0 #e5eeff; }
   .site-shell { padding: 0 15px; }
   .masthead { min-height: 72px; gap: 12px; }
-  .wordmark { font-size: 22px; }
+  .wordmark { font-size: 18px; }
   .masthead nav { gap: 17px; }
   .masthead nav a { padding: 3px 0 0; font-size: 11px; gap: 4px; }
   .masthead nav a span { display: none; }
@@ -421,3 +421,33 @@ body.dialog-open { overflow: hidden; }
 .career-design b { color: #315587; }
 @media(max-width:650px) { .intro { padding: 18px 16px 3px; } .intro h1 { font-size: 32px; } .career-design { grid-template-columns: 1fr; gap: 4px; } }
 @media print { .intro { padding: 12px 16px 0; } .intro h1 { font-size: 28px; } .career-row { padding: 9px 12px; } }
+
+
+/* Keep the original design while aligning both page headings and navigation. */
+.profile-page { padding-bottom: 32px; }
+.projects-page .projects-heading { margin-top: 16px; }
+.intro-text > span { display: block; }
+.intro-text > span + span { margin-top: 8px; }
+
+/* Contact details in the existing photo sidebar, without an extra card. */
+.identity-contact { font-size: 12px; line-height: 1.7; }
+.identity-contact .small-label { margin-bottom: 5px; }
+.identity-contact .contact-location-label { margin-top: 17px; }
+.contact-email { display: block; color: var(--blue-dark); font-size: 11px; font-weight: 650; overflow-wrap: anywhere; }
+.contact-email:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.contact-location { margin: 0; font-size: 12px; color: var(--body); }
+@media screen and (max-width: 700px) {
+  .profile-page { padding-bottom: 24px; }
+  .projects-page .projects-heading { margin-top: 13px; }
+  .identity { min-height: 166px; }
+  .identity .identity-rule { display: block; margin: 12px 0 11px; }
+  .identity .small-label { display: block; font-size: 8px; letter-spacing: 1.1px; margin-bottom: 3px; }
+  .identity-contact .contact-location-label { margin-top: 9px; }
+  .contact-email { font-size: 10px; }
+  .contact-location { font-size: 10px; }
+}
+@media screen and (max-width: 360px) {
+  .wordmark { font-size: 15px; letter-spacing: -.8px; }
+  .masthead nav { gap: 10px; }
+}
+@media print { .profile-page { padding-bottom: 0; } }
