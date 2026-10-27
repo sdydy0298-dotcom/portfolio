@@ -385,6 +385,10 @@ function workList(items) {
   return `<ul class="work-list">${items.map(([title, body]) => `<li><b>${escapeHTML(title)}</b> ${escapeHTML(body)}</li>`).join('')}</ul>`;
 }
 
+function checksList(items) {
+  return `<ul class="work-list checks-list">${items.map(([title, body]) => `<li><b>${escapeHTML(title)}</b><span>${escapeHTML(body)}</span></li>`).join('')}</ul>`;
+}
+
 function responsibilities(c) {
   return `<section class="role-summary" aria-label="본인 담당 영역">
       <span>MY ROLE</span><h3>웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
@@ -408,7 +412,7 @@ function notes(project) {
     <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
     ${project.id === 'aleph-arena' ? `<h3 class="detail-section-title">한국 IDC의 3-Tier 구성</h3>${workList(c.network)}` : ''}
     ${c.teamResult ? `<h3 class="detail-section-title">팀 연동 결과</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
-    ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${workList(c.checks)}` : ''}
+    ${c.checks?.length ? `<h3 class="detail-section-title">구축 결과</h3>${checksList(c.checks)}` : ''}
     <h3 class="detail-section-title">사용 기술·도구</h3>
     <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
     <h3 class="detail-section-title">문제 해결</h3>
