@@ -3,66 +3,6 @@
   "updatedAt": "2026-10-27",
   "projects": [
     {
-      "id": "aleph-arena",
-      "title": "ALEPH Arena",
-      "images": [
-        {
-          "url": "/assets/arena/web-main-v2.jpg",
-          "title": "01 · 게임 웹사이트 메인",
-          "width": 1513,
-          "height": 1039
-        },
-        {
-          "url": "/assets/arena/web-login-v2.jpg",
-          "title": "02 · 로그인 화면",
-          "width": 1513,
-          "height": 1039
-        },
-        {
-          "url": "/assets/arena/web-signup-v2.jpg",
-          "title": "03 · 회원가입 화면",
-          "width": 1514,
-          "height": 1039
-        },
-        {
-          "url": "/assets/arena/game-main-v2.jpg",
-          "title": "04 · 게임 클라이언트 메인",
-          "width": 1278,
-          "height": 748
-        },
-        {
-          "url": "/assets/arena/game-play-v2.jpg",
-          "title": "05 · 인게임 플레이",
-          "width": 1276,
-          "height": 746
-        }
-      ],
-      "topologies": [
-        {
-          "url": "/assets/arena/topology.png",
-          "title": "전체 토폴로지",
-          "caption": "한국·일본의 거점과 IDC를 연결한 팀 전체 구성",
-          "details": [
-            {
-              "label": "전체 구성",
-              "text": "한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 WAN으로 연결했습니다. 거점 내부는 Core–Distribution–Access의 3-Tier 구조입니다."
-            },
-            {
-              "label": "담당 범위",
-              "text": "한국 IDC의 네트워크와 Linux 서버, 웹·WAS·DB·DNS·게임 서버를 직접 구축했습니다. 웹사이트·Windows 런처·Godot 게임도 직접 개발했습니다. 본사·ISP/WAN·일본 IDC·개발/QA 센터·일본 지사는 팀원이 담당했습니다."
-            },
-            {
-              "label": "연결 흐름",
-              "text": "사용자망에서 거점 게이트웨이와 WAN을 거쳐 IDC 서비스에 접근합니다. 한국과 일본의 인터넷 출구는 각 국가의 본사·지사 구간에 두고, 한일 내부 통신은 WAN으로 연결했습니다."
-            }
-          ],
-          "width": 2500,
-          "height": 1550,
-          "overview": true
-        }
-      ]
-    },
-    {
       "id": "smdc",
       "title": "Enterprise Network",
       "images": [
@@ -268,6 +208,66 @@
           "height": 727,
           "overview": false,
           "kind": "design"
+        }
+      ]
+    },
+    {
+      "id": "aleph-arena",
+      "title": "ALEPH Arena",
+      "images": [
+        {
+          "url": "/assets/arena/web-main-v2.jpg",
+          "title": "01 · 게임 웹사이트 메인",
+          "width": 1513,
+          "height": 1039
+        },
+        {
+          "url": "/assets/arena/web-login-v2.jpg",
+          "title": "02 · 로그인 화면",
+          "width": 1513,
+          "height": 1039
+        },
+        {
+          "url": "/assets/arena/web-signup-v2.jpg",
+          "title": "03 · 회원가입 화면",
+          "width": 1514,
+          "height": 1039
+        },
+        {
+          "url": "/assets/arena/game-main-v2.jpg",
+          "title": "04 · 게임 클라이언트 메인",
+          "width": 1278,
+          "height": 748
+        },
+        {
+          "url": "/assets/arena/game-play-v2.jpg",
+          "title": "05 · 인게임 플레이",
+          "width": 1276,
+          "height": 746
+        }
+      ],
+      "topologies": [
+        {
+          "url": "/assets/arena/topology.png",
+          "title": "전체 토폴로지",
+          "caption": "한국·일본의 거점과 IDC를 연결한 팀 전체 구성",
+          "details": [
+            {
+              "label": "전체 구성",
+              "text": "한국 본사·개발/QA 센터·한국 IDC·일본 지사·일본 IDC를 WAN으로 연결했습니다. 거점 내부는 Core–Distribution–Access의 3-Tier 구조입니다."
+            },
+            {
+              "label": "담당 범위",
+              "text": "한국 IDC의 네트워크와 Linux 서버, 웹·WAS·DB·DNS·게임 서버를 직접 구축했습니다. 웹사이트·Windows 런처·Godot 게임도 직접 개발했습니다. 본사·ISP/WAN·일본 IDC·개발/QA 센터·일본 지사는 팀원이 담당했습니다."
+            },
+            {
+              "label": "연결 흐름",
+              "text": "사용자망에서 거점 게이트웨이와 WAN을 거쳐 IDC 서비스에 접근합니다. 한국과 일본의 인터넷 출구는 각 국가의 본사·지사 구간에 두고, 한일 내부 통신은 WAN으로 연결했습니다."
+            }
+          ],
+          "width": 2500,
+          "height": 1550,
+          "overview": true
         }
       ]
     }

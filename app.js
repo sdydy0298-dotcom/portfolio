@@ -5,12 +5,13 @@ const compact = {
   "aleph-arena": {
     "type": "팀 프로젝트 · 5인",
     "period": "2026.09.17 — 09.23",
+    "sortDate": "2026-09-17",
     "cover": "/assets/arena/web-main-v2.jpg",
     "coverWidth": 1513,
     "coverHeight": 1039,
     "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
-    "coverLabel": "직접 개발 · 웹사이트 · 런처 · 게임",
-    "subtitle": "직접 개발한 웹사이트·런처·게임을 한국 IDC에 배포한 5인 팀 프로젝트",
+    "coverLabel": "게임 서비스 · 글로벌 거점 네트워크",
+    "subtitle": "게임회사의 한국·일본 거점과 게임 서비스를 연결한 네트워크 구축 프로젝트",
     "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
     "fix": "웹·게임 개발과 IDC 배포, SELinux 403 오류 해결",
     "result": "Web–WAS 응답, Windows 클라이언트↔Linux 게임 서버 실제 플레이 확인",
@@ -159,12 +160,13 @@ const compact = {
   "smdc": {
     "type": "개인 프로젝트 · 구축 완료",
     "period": "2026.10",
+    "sortDate": "2026-10-01",
     "cover": "/assets/enterprise/gns_all_topology.png",
     "coverWidth": 1600,
     "coverHeight": 1556,
     "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
     "coverLabel": "실제 IDC 구축 · 고객망 서비스 검증",
-    "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크",
+    "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크·서비스 구축 프로젝트",
     "role": "본사·지사 VPN, UTM·DMZ·IPS, Spine–Leaf, Linux·DNS·MX·중앙 로그 서버 구축",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
     "result": "OSPF·VIP 절체, FTTH 쇼핑몰 로그인, MX1→Thunderbird 메일 수신 확인",
@@ -307,16 +309,10 @@ function projectRow(project) {
       <h2>${escapeHTML(project.title)}</h2>
       <p class="project-period"><span>프로젝트 기간</span><strong>${c.period}</strong></p>
       <p class="project-subtitle">${c.subtitle}</p>
-      <p class="project-scope">${escapeHTML(c.scope)}</p>
-      <dl class="project-facts">
-        <div><dt>내 역할</dt><dd>${c.role}</dd></div>
-        <div><dt>${project.id === 'smdc' ? '주요 구현' : '문제 해결'}</dt><dd>${c.fix}</dd></div>
-        <div><dt>확인 결과</dt><dd>${c.result}</dd></div>
-      </dl>
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
-        ${Array.isArray(c.techAreas) ? `<dl class="technology-areas">${[...c.techAreas, ['사용 도구', c.tools.join(' · ')]].map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>` : ''}
+        <dl class="technology-areas"><div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
@@ -353,6 +349,8 @@ function notes(project) {
     <h3 class="detail-section-title">수행한 작업</h3>${workList(c.work)}
     <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
     ${c.teamResult ? `<h3 class="detail-section-title">팀 공동 통합 검증</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
+    <h3 class="detail-section-title">사용 기술·도구</h3>
+    <dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>
     <p class="detail-intro"><b>구축·검증 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
     <h3 class="detail-section-title">문제를 확인하고 해결한 과정</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
@@ -469,7 +467,8 @@ fetch('/content.json')
   })
   .then(data => {
     if (!Array.isArray(data.projects)) throw new Error('Invalid projects');
-    projects = data.projects.filter(project => compact[project.id]);
+    projects = data.projects.filter(project => compact[project.id])
+      .sort((a, b) => compact[b.id].sortDate.localeCompare(compact[a.id].sortDate));
     document.querySelector('#project-list').innerHTML = projects.map(projectRow).join('');
   })
   .catch(() => {
