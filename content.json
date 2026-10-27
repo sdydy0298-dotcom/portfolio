@@ -95,6 +95,12 @@
           "title": "05 · 로그인 성공 후 사용자 표시",
           "width": 1917,
           "height": 952
+        },
+        {
+          "url": "/assets/enterprise/homepc-mail.svg",
+          "title": "06 · Thunderbird에서 MX1 메일 수신 확인",
+          "width": 1000,
+          "height": 500
         }
       ],
       "topologies": [
@@ -136,6 +142,10 @@
             {
               "label": "서비스 흐름",
               "text": "외부 요청은 FW·IPS와 Border Leaf를 거쳐 SLB로 들어온 뒤 WEB–WAS–DB로 이어집니다. DB 앞에는 별도 방화벽을 배치해 접근 경계를 분리했습니다."
+            },
+            {
+              "label": "MX·중앙 로그",
+              "text": "Postfix·Dovecot MX1과 Thunderbird 실제 메일 수신, Chrony·rsyslog 중앙 로그 수집을 구성·확인했습니다."
             }
           ],
           "width": 972,
@@ -197,7 +207,7 @@
             },
             {
               "label": "망 구성",
-              "text": "두 가정망을 서로 다른 사설 대역으로 나누고, 각 Home Router를 ISP 라우터에 연결했습니다. 가정 PC는 DHCP로 주소를 받습니다."
+              "text": "가입자 L3의 DHCP로 두 Home Router에 WAN 주소를 동적으로 할당하고, 각 가정에는 별도 LAN DHCP·NAT/PAT와 사설 대역을 구성했습니다."
             },
             {
               "label": "검증 흐름",

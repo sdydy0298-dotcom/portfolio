@@ -9,24 +9,32 @@ const compact = {
     "coverWidth": 1513,
     "coverHeight": 1039,
     "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
-    "coverLabel": "웹사이트 · 게임 클라이언트",
-    "subtitle": "한국·일본 거점을 연결한 게임 회사 인프라",
-    "role": "전체 공통 설계 주도, 한국 IDC 네트워크·서버 구축과 웹·게임 배포",
-    "fix": "웹 403 오류의 SELinux 컨텍스트를 확인하고 수정해 접근 복구",
-    "result": "웹 메인·Web–WAS 응답 확인, Windows 클라이언트와 Linux 서버 간 실제 게임 플레이",
+    "coverLabel": "직접 개발 · 웹사이트 · 런처 · 게임",
+    "subtitle": "직접 개발한 웹사이트·런처·게임을 한국 IDC에 배포한 5인 팀 프로젝트",
+    "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
+    "fix": "웹·게임 개발과 IDC 배포, SELinux 403 오류 해결",
+    "result": "Web–WAS 응답, Windows 클라이언트↔Linux 게임 서버 실제 플레이 확인",
     "stack": "Rocky Linux · Nginx · Tomcat · MariaDB · BIND · VLAN · OSPF · Static Route · Godot",
     "work": [
       [
-        "네트워크 설계",
-        "거점별 IP·VLAN과 내부·WAN 연결 기준 설계, 구간별 통신 점검"
+        "웹사이트",
+        "HTML·CSS·JavaScript, Java WAS, MariaDB 연동"
       ],
       [
-        "한국 IDC 구축",
-        "Linux 웹·WAS·DB·DNS 환경 구성 및 게임 서버 배포"
+        "런처",
+        "C#/.NET 8 Windows 런처 직접 개발"
       ],
       [
-        "동작 검증",
-        "Web–WAS 응답과 게임 클라이언트 접속·플레이 확인"
+        "게임",
+        "Godot 클라이언트와 Linux Dedicated Server 제작"
+      ],
+      [
+        "IDC",
+        "네트워크·WEB·WAS·DB·DNS·게임 서버 구축"
+      ],
+      [
+        "검증",
+        "웹/게임 실제 접속·플레이, 문제 해결"
       ]
     ],
     "network": [
@@ -48,7 +56,7 @@ const compact = {
       ]
     ],
     "teamResult": "공통 IP·VLAN·WAN 기준을 맞춘 뒤 각자의 환경을 UDP Tunnel로 연결했습니다. 거점 간 라우팅, 목적지·반환 경로, IDC 서비스 접근은 팀이 함께 점검했습니다.",
-    "note": "팀은 일정에 맞춰 단일 3-Tier 구조를 먼저 구현했습니다. 웹 메인과 Web–WAS 응답, 한국 IDC의 실제 게임 플레이를 직접 확인했으며, 일본 IDC의 별도 게임 접속 전체 시험과 구분했습니다.",
+    "note": "웹사이트·런처·게임·한국 IDC는 본인이 직접 개발·구축했습니다. 타 거점의 개별 네트워크는 팀원 담당이며, 일본 IDC 게임 서버의 미확인 통합 시험을 본인 검증 실적으로 포함하지 않습니다.",
     "troubles": [
       {
         "title": "웹 배포 후 403 Forbidden",
@@ -69,7 +77,7 @@ const compact = {
         "result": "+cdflag에서 NOERROR와 A 레코드가 반환되어 Cache DNS의 검증 단계로 원인 범위를 좁혔습니다."
       }
     ],
-    "scope": "한국 IDC 담당",
+    "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
     "coverView": "images",
     "technologies": [
       "java",
@@ -79,7 +87,7 @@ const compact = {
       "nginx",
       "linux"
     ],
-    "roleSummary": "5개 거점으로 나눈 팀 프로젝트에서 한국 IDC를 맡았습니다. 공통 네트워크 설계를 조율하고, 한국 IDC의 서버 환경과 웹·게임 서비스를 직접 구축·배포했습니다.",
+    "roleSummary": "5인 팀의 한국 IDC 담당자로 네트워크·서버를 구축했습니다. 이에 더해 웹사이트, Windows C#/.NET 런처, Godot 게임을 직접 개발·배포하고 한국 IDC에서 서비스를 연동했습니다.",
     "teamRoles": [
       {
         "area": "한국 본사",
@@ -93,7 +101,7 @@ const compact = {
       },
       {
         "area": "한국 IDC",
-        "scope": "서버망·관리망, DNS·WEB·WAS·DB·게임 서버 구축과 서비스 배포",
+        "scope": "한국 IDC 네트워크·서버·DNS 구축, 웹사이트·런처·게임 직접 개발과 서비스 배포",
         "owner": "본인",
         "mine": true
       },
@@ -110,52 +118,82 @@ const compact = {
     ],
     "contributions": [
       {
-        "title": "공통 네트워크 설계",
-        "body": "거점별 IP·VLAN·게이트웨이와 WAN 연결 기준을 설계·조율했습니다. 팀원이 각 영역을 구현한 뒤 목적지·반환 경로를 함께 점검했습니다."
+        "title": "게임 웹사이트 직접 개발",
+        "body": "HTML·CSS·JavaScript 웹사이트와 로그인·회원가입 화면을 제작하고 Java WAS·MariaDB 연동, Nginx /api/ 프록시를 구현했습니다."
       },
       {
-        "title": "한국 IDC 네트워크·서버 구축",
-        "body": "서비스·DB·DNS·관리망을 VLAN으로 나누고 SVI·고정 IP를 설정했습니다. Rocky Linux에 Nginx·Tomcat·MariaDB·BIND를 설치·구성했습니다."
+        "title": "Windows 런처 직접 개발",
+        "body": "C#/.NET 8 런처를 제작하고 Windows 실행 파일로 빌드·배포했습니다."
       },
       {
-        "title": "웹·게임 서비스 배포",
-        "body": "Nginx의 /api/ 요청을 Tomcat으로 연결하고 Java WAR를 배포했습니다. Godot의 Windows 클라이언트·Linux 전용 서버를 Export하고 C# 런처를 빌드했습니다."
+        "title": "Godot 게임 직접 개발",
+        "body": "Godot 게임 클라이언트와 Linux 전용 게임 서버를 구축했습니다. AI·로컬 플레이, 온라인 방 접속·READY·시작 흐름과 Windows↔Linux 실제 플레이를 확인했습니다."
       },
       {
-        "title": "장애 해결과 실제 동작 검증",
-        "body": "SELinux 컨텍스트 오류를 해결해 웹 접근을 복구했습니다. Web–WAS HTTP 200 응답, DNS 질의 경로와 한국 IDC 게임 서버의 실제 플레이를 확인했습니다."
+        "title": "한국 IDC와 네트워크 구축",
+        "body": "5인 팀의 IP·VLAN·WAN 설계를 조율하고 한국 IDC의 WEB·WAS·DB·DNS 및 게임 서버 운영 환경을 구축했습니다."
+      },
+      {
+        "title": "장애 해결과 검증",
+        "body": "SELinux 컨텍스트를 수정해 웹 403을 해결했고 실제 IPv4 /api/ 요청, DNS 질의와 한국 IDC의 게임 접속을 검증했습니다."
+      }
+    ],
+    "components": [
+      {
+        "title": "게임 웹사이트",
+        "tech": "HTML · CSS · JavaScript · Java",
+        "body": "로그인·회원가입, Java WAS·MariaDB와 연동되는 게임 웹사이트 직접 제작"
+      },
+      {
+        "title": "Windows 런처",
+        "tech": "C# · .NET 8",
+        "body": "게임 런처 직접 제작, Windows용 실행 파일 빌드 및 배포"
+      },
+      {
+        "title": "게임 클라이언트·서버",
+        "tech": "Godot · ENet/UDP",
+        "body": "게임 클라이언트·Linux Dedicated Server 구현과 실제 접속·플레이 검증"
+      },
+      {
+        "title": "한국 IDC",
+        "tech": "Linux · Nginx · Tomcat · MariaDB",
+        "body": "네트워크·DNS·WEB·WAS·DB·게임 서버 환경 구축과 연동"
       }
     ]
   },
   "smdc": {
-    "type": "개인 프로젝트 · 진행 중",
-    "period": "2026.10 — 현재",
+    "type": "개인 프로젝트 · 구축 완료",
+    "period": "2026.10",
     "cover": "/assets/enterprise/overview.svg",
     "coverWidth": 960,
     "coverHeight": 600,
     "coverAlt": "본사·지사 VPN, ISP·IX, 고객망과 IDC를 연결하고 UTM·DMZ·HA 구축 범위를 요약한 개념도",
     "coverLabel": "기업망 · 보안 · IDC 구성 요약",
     "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크",
-    "role": "본사·지사·IDC·고객망 설계, 보안 경계와 Linux 서버 환경 구축",
-    "fix": "UTM·DMZ·본사–지사 VPN, Spine–Leaf와 SLB/VIP 이중화 구성",
-    "result": "OSPF FULL·Front/Backend VIP 동시 절체 확인, 가정 PC에서 쇼핑몰 접속·로그인 확인",
+    "role": "본사·지사 VPN, UTM·DMZ·IPS, Spine–Leaf, Linux·DNS·MX·중앙 로그 서버 구축",
+    "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
+    "result": "OSPF·VIP 절체, FTTH 쇼핑몰 로그인, MX1→Thunderbird 메일 수신 확인",
     "stack": "OSPF · pfSense · HAProxy · Keepalived · Nginx · Tomcat · MariaDB · Chrony",
     "work": [
       [
-        "기업망 설계",
-        "본사·지사·IDC·ISP/IX·FTTH의 주소·VLAN·연결 경로 구성"
+        "기업망",
+        "본사·지사 VLAN·OSPF·VPN과 ISP/IX·FTTH 고객망 구축"
       ],
       [
-        "보안·거점 연결",
-        "UTM 배치와 DMZ 구성, 본사–지사 VPN 연결"
+        "보안망",
+        "pfSense FW/UTM·DMZ·IPS/IDS 및 서비스 NAT·접근 정책"
       ],
       [
-        "IDC 서비스",
-        "Spine–Leaf·HAProxy/Keepalived·WEB–WAS–DB와 운영 서비스 구성"
+        "IDC",
+        "Spine–Leaf·HAProxy·Keepalived Front/Backend VIP, WEB–WAS–DB 구성"
+      ],
+      [
+        "공통 서비스",
+        "BIND9 DNS, Postfix·Dovecot MX, Chrony NTP, rsyslog 중앙 로그 수집"
       ],
       [
         "검증",
-        "OSPF FULL, Front/Backend VIP 절체와 가정 PC의 쇼핑몰 접속·로그인 확인"
+        "VIP 절체·OSPF·FTTH 접속·로그인·Thunderbird IMAP 수신 확인"
       ]
     ],
     "network": [
@@ -174,18 +212,34 @@ const compact = {
       [
         "고객 접근",
         "가정 PC → Home Router → ISP/IX → IDC 서비스의 접속 경로 구성"
+      ],
+      [
+        "메일·로그",
+        "MX1 Postfix·Dovecot 메일 전달과 Thunderbird IMAP 수신 확인, rsyslog 중앙 로그 수집 구성"
       ]
     ],
-    "note": "구축·검증 진행 중입니다. DB 복제·장애 전환, WAS 세션 복제와 전체 운영 서비스의 통합 검증은 후속 작업입니다. 100대는 IDC의 설계상 수용 목표입니다.",
+    "note": "개인 프로젝트 구축을 완료했습니다. 100대는 데이터센터 수용 목표 설계이지 실제 서버 100대 가동 기록은 아닙니다. DB3/Galera 등 별도 심화 설계는 구축 완료 성과에 포함하지 않습니다.",
     "troubles": [
       {
         "title": "NTP 서비스 실행과 실제 동기화 구분",
         "symptom": "서비스가 실행 중이어도 클라이언트가 실제로 시간을 동기화했는지는 별도 확인이 필요했습니다.",
         "action": "Reference ID·Stratum·Leap status·UDP 123 리스닝을 확인하고 클라이언트 응답 수신을 별도 점검 항목으로 분리했습니다.",
         "result": "NTP1의 로컬 시간원 동작을 확인했습니다. 외부 표준시각·전체 클라이언트 동기화는 추가 검증 대상으로 남겼습니다."
+      },
+      {
+        "title": "FTTH WAN DHCP 장애 해결",
+        "symptom": "Home Router가 WAN DHCP 주소를 수신하지 못했습니다.",
+        "action": "LG-L3-1 설정에서 비활성화된 DHCP 서비스를 확인해 service dhcp를 활성화했습니다.",
+        "result": "Home Router WAN DHCP와 가정 PC 주소 할당을 확인했습니다."
+      },
+      {
+        "title": "MX1 메일 수신 검증",
+        "symptom": "서버 프로세스 실행만으로 실제 클라이언트 수신을 입증하기 어려웠습니다.",
+        "action": "Postfix·Dovecot 메일 처리를 구성하고 Windows 가상 PC Thunderbird에서 테스트 계정을 조회했습니다.",
+        "result": "mailuser2@starmall.com 받은 편지함에서 mailuser1@starmall.com의 MX1 test 메일을 확인했습니다."
       }
     ],
-    "scope": "전 구간 설계·구축",
+    "scope": "기업망·보안·IDC·고객망 전 구간 구축",
     "coverView": "topology",
     "technologies": [
       "java",
@@ -194,6 +248,20 @@ const compact = {
       "mariadb",
       "haproxy",
       "linux"
+    ],
+    "techAreas": [
+      [
+        "네트워크",
+        "Spine–Leaf · VLAN · OSPF · NAT/PAT · Site-to-Site VPN"
+      ],
+      [
+        "보안·가용성",
+        "pfSense · FW/UTM · DMZ · Suricata IPS · Keepalived · VIP"
+      ],
+      [
+        "운영 서비스",
+        "BIND9 · Postfix · Dovecot · Chrony · rsyslog"
+      ]
     ]
   }
 };
@@ -254,6 +322,7 @@ function projectRow(project) {
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
+        ${Array.isArray(c.techAreas) ? `<dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>` : ''}
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
@@ -270,8 +339,9 @@ function workList(items) {
 
 function responsibilities(c) {
   return `<section class="role-summary" aria-label="본인 담당 영역">
-      <span>MY ROLE</span><h3>한국 IDC · 네트워크와 서비스 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
+      <span>MY ROLE</span><h3>웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축</h3><p>${escapeHTML(c.roleSummary)}</p>
     </section>
+    ${Array.isArray(c.components) ? `<div class="build-scope-grid">${c.components.map(item => `<section class="build-scope-card"><h4>${escapeHTML(item.title)}</h4><strong>${escapeHTML(item.tech)}</strong><p>${escapeHTML(item.body)}</p></section>`).join('')}</div>` : ''}
     <h3 class="detail-section-title">팀 업무 분담과 나의 담당</h3>
     <table class="team-table" aria-label="5인 팀의 거점별 업무 분담">
       <thead><tr><th scope="col">담당 영역</th><th scope="col">주요 업무</th></tr></thead>
