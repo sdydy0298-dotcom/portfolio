@@ -89,15 +89,15 @@ const compact = {
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
     "coverView": "images",
     "technologies": [
+      "rockylinux",
+      "nginx",
+      "tomcat",
+      "mariadb",
       "java",
       "javascript",
       "csharp",
       "dotnet",
-      "godot",
-      "mariadb",
-      "nginx",
-      "tomcat",
-      "linux"
+      "godot"
     ],
     "tools": [
       "GNS3",
@@ -258,13 +258,15 @@ const compact = {
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
     "coverView": "images",
     "technologies": [
+      "rockylinux",
+      "ubuntu",
+      "windows",
       "pfsense",
       "haproxy",
-      "linux",
       "nginx",
       "tomcat",
-      "mariadb",
-      "java"
+      "java",
+      "mariadb"
     ],
     "tools": [
       "GNS3",
@@ -281,7 +283,7 @@ const compact = {
       ],
       [
         "쇼핑몰 서버",
-        "Linux · Nginx · Tomcat · Java Servlet · MariaDB · WEB–WAS–DB"
+        "Rocky Linux · Ubuntu · Windows · Nginx · Tomcat · Java Servlet · MariaDB · WEB–WAS–DB"
       ],
       [
         "공통 서비스",
@@ -309,6 +311,9 @@ const compact = {
   }
 };
 const technologyNames = {
+  rockylinux: 'Rocky Linux',
+  ubuntu: 'Ubuntu',
+  windows: 'Windows',
   c: 'C',
   javascript: 'JavaScript',
   dotnet: '.NET',
@@ -364,7 +369,7 @@ function projectRow(project) {
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
-        <dl class="technology-areas">${project.id === 'smdc' ? c.techAreas.filter(([label]) => label !== '쇼핑몰 서버').map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('') : ''}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
+        <dl class="technology-areas"><div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>

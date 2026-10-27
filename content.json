@@ -4,7 +4,7 @@
   "projects": [
     {
       "id": "smdc",
-      "title": "쇼핑몰 서비스 인프라 설계 및 구축",
+      "title": "쇼핑몰 기업 IT 인프라 설계 및 구축",
       "images": [
         {
           "url": "/assets/enterprise/homepc-dhcp.png",
@@ -213,7 +213,7 @@
     },
     {
       "id": "aleph-arena",
-      "title": "게임 서비스 인프라 설계 및 구축",
+      "title": "게임 기업 IT 인프라 설계 및 구축",
       "images": [
         {
           "url": "/assets/arena/web-main-v2.jpg",
