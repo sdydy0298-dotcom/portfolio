@@ -79,19 +79,13 @@ const compact = {
     ],
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
     "coverView": "images",
-    "technologies": [
-      "java",
-      "csharp",
-      "godot",
-      "mariadb",
-      "nginx",
-      "linux"
-    ],
+    "technologies": ["java", "javascript", "csharp", "dotnet", "godot", "mariadb", "nginx", "tomcat", "linux"],
+    "techAreas": [["네트워크", "VLAN · OSPF · Static Route · DHCP · UDP Tunnel"], ["인프라", "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"]],
     "roleSummary": "5인 팀의 한국 IDC 담당자로 네트워크·서버를 구축했습니다. 이에 더해 웹사이트, Windows C#/.NET 런처, Godot 게임을 직접 개발·배포하고 한국 IDC에서 서비스를 연동했습니다.",
     "teamRoles": [
       {
         "area": "한국 본사",
-        "scope": "본사 사용자·관리망과 상위 회선·WAN 연결",
+        "scope": "본사 사용자·관리망과 ISP·국제 WAN 연결",
         "owner": "팀원"
       },
       {
@@ -111,8 +105,8 @@ const compact = {
         "owner": "팀원"
       },
       {
-        "area": "일본 IDC · ISP",
-        "scope": "일본 IDC 구성과 ISP·WAN 회선·라우팅 연결",
+        "area": "일본 IDC",
+        "scope": "일본 IDC 네트워크·서버 구성",
         "owner": "팀원"
       }
     ],
@@ -123,7 +117,7 @@ const compact = {
       },
       {
         "title": "Windows 런처 직접 개발",
-        "body": "C#/.NET 8 런처를 제작하고 Windows 실행 파일로 빌드·배포했습니다."
+        "body": "C#/.NET 8 런처를 제작하고 Windows 실행 파일로 빌드·배포했습니다. 버전 정보 조회, 게임 ZIP 다운로드·압축 해제와 게임 실행 흐름을 구현했습니다."
       },
       {
         "title": "Godot 게임 직접 개발",
@@ -131,7 +125,7 @@ const compact = {
       },
       {
         "title": "한국 IDC와 네트워크 구축",
-        "body": "5인 팀의 IP·VLAN·WAN 설계를 조율하고 한국 IDC의 WEB·WAS·DB·DNS 및 게임 서버 운영 환경을 구축했습니다."
+        "body": "팀의 공통 IP·VLAN·연결 기준을 맞추고 한국 IDC의 WEB·WAS·DB·DNS 및 게임 서버 운영 환경을 구축했습니다."
       },
       {
         "title": "장애 해결과 검증",
@@ -164,11 +158,11 @@ const compact = {
   "smdc": {
     "type": "개인 프로젝트 · 구축 완료",
     "period": "2026.10",
-    "cover": "/assets/enterprise/overview.svg",
-    "coverWidth": 960,
-    "coverHeight": 600,
-    "coverAlt": "본사·지사 VPN, ISP·IX, 고객망과 IDC를 연결하고 UTM·DMZ·HA 구축 범위를 요약한 개념도",
-    "coverLabel": "기업망 · 보안 · IDC 구성 요약",
+    "cover": "/assets/enterprise/gns_all_topology.png",
+    "coverWidth": 1600,
+    "coverHeight": 1556,
+    "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
+    "coverLabel": "GNS3 실제 구성 · 설계도 함께 보기",
     "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크",
     "role": "본사·지사 VPN, UTM·DMZ·IPS, Spine–Leaf, Linux·DNS·MX·중앙 로그 서버 구축",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
@@ -235,20 +229,13 @@ const compact = {
       {
         "title": "MX1 메일 수신 검증",
         "symptom": "서버 프로세스 실행만으로 실제 클라이언트 수신을 입증하기 어려웠습니다.",
-        "action": "Postfix·Dovecot 메일 처리를 구성하고 Windows 가상 PC Thunderbird에서 테스트 계정을 조회했습니다.",
-        "result": "mailuser2@starmall.com 받은 편지함에서 mailuser1@starmall.com의 MX1 test 메일을 확인했습니다."
+        "action": "Postfix로 mailuser1→mailuser2 메일을 로컬 전달하고 Dovecot IMAP을 구성했습니다. Windows 가상 PC의 Thunderbird에서 받은 편지함을 조회했습니다.",
+        "result": "mailuser2@starmall.com 받은 편지함에서 mailuser1@starmall.com의 MX1 test 메일과 Hello from SMDC-MX1! 본문을 확인했습니다."
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
     "coverView": "topology",
-    "technologies": [
-      "java",
-      "nginx",
-      "tomcat",
-      "mariadb",
-      "haproxy",
-      "linux"
-    ],
+    "technologies": ["pfsense", "haproxy", "linux", "nginx", "tomcat", "mariadb"],
     "techAreas": [
       [
         "네트워크",
@@ -266,6 +253,10 @@ const compact = {
   }
 };
 const technologyNames = {
+  c: 'C',
+  javascript: 'JavaScript',
+  dotnet: '.NET',
+  pfsense: 'pfSense',
   java: 'Java',
   csharp: 'C#',
   godot: 'Godot',
@@ -303,9 +294,11 @@ function projectRow(project) {
   const coverView = c.coverView || 'images';
   const coverAction = coverView === 'topology' ? '구성도 보기' : '서비스 화면 보기';
   return `<article class="project-row">
-    <div class="project-art">
+    <div class="project-art${project.id === 'smdc' ? ' enterprise-art' : ''}">
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
+        ${project.id === 'smdc' ? '<span class="network-cover-heading"><span>ENTERPRISE NETWORK</span><strong>설계에서 서비스 검증까지</strong></span>' : ''}
         <img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">
+        ${project.id === 'smdc' ? '<span class="network-cover-footer">VPN · SECURITY · SPINE–LEAF · INFRA</span>' : ''}
       </button>
       <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
     </div>
@@ -379,7 +372,7 @@ function imageFigure(item, topology = false) {
     <a class="${topology ? 'topology-image' : 'gallery-image'}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${title} 원본 보기">
       <img src="${url}" alt="${escapeHTML(item.caption || item.title)}" width="${width}" height="${height}" decoding="async" loading="lazy">
     </a>
-    <figcaption><strong>${title}</strong>${topology && item.caption ? `<span>${escapeHTML(item.caption)}</span>` : ''}
+    <figcaption><strong>${title}</strong>${item.caption ? `<span>${escapeHTML(item.caption)}</span>` : ''}
       ${topology && Array.isArray(item.details) ? `<dl class="topology-details">${item.details.map(detail => `<div><dt>${escapeHTML(detail.label)}</dt><dd>${escapeHTML(detail.text)}</dd></div>`).join('')}</dl>` : ''}
     </figcaption>
   </figure>`;
@@ -393,9 +386,9 @@ function gallery(project) {
 
 function topology(project) {
   const items = (project.topologies || []).filter(item => safeURL(item.url));
-  return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>공통 토폴로지·IP·VLAN·WAN 설계를 주도하고 한국 IDC의 네트워크·서버·서비스를 직접 구축했습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
+  return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>팀의 공통 IP·VLAN·연결 기준을 맞추고 한국 IDC의 네트워크·서버·서비스를 직접 구축했습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
     <p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 구간별 구축 내용입니다.' : '팀 전체 연결 구조와 담당 범위입니다.'} 그림을 누르면 원본 크기로 볼 수 있습니다.</p>
-    <div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`;
+    ${project.id === 'smdc' ? ['implementation', 'design'].map(kind => `<section class="topology-group"><h3 class="detail-section-title">${kind === 'implementation' ? 'GNS3 실제 구현' : 'draw.io 설계도'}</h3><p class="detail-intro">${kind === 'implementation' ? '직접 장비와 서버를 연결해 구동한 환경의 원본 캡처입니다. 서비스 화면과 구축·검증 기록에서 실제 동작 결과를 함께 확인할 수 있습니다.' : '영역별 설계와 연결 의도를 설명하는 기존 설계도입니다. 실제 배치와 주소·연결 차이는 위 GNS3 구현 화면을 기준으로 확인합니다.'}</p><div class="topology-grid">${items.filter(item => item.kind === kind).map(item => imageFigure(item, true)).join('')}</div></section>`).join('') : `<div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`}`;
 }
 
 function setDetailView(project, requestedView) {

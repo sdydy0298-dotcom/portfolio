@@ -2,6 +2,22 @@
 
 Version **1.0.0** · 2026-10-27
 
+## 2026.10.27 원본 증빙·기술 표시 최종 보완
+
+- 첨부 `gnstopology.zip`의 GNS3 실제 구성 PNG 5개를 원본 그대로 추가했습니다. 기존 draw.io 설계도 5개와 별도 그룹으로 표시합니다. 설계와 실제 구성의 주소·배치 차이는 구분해서 읽습니다.
+- `HomePc_MX.png`를 원본 그대로 추가하고, 실제 캡처가 아닌 `homepc-mail.svg`는 삭제했습니다. 메일 검증 범위는 Postfix 로컬 전달과 Dovecot/Thunderbird IMAP 수신이며 SMTP 587 클라이언트 발송·인터넷 메일 송수신은 포함하지 않습니다.
+- 소개 기술은 기존 로고 6개를 유지하고 C·C#·JavaScript·Godot·Nginx·pfSense를 추가해 12개로 구성했습니다. 추가 SVG도 같은 고정 Devicon 소스에서 가져왔습니다.
+- ALEPH Arena의 JavaScript·.NET·Tomcat 로고와 네트워크/인프라 기술 분류를 보완했습니다. 웹·런처·게임 직접 개발과 한국 IDC 담당 범위를 유지하고, 본사/ISP/WAN 및 일본 IDC 팀원 업무를 구분했습니다.
+- Enterprise 대표 이미지는 실제 전체 GNS3 구성도에 제목·기술 범위를 HTML/CSS로 배치했습니다. 네트워크 구조를 새로 그리거나 원본 캡처를 합성하지 않았습니다.
+- 토폴로지 동일 행 이미지 높이를 통일하고 전체 원본을 contain으로 표시합니다. 링크로 원본 크기를 열 수 있습니다.
+- Supabase 설정·원문 상세 레코드·SQL은 변경하지 않았습니다. 빌드는 기존 공개 데이터 조회와 버전 관리 이미지 목록을 유지합니다.
+
+### 이번에 추가한 실제 증빙
+
+`assets/enterprise/HomePc_MX.png`, `gns_all_topology.png`, `gns_idc_topology.png`, `gns_ho_topology.png`, `gns_bo_topology.png`, `gns_home_topology.png`.
+
+한국 IDC 단독 토폴로지·런처 원본 스크린샷·`topology.zip`·`game_net_topology.zip`은 이번 첨부에 없어 추가하지 않았습니다. 기존 게임 전체 토폴로지와 서비스 화면은 유지합니다.
+
 ## 2026.10.27 프로젝트 실제 수행·증빙 업데이트
 
 - ALEPH Arena: 웹사이트, Windows C#/.NET 런처, Godot 게임 직접 개발과 한국 IDC 구축 역할을 명확히 분리. 팀원 담당 영역은 별도 표시.

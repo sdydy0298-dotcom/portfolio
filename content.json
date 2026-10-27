@@ -49,7 +49,7 @@
             },
             {
               "label": "담당 범위",
-              "text": "전체 네트워크의 공통 주소·VLAN·연결 기준을 설계하고, 한국 IDC의 Linux 서버와 웹·WAS·DB·DNS·게임 서버 구축을 맡았습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다."
+              "text": "한국 IDC의 네트워크와 Linux 서버, 웹·WAS·DB·DNS·게임 서버를 직접 구축했습니다. 웹사이트·Windows 런처·Godot 게임도 직접 개발했습니다. 본사·ISP/WAN·일본 IDC·개발/QA 센터·일본 지사는 팀원이 담당했습니다."
             },
             {
               "label": "연결 흐름",
@@ -97,16 +97,62 @@
           "height": 952
         },
         {
-          "url": "/assets/enterprise/homepc-mail.svg",
+          "url": "/assets/enterprise/HomePc_MX.png",
           "title": "06 · Thunderbird에서 MX1 메일 수신 확인",
-          "width": 1000,
-          "height": 500
+          "width": 1916,
+          "height": 955,
+          "caption": "Windows 10 · Thunderbird: mailuser2@starmall.com이 mailuser1@starmall.com의 “MX1 test” 메일을 수신했습니다. 본문: Hello from SMDC-MX1!"
         }
       ],
       "topologies": [
         {
+          "url": "/assets/enterprise/gns_all_topology.png",
+          "title": "실제 구성 · 전체 네트워크",
+          "caption": "본사·지사·IDC·가정 고객망을 ISP/IX로 연결한 실제 GNS3 구성입니다.",
+          "width": 2293,
+          "height": 2230,
+          "overview": true,
+          "kind": "implementation"
+        },
+        {
+          "url": "/assets/enterprise/gns_idc_topology.png",
+          "title": "실제 구성 · IDC · Spine–Leaf",
+          "caption": "Spine 2대와 Border·FR·WEB·APP·DB·INF·MGMT Leaf, SLB·서버·보안 장비를 연결한 실제 구성입니다.",
+          "width": 980,
+          "height": 727,
+          "overview": false,
+          "kind": "implementation"
+        },
+        {
+          "url": "/assets/enterprise/gns_ho_topology.png",
+          "title": "실제 구성 · 본사",
+          "caption": "본사 UTM, VLAN과 서버팜·사무망·관리망을 구성한 실제 화면입니다.",
+          "width": 580,
+          "height": 637,
+          "overview": false,
+          "kind": "implementation"
+        },
+        {
+          "url": "/assets/enterprise/gns_bo_topology.png",
+          "title": "실제 구성 · 지사",
+          "caption": "지사 UTM·사무망과 상위 회선을 연결한 실제 구성입니다.",
+          "width": 447,
+          "height": 667,
+          "overview": false,
+          "kind": "implementation"
+        },
+        {
+          "url": "/assets/enterprise/gns_home_topology.png",
+          "title": "실제 구성 · FTTH 고객망",
+          "caption": "두 가정 라우터·가입자 L3·PC를 배치한 실제 고객망입니다. WAN DHCP 장애 해결 후 StarMall 접속과 로그인까지 확인했습니다.",
+          "width": 392,
+          "height": 516,
+          "overview": false,
+          "kind": "implementation"
+        },
+        {
           "url": "/assets/enterprise/topology.png",
-          "title": "전체 토폴로지",
+          "title": "설계도 · 전체 토폴로지",
           "caption": "업무망·서비스망·외부 고객망을 연결한 기업 네트워크",
           "details": [
             {
@@ -124,11 +170,12 @@
           ],
           "width": 2048,
           "height": 1832,
-          "overview": true
+          "overview": true,
+          "kind": "design"
         },
         {
           "url": "/assets/enterprise/topology-idc.png",
-          "title": "IDC",
+          "title": "설계도 · IDC",
           "caption": "쇼핑몰 서비스와 공통 인프라를 제공하는 데이터센터",
           "details": [
             {
@@ -150,11 +197,12 @@
           ],
           "width": 972,
           "height": 722,
-          "overview": false
+          "overview": false,
+          "kind": "design"
         },
         {
           "url": "/assets/enterprise/topology-head-office.png",
-          "title": "본사 · Head Office",
+          "title": "설계도 · 본사 · Head Office",
           "caption": "서버팜·사무망·관리망으로 나눈 본사 업무 환경",
           "details": [
             {
@@ -172,11 +220,12 @@
           ],
           "width": 687,
           "height": 622,
-          "overview": false
+          "overview": false,
+          "kind": "design"
         },
         {
           "url": "/assets/enterprise/topology-branch-office.png",
-          "title": "지사 · Branch Office",
+          "title": "설계도 · 지사 · Branch Office",
           "caption": "UTM과 VPN으로 본사에 연결한 지사 사무망",
           "details": [
             {
@@ -194,11 +243,12 @@
           ],
           "width": 557,
           "height": 632,
-          "overview": false
+          "overview": false,
+          "kind": "design"
         },
         {
           "url": "/assets/enterprise/topology-ftth.png",
-          "title": "FTTH · 가정 고객망",
+          "title": "설계도 · FTTH · 가정 고객망",
           "caption": "외부 고객의 쇼핑몰 접속을 확인하는 가정 인터넷 환경",
           "details": [
             {
@@ -216,7 +266,8 @@
           ],
           "width": 892,
           "height": 727,
-          "overview": false
+          "overview": false,
+          "kind": "design"
         }
       ]
     }

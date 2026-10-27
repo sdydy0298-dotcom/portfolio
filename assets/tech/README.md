@@ -21,3 +21,7 @@ Self-hosted original SVGs from [Devicon](https://github.com/devicons/devicon).
 | `nginx.svg` | [nginx-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/nginx/nginx-original.svg) |
 | `tomcat.svg` | [tomcat-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/tomcat/tomcat-original.svg) |
 | `haproxy.svg` | [haproxy-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/haproxy/haproxy-original.svg) |
+| `c.svg` | [c-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/c/c-original.svg) |
+| `javascript.svg` | [javascript-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/javascript/javascript-original.svg) |
+| `dotnet.svg` | [dot-net-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/dot-net/dot-net-original.svg) |
+| `pfsense.svg` | [pfsense-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/pfsense/pfsense-original.svg) |
