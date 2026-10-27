@@ -9,7 +9,7 @@ const compact = {
     "cover": "/assets/arena/web-main-v2.jpg",
     "coverWidth": 1513,
     "coverHeight": 1039,
-    "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
+    "coverAlt": "게임 서비스 웹사이트 메인 화면",
     "coverLabel": "게임 서비스 · 글로벌 거점 네트워크",
     "subtitle": "게임 서비스를 제공하기 위해 한국·일본의 본사·지사·데이터센터와 개발·QA 센터를 연결한 네트워크 및 서비스 구축 프로젝트입니다.",
     "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
