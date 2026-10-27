@@ -11,7 +11,7 @@ const compact = {
     "coverHeight": 1039,
     "coverAlt": "ALEPH Arena 웹사이트 메인 화면",
     "coverLabel": "게임 서비스 · 글로벌 거점 네트워크",
-    "subtitle": "한국·일본 거점을 연결한 팀 프로젝트입니다. 한국 IDC를 맡아 웹·게임 서비스를 개발하고 서버에 배포했습니다.",
+    "subtitle": "게임 서비스를 제공하기 위해 한국·일본의 본사·지사·데이터센터와 개발·QA 센터를 연결한 네트워크 및 서비스 구축 프로젝트입니다.",
     "role": "게임 웹사이트·C#/.NET 런처·Godot 게임 직접 개발, 한국 IDC 네트워크·서버 구축",
     "fix": "웹·게임 개발과 IDC 배포, SELinux 403 오류 해결",
     "result": "Web–WAS 응답, Windows 클라이언트↔Linux 게임 서버 실제 플레이 확인",
@@ -197,7 +197,7 @@ const compact = {
     "coverHeight": 1556,
     "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
     "coverLabel": "StarMall 쇼핑몰 · 서비스 인프라·이중화",
-    "subtitle": "외부 고객이 StarMall 쇼핑몰에 접속할 수 있도록 서버와 네트워크를 구성하고, 로드밸런서를 이중화했습니다.",
+    "subtitle": "쇼핑몰 서비스를 제공하기 위해 본사·지사·데이터센터와 외부 고객 접속 환경을 설계하고 구축한 프로젝트입니다.",
     "role": "네트워크 설계부터 Linux 서버 설치, 쇼핑몰 배포, 보안 정책과 공통 서비스 설정까지 전체 구간을 구성했습니다.",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
     "result": "가정 PC의 쇼핑몰 접속·로그인, SLB VIP 절체, Thunderbird 메일 수신 확인",
@@ -352,7 +352,7 @@ function projectRow(project) {
   return `<article class="project-row">
     <div class="project-art${project.id === 'smdc' ? ' enterprise-art' : ''}">
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
-        ${project.id === 'smdc' ? `<span class="enterprise-cover-title"><span>NETWORK · SECURITY · IDC</span><strong>Enterprise<br>Network<span class="cover-dot">.</span></strong></span><span class="enterprise-cover-evidence"><img class="cover-network-capture" src="/assets/enterprise/gns_idc_topology.png" alt="직접 구축한 IDC의 GNS3 원본 구성" width="980" height="727" decoding="async"><img class="cover-service-capture" src="/assets/enterprise/homepc-web.png" alt="FTTH 고객 PC의 StarMall 실제 접속 화면" width="1010" height="841" decoding="async"></span>` : `<img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">`}
+        ${project.id === 'smdc' ? `<span class="enterprise-cover-title"><span>NETWORK · SECURITY · IDC</span><strong>StarMall<br>Infrastructure<span class="cover-dot">.</span></strong></span><span class="enterprise-cover-evidence"><img class="cover-network-capture" src="/assets/enterprise/gns_idc_topology.png" alt="직접 구축한 IDC의 GNS3 원본 구성" width="980" height="727" decoding="async"><img class="cover-service-capture" src="/assets/enterprise/homepc-web.png" alt="FTTH 고객 PC의 StarMall 실제 접속 화면" width="1010" height="841" decoding="async"></span>` : `<img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">`}
       </button>
       <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
     </div>
@@ -360,7 +360,7 @@ function projectRow(project) {
       <div class="project-topline"><span class="project-type">${c.type}</span></div>
       <h2>${escapeHTML(project.title)}</h2>
       <p class="project-period"><span>프로젝트 기간</span><strong>${c.period}</strong></p>
-      <p class="project-subtitle">${c.subtitle}</p><p class="project-outcome"><b>확인한 결과</b> ${escapeHTML(c.result)}</p>
+      <p class="project-subtitle">${c.subtitle}</p>
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
