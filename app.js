@@ -65,7 +65,7 @@ const compact = {
       ]
     ],
     "teamResult": "각자 구축한 환경을 공통 IP·VLAN·WAN 기준에 맞춰 UDP Tunnel로 연결했습니다. 이후 거점 간 경로와 IDC 서비스 접근을 함께 확인했습니다.",
-    "note": "담당 범위는 한국 IDC와 웹·런처·게임 개발입니다. 다른 거점은 팀원이 구축하고, 거점 연결과 서비스 접근은 함께 점검했습니다.",
+    "note": "담당 범위는 한국 IDC와 웹·런처·게임 개발입니다. 다른 거점은 팀원이 구축하고 거점 연결과 서비스 접근은 함께 점검했습니다.",
     "troubles": [
       {
         "title": "SELinux 보안 설정으로 인한 웹사이트 403 오류",
@@ -108,7 +108,7 @@ const compact = {
         "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"
       ]
     ],
-    "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트·Windows 런처·Godot 게임을 개발하고, Linux 게임 서버의 2인 방 생성·참가·게임 시작 흐름을 검증했습니다.",
+    "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트·Windows 런처·Godot 게임을 개발하고 Linux 게임 서버의 2인 방 생성·참가·게임 시작 흐름을 검증했습니다.",
     "teamRoles": [
       {
         "area": "한국 본사",
@@ -148,7 +148,7 @@ const compact = {
       },
       {
         "title": "Godot 게임 직접 개발",
-        "body": "Godot 게임 클라이언트와 Linux 게임 서버를 구성하고, 두 플레이어가 방 생성·참가·준비·게임 시작을 진행하도록 구현했습니다. 게임 진행 상황은 서버에서 관리해 각 클라이언트에 전달했습니다."
+        "body": "Godot 게임 클라이언트와 Linux 게임 서버를 구성하고 두 플레이어가 방 생성·참가·준비·게임 시작을 진행하도록 구현했습니다. 게임 진행 상황은 서버에서 관리해 각 클라이언트에 전달했습니다."
       },
       {
         "title": "한국 IDC와 네트워크 구축",
@@ -216,7 +216,7 @@ const compact = {
     "subtitle": "쇼핑몰 서비스를 제공하기 위해 본사·지사·데이터센터와 외부 고객 접속 환경을 설계하고 구축한 프로젝트입니다.",
     "role": "네트워크 설계부터 Linux 서버 설치, 쇼핑몰 배포, 보안 정책과 공통 서비스 설정까지 전체 구간을 구성했습니다.",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
-    "result": "가정 PC의 쇼핑몰 접속·로그인, SLB VIP 절체, Thunderbird 메일 수신 확인",
+    "result": "가정 PC의 쇼핑몰 접속·로그인, SLB 장애 시 VIP 인계, Thunderbird 메일 수신 확인",
     "stack": "Linux · Nginx · Tomcat · MariaDB · HAProxy · Keepalived · pfSense · Suricata · BIND9 · Postfix · Dovecot · Chrony · rsyslog",
     "work": [
       [
@@ -245,13 +245,13 @@ const compact = {
       ],
       [
         "검증",
-        "OSPF·VIP 절체 점검, 가정 PC의 쇼핑몰 접속·로그인과 Thunderbird 메일 수신 확인"
+        "OSPF 경로·VIP 인계 점검, 가정 PC의 쇼핑몰 접속·로그인과 Thunderbird 메일 수신 확인"
       ]
     ],
     "network": [
       [
         "거점 연결",
-        "본사와 지사는 VPN으로 연결하고, IDC·외부 고객망은 ISP/IX 구간으로 연결했습니다."
+        "본사와 지사는 VPN으로 연결하고 IDC·외부 고객망은 ISP/IX 구간으로 연결했습니다."
       ],
       [
         "IDC 내부",
@@ -263,16 +263,16 @@ const compact = {
       ],
       [
         "관리망",
-        "관리망에 Jump Server를 배치했습니다. 관리자 PC에서 서버를 관리하고 있으며, Jump Server를 통한 접속 경유 및 ACL 기반 접근 통제는 검증 예정입니다."
+        "관리망에 Jump Server를 배치했습니다. 서버 관리는 관리자 PC에서 수행했습니다. Jump Server 경유 접속과 ACL 기반 접근 통제는 향후 검증할 계획입니다."
       ]
     ],
-    "note": "100대 수용을 기준으로 설계하고, 실습 환경에서는 역할별 대표 장비와 서버로 구성했습니다.",
+    "note": "100대 수용을 기준으로 설계하고 실습 환경에서는 역할별 대표 장비와 서버로 구성했습니다.",
     "troubles": [
       {
         "title": "SELinux 때문에 SLB 장애 전환이 실패한 문제",
         "symptom": "HAProxy는 실행 중이었지만 Keepalived의 HAProxy 감시 스크립트가 실행 오류(코드 126)를 내면서 FAULT 상태에 진입했습니다.",
         "action": "SELinux가 감시 스크립트의 systemctl 실행을 차단하는 것을 확인했습니다. SELinux를 끄지 않고 프로세스를 /proc에서 확인하는 방식으로 감시 스크립트를 변경했습니다.",
-        "result": "감시 스크립트가 정상 동작하고, SLB1의 Keepalived 중지 시 SLB2가 Front·Backend VIP를 인계받는 것을 확인했습니다."
+        "result": "감시 스크립트가 정상 동작하고 SLB1의 Keepalived 중지 시 SLB2가 Front·Backend VIP를 인계받는 것을 확인했습니다."
       },
       {
         "title": "이중화 장비 두 대가 모두 MASTER가 된 문제",
@@ -350,7 +350,7 @@ const compact = {
         "points": [
           "pfSense FW/UTM·DMZ·DB 접근 경계, Suricata IPS/IDS 및 접근 정책 구성",
           "HAProxy 부하 분산과 Keepalived VRRP로 SLB 이중화, Front·Backend VIP 구성",
-          "SLB 장애 시 VIP 절체 검증, WEB·WAS 다중 구성 및 DB Primary–Replica 복제 적용"
+          "SLB 장애 시 대기 장비의 VIP 인계 확인, WEB·WAS 다중 구성 및 DB Primary–Replica 복제 적용"
         ]
       },
       {
@@ -372,11 +372,11 @@ const compact = {
       ],
       [
         "SLB 이중화",
-        "HAProxy·Keepalived의 Front·Backend VIP를 구성하고 SLB 장애 시 VIP 절체를 확인했습니다."
+        "HAProxy·Keepalived의 Front·Backend VIP를 구성하고 SLB 장애 시 대기 장비가 VIP를 넘겨받는 것을 확인했습니다."
       ],
       [
         "WEB·WAS 구성",
-        "Nginx WEB 3대와 Tomcat WAS 2대를 구성했으며, WAS2 서비스 상태 URL의 HTTP 200 응답을 확인했습니다."
+        "Nginx WEB 3대와 Tomcat WAS 2대를 구성했습니다. WAS2 서비스 상태 URL에서 HTTP 200 응답을 확인했습니다."
       ],
       [
         "DB 복제",
