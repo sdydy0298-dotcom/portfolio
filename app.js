@@ -80,6 +80,7 @@ const compact = {
     "scope": "웹사이트 · 런처 · 게임 개발 / 한국 IDC 구축",
     "coverView": "images",
     "technologies": ["java", "javascript", "csharp", "dotnet", "godot", "mariadb", "nginx", "tomcat", "linux"],
+    "tools": ["GNS3", "Oracle VirtualBox"],
     "techAreas": [["네트워크", "VLAN · OSPF · Static Route · DHCP · UDP Tunnel"], ["인프라", "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"]],
     "roleSummary": "5인 팀의 한국 IDC 담당자로 네트워크·서버를 구축했습니다. 이에 더해 웹사이트, Windows C#/.NET 런처, Godot 게임을 직접 개발·배포하고 한국 IDC에서 서비스를 연동했습니다.",
     "teamRoles": [
@@ -236,6 +237,7 @@ const compact = {
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
     "coverView": "images",
     "technologies": ["pfsense", "haproxy", "linux", "nginx", "tomcat", "mariadb"],
+    "tools": ["GNS3", "Oracle VirtualBox"],
     "techAreas": [
       [
         "네트워크",
@@ -314,7 +316,7 @@ function projectRow(project) {
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
         <h3>사용 기술</h3>
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
-        ${Array.isArray(c.techAreas) ? `<dl class="technology-areas">${c.techAreas.map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>` : ''}
+        ${Array.isArray(c.techAreas) ? `<dl class="technology-areas">${[...c.techAreas, ['사용 도구', c.tools.join(' · ')]].map(([label, body]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(body)}</dd></div>`).join('')}</dl>` : ''}
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
@@ -351,6 +353,7 @@ function notes(project) {
     <h3 class="detail-section-title">수행한 작업</h3>${workList(c.work)}
     <h3 class="detail-section-title">네트워크 구성</h3>${workList(c.network)}`}
     ${c.teamResult ? `<h3 class="detail-section-title">팀 공동 통합 검증</h3><p class="detail-intro">${c.teamResult}</p>` : ''}
+    <p class="detail-intro"><b>구축·검증 도구</b> · ${c.tools.map(escapeHTML).join(' · ')}</p>
     <h3 class="detail-section-title">문제를 확인하고 해결한 과정</h3>
     ${c.troubles.map(trouble => `<article class="trouble-note">
       <h4>${trouble.title}</h4><dl>
