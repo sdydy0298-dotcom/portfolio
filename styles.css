@@ -546,7 +546,7 @@ body.dialog-open { overflow: hidden; }
    Crops hide browser / VM window chrome; full source photos remain in the gallery. */
 .project-art-screenshot .cover-button { overflow: hidden; background: #eef4ff; border-color: #d9e6f7; }
 .project-art-screenshot .cover-button .project-cover-screenshot {
-  display: block; position: absolute; max-width: none; height: auto; left: 50%;
+  display: block; position: absolute; max-width: none; height: auto; left: 53%;
   object-fit: initial; background: none; transform: translateX(-50%);
 }
 .project-art-screenshot.arena-art .project-cover-screenshot { width: 111%; top: -9%; }
