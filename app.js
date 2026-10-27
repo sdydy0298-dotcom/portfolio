@@ -280,33 +280,85 @@ const compact = {
       ],
       [
         "보안·이중화",
-        "pfSense FW/UTM · DMZ · Suricata IPS/IDS · HAProxy · Keepalived · VRRP/VIP"
+        "pfSense FW/UTM · DMZ · Suricata IPS/IDS · HAProxy/Keepalived SLB · VRRP/VIP · WEB/WAS 다중 구성"
       ],
       [
         "쇼핑몰 서버",
-        "Rocky Linux · Ubuntu · Windows · Nginx · Tomcat · Java Servlet · MariaDB · WEB–WAS–DB"
+        "Rocky Linux · Ubuntu · Windows · WEB1~3(Nginx) · WAS1~2(Tomcat) · MariaDB DB1 Primary/DB2 Replica"
       ],
       [
         "공통 서비스",
-        "BIND9 DNS · Postfix·Dovecot 메일 · Chrony NTP · rsyslog 중앙 로그"
+        "BIND9 DNS · Postfix SMTP · Dovecot IMAP · Chrony NTP1 서버 시간 동기화 · rsyslog LOG1(TCP 514) 중앙 로그"
       ]
+    ],
+    "components": [
+      {
+        "title": "기업 네트워크",
+        "tech": "Spine–Leaf · OSPF · VLAN · VPN · DHCP · NAT/PAT",
+        "body": "본사·지사·IDC와 외부 고객망을 연결하는 네트워크 경로를 구성했습니다.",
+        "points": [
+          "100대 수용 기준으로 설계하고 Spine 2대와 역할별 Leaf, VLAN·OSPF 경로를 구성",
+          "본사–지사 Site-to-Site VPN과 ISP/IX·FTTH 고객망의 통신 경로 구성",
+          "Home Router WAN DHCP·가정 LAN DHCP·NAT/PAT를 설정하고 쇼핑몰 접속 경로 점검"
+        ]
+      },
+      {
+        "title": "쇼핑몰 서버·서비스",
+        "tech": "WEB 3대 · WAS 2대 · DB 2대 · Nginx · Tomcat · MariaDB",
+        "body": "WEB–WAS–DB 다중 서버 환경을 구성하고 StarMall 회원가입·로그인 서비스를 배포했습니다.",
+        "points": [
+          "Nginx WEB1~3과 Tomcat WAS1~2를 구축하고 웹 서버–WAS 연동",
+          "WAS 2대 환경을 구성하고 WAS2 서비스 상태 URL에서 HTTP 200 응답 확인",
+          "MariaDB DB1(Primary) → DB2(Replica) 복제 구성과 기존 회원 데이터 일치 확인",
+          "DB 자동 장애 전환과 복제본 자동 승격은 별도 구현 범위로 구분"
+        ]
+      },
+      {
+        "title": "보안·이중화",
+        "tech": "pfSense · Suricata · HAProxy · Keepalived · VRRP/VIP",
+        "body": "서비스 접근을 보호하고 부하 분산·장애 대응 구조를 구성했습니다.",
+        "points": [
+          "pfSense FW/UTM·DMZ·DB 접근 경계, Suricata IPS/IDS 및 접근 정책 구성",
+          "HAProxy 부하 분산과 Keepalived VRRP로 SLB 이중화, Front·Backend VIP 구성",
+          "SLB 장애 시 VIP 절체 검증, WEB·WAS 다중 구성 및 DB Primary–Replica 복제 적용"
+        ]
+      },
+      {
+        "title": "공통 인프라",
+        "tech": "BIND9 · Postfix · Dovecot · Thunderbird · Chrony · rsyslog",
+        "body": "DNS·메일·시간 동기화·중앙 로그 서비스를 연계해 인프라 운영 환경을 구축했습니다.",
+        "points": [
+          "BIND9 기반 DNS·캐시 DNS를 구성해 서비스 도메인 조회 환경 제공",
+          "Postfix SMTP 메일 전송과 Dovecot IMAP 수신을 설정하고 Thunderbird에서 수신 확인",
+          "Chrony NTP1을 공통 시간원으로 사용해 서비스 서버들의 시간을 동기화",
+          "서버별 rsyslog 로그를 LOG1(TCP 514)에 모아 동일한 시간 기준으로 이벤트 확인"
+        ]
+      }
     ],
     "checks": [
       [
-        "쇼핑몰",
-        "가정 PC에서 StarMall 접속, 회원가입 화면과 로그인 후 사용자명 표시를 확인했습니다."
+        "쇼핑몰 접속",
+        "가정 PC에서 StarMall 접속, 회원가입 화면 및 로그인 후 사용자명 표시를 확인했습니다."
       ],
       [
-        "이중화",
-        "HAProxy·Keepalived로 Front·Backend VIP를 구성하고 SLB 장애 시 VIP 절체를 확인했습니다."
+        "SLB 이중화",
+        "HAProxy·Keepalived의 Front·Backend VIP를 구성하고 SLB 장애 시 VIP 절체를 확인했습니다."
       ],
       [
-        "메일",
-        "Postfix의 사용자 간 메일 전달과 Dovecot IMAP을 설정하고 Thunderbird에서 수신을 확인했습니다."
+        "WEB·WAS 구성",
+        "Nginx WEB 3대와 Tomcat WAS 2대를 구성했으며, WAS2 서비스 상태 URL의 HTTP 200 응답을 확인했습니다."
       ],
       [
-        "운영",
-        "rsyslog 중앙 로그 수집을 구성했습니다. Chrony는 로컬 시간원 동작을 확인했으며 외부 표준시각과 전체 단말의 동기화는 추가 확인이 필요합니다."
+        "DB 복제",
+        "MariaDB DB1 Primary→DB2 Replica 복제에서 회원 데이터 일치와 복제 스레드 정상 동작을 확인했습니다. 자동 장애 전환은 미구현입니다."
+      ],
+      [
+        "메일 서비스",
+        "Postfix를 통한 메일 전달과 Dovecot IMAP 설정 후 Thunderbird의 수신 동작을 확인했습니다."
+      ],
+      [
+        "시간 동기화·로그",
+        "Chrony NTP1 기준으로 서버 간 시각을 맞추고 rsyslog로 LOG1에 로그를 중앙 수집해 같은 시간 기준으로 확인하도록 구성했습니다."
       ]
     ]
   }
@@ -409,17 +461,14 @@ function recordRoles(c) {
 function recordCards(project,c) {
   const cards=project.id==='aleph-arena'
     ? c.components.map((x,i)=>({...x,body:c.contributions?.[i]?.body||x.body}))
-    : [
-      {title:'기업 네트워크',tech:'Spine–Leaf · OSPF · VLAN · VPN · NAT/PAT',body:'IDC의 Spine 2대와 역할별 Leaf, VLAN·OSPF 경로를 구성했습니다. 본사·지사 VPN과 ISP/IX·FTTH 고객망의 DHCP·NAT/PAT를 설정했습니다.'},
-      {title:'쇼핑몰 서버·서비스',tech:'Rocky Linux · Ubuntu · Nginx · Tomcat · MariaDB',body:'WEB–WAS–DB 서비스를 연동하고 StarMall 회원가입·로그인 환경을 구축·배포했습니다.'},
-      {title:'보안·이중화',tech:'pfSense · Suricata · HAProxy · Keepalived',body:'FW/UTM·DMZ·IPS/IDS 및 서비스 접근 정책을 구성하고, HAProxy·Keepalived로 SLB와 Front·Backend VIP를 이중화했습니다.'},
-      {title:'공통 인프라',tech:'BIND9 · Postfix · Dovecot · Chrony · rsyslog',body:'DNS·메일·NTP·중앙 로그 수집 환경을 구성했습니다.'}
-    ];
+    : c.components;
   return `<div class="build-scope-grid execution-cards">${cards.map((item,i)=>`<article class="build-scope-card">
     <span class="execution-card-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</span>
     <h4>${cleanProjectText(item.title)}</h4>
     <strong>${cleanProjectText(item.tech)}</strong>
-    <p>${cleanProjectText(item.body)}</p></article>`).join('')}</div>`;
+    <p>${cleanProjectText(item.body)}</p>
+    ${Array.isArray(item.points)&&item.points.length ? `<ul class="execution-card-points">${item.points.map(line=>`<li>${cleanProjectText(line)}</li>`).join('')}</ul>`:''}
+  </article>`).join('')}</div>`;
 }
 
 function recordImplementation(project,c) {

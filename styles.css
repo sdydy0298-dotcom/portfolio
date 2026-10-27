@@ -533,3 +533,10 @@ body.dialog-open { overflow: hidden; }
   .execution-issue dl>div { grid-template-columns: 62px minmax(0,1fr); gap: 8px; }
   .execution-results { grid-template-columns: minmax(0,1fr); }
 }
+
+
+/* Expandable technical descriptions without changing the shared four-card layout. */
+.execution-card-points { list-style: none; padding: 11px 0 0; margin: 12px 0 0; border-top: 1px solid #dfe9f8; }
+.execution-card-points li { position: relative; padding-left: 14px; color: #4b6283; font-size: 11px; line-height: 1.8; }
+.execution-card-points li + li { margin-top: 7px; }
+.execution-card-points li::before { content: ""; position: absolute; top: .7em; left: 0; width: 4px; height: 4px; background: #4b82e2; border-radius: 50%; }
