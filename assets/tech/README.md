@@ -25,3 +25,6 @@ Self-hosted original SVGs from [Devicon](https://github.com/devicons/devicon).
 | `javascript.svg` | [javascript-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/javascript/javascript-original.svg) |
 | `dotnet.svg` | [dot-net-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/dot-net/dot-net-original.svg) |
 | `pfsense.svg` | [pfsense-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/pfsense/pfsense-original.svg) |
+| `ubuntu.svg` | [ubuntu-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/ubuntu/ubuntu-original.svg) |
+| `apache.svg` | [apache-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/apache/apache-original.svg) |
+| `rockylinux.svg` | [rockylinux-original.svg](https://raw.githubusercontent.com/devicons/devicon/4fbcc685c9a85434bc01b1c236c9076f54806236/icons/rockylinux/rockylinux-original.svg) |

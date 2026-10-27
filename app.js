@@ -162,7 +162,7 @@ const compact = {
     "coverWidth": 1600,
     "coverHeight": 1556,
     "coverAlt": "직접 구축한 Enterprise Network 전체 GNS3 원본 구성도",
-    "coverLabel": "GNS3 실제 구성 · 설계도 함께 보기",
+    "coverLabel": "실제 IDC 구축 · 고객망 서비스 검증",
     "subtitle": "본사·지사·IDC·가정 고객망을 연결한 기업 네트워크",
     "role": "본사·지사 VPN, UTM·DMZ·IPS, Spine–Leaf, Linux·DNS·MX·중앙 로그 서버 구축",
     "fix": "UTM·DMZ·VPN, OSPF, SLB/VIP 이중화, WEB–WAS–DB·MX·운영 서비스 구현",
@@ -234,7 +234,7 @@ const compact = {
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
-    "coverView": "topology",
+    "coverView": "images",
     "technologies": ["pfsense", "haproxy", "linux", "nginx", "tomcat", "mariadb"],
     "techAreas": [
       [
@@ -268,8 +268,8 @@ const technologyNames = {
 };
 const detailViews = [
   { id: 'notes', label: '역할·구축 기록' },
-  { id: 'topology', label: '토폴로지' },
-  { id: 'images', label: '서비스 화면' }
+  { id: 'topology', label: '설계도' },
+  { id: 'images', label: '실제 구현 화면' }
 ];
 let projects = [];
 let lastTrigger;
@@ -292,19 +292,18 @@ function projectRow(project) {
   if (!c) return '';
   const id = escapeHTML(project.id);
   const coverView = c.coverView || 'images';
-  const coverAction = coverView === 'topology' ? '구성도 보기' : '서비스 화면 보기';
+  const coverAction = '실제 구현 화면 보기';
   return `<article class="project-row">
     <div class="project-art${project.id === 'smdc' ? ' enterprise-art' : ''}">
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
-        ${project.id === 'smdc' ? '<span class="network-cover-heading"><span>ENTERPRISE NETWORK</span><strong>설계에서 서비스 검증까지</strong></span>' : ''}
-        <img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">
-        ${project.id === 'smdc' ? '<span class="network-cover-footer">VPN · SECURITY · SPINE–LEAF · INFRA</span>' : ''}
+        ${project.id === 'smdc' ? `<span class="enterprise-cover-title"><span>NETWORK · SECURITY · IDC</span><strong>Enterprise<br>Network<span class="cover-dot">.</span></strong></span><span class="enterprise-cover-evidence"><img class="cover-network-capture" src="/assets/enterprise/gns_idc_topology.png" alt="직접 구축한 IDC의 GNS3 원본 구성" width="980" height="727" decoding="async"><img class="cover-service-capture" src="/assets/enterprise/homepc-web.png" alt="FTTH 고객 PC의 StarMall 실제 접속 화면" width="1010" height="841" decoding="async"></span>` : `<img class="project-cover" src="${c.cover}" alt="${c.coverAlt}" width="${c.coverWidth}" height="${c.coverHeight}" decoding="async">`}
       </button>
       <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
     </div>
     <div class="project-copy">
-      <div class="project-topline"><span class="project-type">${c.type}</span><span>${c.period}</span></div>
+      <div class="project-topline"><span class="project-type">${c.type}</span></div>
       <h2>${escapeHTML(project.title)}</h2>
+      <p class="project-period"><span>프로젝트 기간</span><strong>${c.period}</strong></p>
       <p class="project-subtitle">${c.subtitle}</p>
       <p class="project-scope">${escapeHTML(c.scope)}</p>
       <dl class="project-facts">
@@ -319,8 +318,8 @@ function projectRow(project) {
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">${project.id === 'aleph-arena' ? '역할·구축 기록' : '구축·검증 기록'} ↗</button>
-        <button type="button" data-project="${id}" data-view="topology">토폴로지 보기 ↗</button>
-        <button type="button" data-project="${id}" data-view="images">서비스 화면 ↗</button>
+        <button type="button" data-project="${id}" data-view="topology">설계도 ↗</button>
+        <button type="button" data-project="${id}" data-view="images">실제 구현 화면 ↗</button>
       </div>
     </div>
   </article>`;
@@ -379,22 +378,24 @@ function imageFigure(item, topology = false) {
 }
 
 function gallery(project) {
-  const items = (project.images || []).filter(item => safeURL(item.url));
-  return `<p class="gallery-intro">사진을 누르면 원본 크기로 볼 수 있습니다.</p>
-    <div class="gallery">${items.map(item => imageFigure(item)).join('')}</div>`;
+  const service = (project.images || []).filter(item => safeURL(item.url));
+  const network = (project.topologies || []).filter(item => item.kind === 'implementation' && safeURL(item.url));
+  return `<p class="gallery-intro">직접 구현한 서비스와 네트워크 환경입니다. 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
+    <section class="evidence-section"><h3 class="detail-section-title">서비스 동작 · 실제 확인 화면</h3><div class="gallery">${service.map(item => imageFigure(item)).join('')}</div></section>
+    ${network.length ? `<section class="evidence-section"><h3 class="detail-section-title">네트워크 · GNS3 실제 구성</h3><p class="detail-intro">IDC·본사·지사·고객망을 직접 연결한 환경입니다. 설계도 탭의 구성과 비교해 볼 수 있습니다.</p><div class="gallery implementation-gallery">${network.map(item => imageFigure(item)).join('')}</div></section>` : ''}`;
 }
 
 function topology(project) {
-  const items = (project.topologies || []).filter(item => safeURL(item.url));
+  const items = (project.topologies || []).filter(item => item.kind !== 'implementation' && safeURL(item.url));
   return `${project.id === 'aleph-arena' ? `<section class="role-summary" aria-label="전체 구성에서 본인 담당 범위"><span>MY SCOPE</span><h3>전체 5개 거점 중, 한국 IDC 담당</h3><p>팀의 공통 IP·VLAN·연결 기준을 맞추고 한국 IDC의 네트워크·서버·서비스를 직접 구축했습니다. 다른 거점의 개별 구축은 팀원이 담당했습니다.</p></section>` : ''}
-    <p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 구간별 구축 내용입니다.' : '팀 전체 연결 구조와 담당 범위입니다.'} 그림을 누르면 원본 크기로 볼 수 있습니다.</p>
-    ${project.id === 'smdc' ? ['implementation', 'design'].map(kind => `<section class="topology-group"><h3 class="detail-section-title">${kind === 'implementation' ? 'GNS3 실제 구현' : 'draw.io 설계도'}</h3><p class="detail-intro">${kind === 'implementation' ? '직접 장비와 서버를 연결해 구동한 환경의 원본 캡처입니다. 서비스 화면과 구축·검증 기록에서 실제 동작 결과를 함께 확인할 수 있습니다.' : '영역별 설계와 연결 의도를 설명하는 기존 설계도입니다. 실제 배치와 주소·연결 차이는 위 GNS3 구현 화면을 기준으로 확인합니다.'}</p><div class="topology-grid">${items.filter(item => item.kind === kind).map(item => imageFigure(item, true)).join('')}</div></section>`).join('') : `<div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`}`;
+    <p class="topology-intro">${project.id === 'smdc' ? '전체 연결 구조와 영역별 설계입니다. 실제 GNS3 구성과 서비스 검증 캡처는 실제 구현 화면 탭에서 볼 수 있습니다.' : '팀 전체 네트워크와 본인 담당 영역을 보여주는 구성도입니다.'} 이미지를 누르면 원본 전체를 확인할 수 있습니다.</p>
+    <div class="topology-grid">${items.map(item => imageFigure(item, true)).join('')}</div>`;
 }
 
 function setDetailView(project, requestedView) {
   const view = detailViews.some(item => item.id === requestedView) ? requestedView : 'notes';
   const c = compact[project.id];
-  const count = id => id === 'images' ? project.images?.length || 0 : id === 'topology' ? project.topologies?.length || 0 : null;
+  const count = id => id === 'images' ? (project.images?.length || 0) + (project.topologies || []).filter(item => item.kind === 'implementation').length : id === 'topology' ? (project.topologies || []).filter(item => item.kind !== 'implementation').length : null;
   document.querySelector('#dialog-content').innerHTML = `<article class="project-detail">
     <p class="kicker">${c.type} / ${c.period}</p>
     <h2 id="dialog-title">${escapeHTML(project.title)}</h2>
