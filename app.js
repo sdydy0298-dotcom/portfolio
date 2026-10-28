@@ -276,10 +276,11 @@ const compact = {
         "result": "감시 스크립트가 정상 동작하고 SLB1의 Keepalived 중지 시 SLB2가 Front·Backend VIP를 인계받는 것을 확인했습니다."
       },
       {
-        "title": "이중화 장비 두 대가 모두 MASTER가 된 문제",
-        "symptom": "SLB1과 SLB2가 서로의 VRRP 신호를 받지 못해 두 장비가 동시에 MASTER 상태가 되고 동일한 VIP를 보유했습니다.",
-        "action": "Keepalived 설정만이 아니라 SLB가 연결된 스위치의 VLAN30·VLAN31 포트 구성을 점검하고 수정해 VRRP 신호가 정상적으로 전달되도록 했습니다.",
-        "result": "SLB1은 MASTER, SLB2는 BACKUP으로 정상 분리됐습니다. SLB1 중지 후 SLB2가 Front VIP(192.168.30.18)와 Backend VIP(192.168.31.1)를 인계받는 것까지 확인했습니다."
+        "kind": "design",
+        "title": "데이터센터 네트워크 구조 개선",
+        "symptom": "초기에는 3-Tier 구조로 데이터센터 네트워크를 구축했습니다. 이후 데이터센터 내부의 서버 간 통신(East-West 트래픽)과 향후 서버 증설을 고려해 Spine–Leaf 구조로 변경하기로 했습니다.",
+        "action": "기존 3-Tier 구조를 Spine 2대와 역할별 Leaf로 재설계했습니다. 각 Leaf에 서비스별 네트워크를 구성하고 OSPF를 적용해 장비 간 통신 경로를 설정했습니다.",
+        "result": "Spine–Leaf 구조로 네트워크를 재구축했습니다. 서버 증설 시 Leaf를 추가해 네트워크를 확장할 수 있도록 구성했습니다."
       }
     ],
     "scope": "기업망·보안·IDC·고객망 전 구간 구축",
@@ -520,10 +521,10 @@ function recordImplementation(project,c) {
 
 function recordTroubles(c) {
   return `<div class="execution-issues">${c.troubles.map((issue,i)=>`<article class="execution-issue">
-    <header><span>CASE ${String(i+1).padStart(2,'0')}${issue.kind==='collaboration'?' · 팀 협업':''}</span><h4>${cleanProjectText(issue.title)}</h4></header>
+    <header><span>CASE ${String(i+1).padStart(2,'0')}${issue.kind==='collaboration'?' · 팀 협업':issue.kind==='design'?' · 설계 개선':''}</span><h4>${cleanProjectText(issue.title)}</h4></header>
     <dl><div><dt>상황</dt><dd>${cleanProjectText(issue.symptom)}</dd></div>
-        <div><dt>${issue.kind==='collaboration'?'협업 과정':'분석·조치'}</dt><dd>${cleanProjectText(issue.action)}</dd></div>
-        <div><dt>${issue.kind==='collaboration'?'결과':'확인 결과'}</dt><dd>${cleanProjectText(issue.result)}</dd></div></dl>
+        <div><dt>${issue.kind==='collaboration'?'협업 과정':issue.kind==='design'?'설계 변경':'분석·조치'}</dt><dd>${cleanProjectText(issue.action)}</dd></div>
+        <div><dt>${issue.kind==='collaboration'||issue.kind==='design'?'결과':'확인 결과'}</dt><dd>${cleanProjectText(issue.result)}</dd></div></dl>
   </article>`).join('')}</div>`;
 }
 
@@ -545,7 +546,7 @@ function notes(project) {
   return `<div class="execution-record">
     ${recordHeading('01','담당 역할','담당 범위와 역할 구분',recordRoles(c))}
     ${recordHeading('02','주요 구현 내용','구현한 기능과 인프라를 영역별로 정리',recordImplementation(project,c))}
-    ${recordHeading('03',project.id==='aleph-arena'?'문제 해결·팀 협업':'문제 해결',project.id==='aleph-arena'?'웹사이트 장애 해결과 거점 연동 협업':'상황 · 분석 및 조치 · 확인 결과',recordTroubles(c))}
+    ${recordHeading('03',project.id==='aleph-arena'?'문제 해결·팀 협업':'문제 해결·설계 개선',project.id==='aleph-arena'?'웹사이트 장애 해결과 거점 연동 협업':'장애 해결과 데이터센터 네트워크 구조 개선',recordTroubles(c))}
     ${recordHeading('04','검증 결과','구축 후 실제 확인한 기능과 서비스',recordResults(project,c))}
   </div>`;
 }
