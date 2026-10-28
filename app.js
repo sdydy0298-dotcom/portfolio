@@ -449,11 +449,14 @@ function projectRow(project) {
       <button class="cover-button" type="button" data-project="${id}" data-view="${coverView}" aria-label="${escapeHTML(project.title)} ${coverAction}">
         <img class="project-cover project-cover-screenshot" src="${thumbnailSrc}" alt="${thumbnailAlt}" width="${thumbnailWidth}" height="${thumbnailHeight}" decoding="async">
       </button>
-      <p class="cover-caption"><span>${c.coverLabel}</span><button type="button" data-project="${id}" data-view="${coverView}">${coverAction} ↗</button></p>
+      <p class="cover-caption"><span>${c.coverLabel}</span></p>
     </div>
     <div class="project-copy">
       <div class="project-topline"><span class="project-type">${c.type}</span></div>
       <h2>${escapeHTML(project.title)}</h2>
+      <div class="project-actions">
+        <button type="button" data-project="${id}" data-view="notes">수행 내용 ↗</button>
+      </div>
       <p class="project-period"><span>프로젝트 기간</span><strong>${c.period}</strong></p>
       <p class="project-subtitle">${c.subtitle}</p>
       <section class="project-technologies" aria-label="프로젝트 사용 기술">
@@ -461,9 +464,6 @@ function projectRow(project) {
         <ul class="technology-list">${c.technologies.map(key => `<li><img src="/assets/tech/${key}.svg" alt="" aria-hidden="true" width="32" height="32" loading="lazy" decoding="async"><span>${technologyNames[key]}</span></li>`).join('')}</ul>
         <dl class="technology-areas"><div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
       </section>
-      <div class="project-actions">
-        <button type="button" data-project="${id}" data-view="notes">수행 내용 ↗</button>
-      </div>
     </div>
   </article>`;
 }

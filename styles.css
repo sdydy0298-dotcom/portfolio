@@ -558,3 +558,10 @@ body.dialog-open { overflow: hidden; }
   .project-art-screenshot.arena-art .project-cover-screenshot { top: -14%; }
   .project-art-screenshot.enterprise-art .project-cover-screenshot { top: -43%; }
 }
+
+/* Single project detail action at top right; below title on narrow layouts. */
+.project-copy { position: relative; }
+.project-copy > .project-actions { position: absolute; top: 0; right: 0; margin: 0; }
+@media screen and (max-width: 1050px) {
+  .project-copy > .project-actions { position: static; margin: 8px 0 12px; }
+}
