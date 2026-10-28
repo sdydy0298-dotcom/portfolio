@@ -437,8 +437,8 @@ function projectRow(project) {
   const c = compact[project.id];
   if (!c) return '';
   const id = escapeHTML(project.id);
-  const coverView = c.coverView || 'images';
-  const coverAction = '실제 구현 화면 보기';
+  const coverView = 'notes';
+  const coverAction = '수행 내용 보기';
   const isMall = project.id === 'smdc';
   const thumbnailSrc = isMall ? '/assets/enterprise/homepc-web.png' : '/assets/arena/web-main-v2.jpg';
   const thumbnailAlt = isMall ? 'StarMall 쇼핑몰 메인 화면' : 'ALEPH Arena 게임 웹사이트 메인 화면';
@@ -463,8 +463,6 @@ function projectRow(project) {
       </section>
       <div class="project-actions">
         <button type="button" data-project="${id}" data-view="notes">수행 내용 ↗</button>
-        <button type="button" data-project="${id}" data-view="topology">설계도 ↗</button>
-        <button type="button" data-project="${id}" data-view="images">실제 구현 화면 ↗</button>
       </div>
     </div>
   </article>`;
