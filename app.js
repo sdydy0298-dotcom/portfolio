@@ -414,8 +414,9 @@ const technologyNames = {
 };
 const detailViews = [
   { id: 'notes', label: '수행 내용' },
-  { id: 'topology', label: '설계도' },
-  { id: 'images', label: '실제 구현 화면' }
+  { id: 'topology', label: '설계·구축' },
+  { id: 'validation', label: '동작·검증' },
+  { id: 'troubles', label: '문제 해결·개선' }
 ];
 let projects = [];
 let lastTrigger;
@@ -544,8 +545,7 @@ function notes(project) {
   return `<div class="execution-record">
     ${recordHeading('01','담당 역할','담당 범위와 역할 구분',recordRoles(c))}
     ${recordHeading('02','주요 구현 내용','구현한 기능과 인프라를 영역별로 정리',recordImplementation(project,c))}
-    ${recordHeading('03',project.id==='aleph-arena'?'문제 해결·팀 협업':'문제 해결·설계 개선',project.id==='aleph-arena'?'웹사이트 장애 해결과 거점 연동 협업':'장애 해결과 데이터센터 네트워크 구조 개선',recordTroubles(c))}
-    ${recordHeading('04','검증 결과','구축 후 실제 확인한 기능과 서비스',recordResults(project,c))}
+
   </div>`;
 }
 
@@ -583,7 +583,7 @@ function topology(project) {
 function setDetailView(project, requestedView) {
   const view = detailViews.some(item => item.id === requestedView) ? requestedView : 'notes';
   const c = compact[project.id];
-  const count = id => id === 'images' ? (project.images?.length || 0) + (project.topologies || []).filter(item => item.kind === 'implementation').length : id === 'topology' ? (project.topologies || []).filter(item => item.kind !== 'implementation').length : null;
+  const count = () => null;
   document.querySelector('#dialog-content').innerHTML = `<article class="project-detail">
     <p class="kicker">${c.type} / ${c.period}</p>
     <h2 id="dialog-title">${escapeHTML(project.title)}</h2>
@@ -591,7 +591,7 @@ function setDetailView(project, requestedView) {
     <div class="detail-nav" role="tablist" aria-label="프로젝트 상세 선택">
       ${detailViews.map(item => `<button id="tab-${item.id}" type="button" role="tab" aria-selected="${view === item.id}" aria-controls="detail-panel" tabindex="${view === item.id ? 0 : -1}" data-detail-view="${item.id}">${item.label}${count(item.id) === null ? '' : ` ${count(item.id)}`}</button>`).join('')}
     </div>
-    <div id="detail-panel" role="tabpanel" aria-labelledby="tab-${view}" tabindex="0">${view === 'images' ? gallery(project) : view === 'topology' ? topology(project) : notes(project)}</div>
+    <div id="detail-panel" role="tabpanel" aria-labelledby="tab-${view}" tabindex="0">${view === 'topology' ? designView(project) : view === 'validation' ? validationView(project) : view === 'troubles' ? issuesView(project) : notes(project)}</div>
   </article>`;
   dialog.dataset.project = project.id;
   dialog.dataset.view = view;
@@ -608,6 +608,14 @@ document.addEventListener('click', event => {
     dialog.showModal();
     document.body.classList.add('dialog-open');
     document.querySelector('#close-dialog').focus();
+  }
+  const filter = event.target.closest('[data-record-filter]');
+  if (filter) {
+    const project = projects.find(item => item.id === dialog.dataset.project);
+    if (!project) return;
+    const panel = document.querySelector('#detail-panel');
+    panel.innerHTML = dialog.dataset.view === 'validation' ? validationView(project, filter.dataset.recordFilter) : issuesView(project, filter.dataset.recordFilter);
+    panel.querySelector(`[data-record-filter="${filter.dataset.recordFilter}"]`)?.focus();
   }
   const tab = event.target.closest('[data-detail-view]');
   if (tab) {
@@ -661,3 +669,38 @@ fetch('/content.json')
   .catch(() => {
     document.querySelector('#project-list').innerHTML = '<p class="loading-error">프로젝트를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>';
   });
+
+// Project detail records share the existing dialog and its keyboard navigation.
+function evidenceFor(project, names = []) {
+  const all = [...(project.images || []), ...(project.topologies || [])];
+  const items = names.map(name => all.find(item => item.url.split('/').pop() === name)).filter(Boolean);
+  return items.length ? `<div class="gallery record-evidence">${items.map(item => imageFigure(item)).join('')}</div>` : '';
+}
+function recordFields(fields) {
+  return `<dl class="process-fields">${fields.map(([label, value]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('')}</dl>`;
+}
+function designView(project) {
+  const records = projectRecords[project.id];
+  const overview = project.topologies.find(item => item.overview && item.kind !== 'implementation');
+  return `<div class="process-record">${recordHeading('01','설계·구축','전체 연결과 담당 범위를 먼저 확인하고 영역별 구축 과정을 살펴봅니다.', '')}
+    ${overview ? `<div class="topology-grid">${imageFigure(overview, true)}</div>` : ''}
+    <div class="process-list">${records.design.map((item, i) => `<details class="process-case" ${i === 0 ? 'open' : ''}><summary><span class="case-index">${String(i+1).padStart(2,'0')}</span><strong>${escapeHTML(item.title)}</strong><span class="expand-sign" aria-hidden="true"></span></summary><div class="process-case-body">${recordFields([['설계 이유',item.why],['구축 과정',item.build]])}${evidenceFor(project,item.images)}</div></details>`).join('')}</div></div>`;
+}
+function recordFilters(options, selected) {
+  return `<div class="record-filters" role="group" aria-label="세부 항목 선택">${options.map(([id,label])=>`<button type="button" data-record-filter="${id}" aria-pressed="${selected===id}">${label}</button>`).join('')}</div>`;
+}
+function workflowDiagram(items) {
+  return `<ol class="workflow-path" aria-label="동작 순서">${items.map((text, i)=>`<li><span>${String(i+1).padStart(2,'0')}</span>${escapeHTML(text)}</li>`).join('')}</ol>`;
+}
+function validationView(project, category = 'normal') {
+  const options = [['normal','정상 업무'],['security','보안 기능'],['operations','운영 및 복구 시험']];
+  const items = projectRecords[project.id].scenarios.filter(item=>item.category===category);
+  return `<div class="process-record">${recordHeading('01','동작·검증','서비스 흐름과 시험 절차를 확인하고, 실제 결과와 추가 검증 범위를 구분합니다.', '')}
+    ${recordFilters(options,category)}<div class="scenario-list">${items.map((item,i)=>`<section class="scenario-card"><div class="scenario-topline"><span>SCENARIO ${String(i+1).padStart(2,'0')}</span><span class="record-status ${item.pending?'pending':''}">${item.pending?'추가 검증 대상':'수행 기록'}</span></div><h3>${escapeHTML(item.title)}</h3>${workflowDiagram(item.flow)}${recordFields([['목적',item.purpose],[item.pending?'검증 절차':'수행 절차',item.procedure],['현재 결과',item.result]])}${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}${evidenceFor(project,item.evidence)}</section>`).join('')}</div></div>`;
+}
+function issuesView(project, stage = 'all') {
+  const options = [['all','전체'],['design','설계'],['implementation','구현'],['test','테스트']];
+  const items = projectRecords[project.id].issues.filter(item=>stage==='all'||item.stage===stage);
+  return `<div class="process-record">${recordHeading('01','문제 해결·개선','문제가 생긴 배경부터 원인 판단, 해결 방법과 재검증까지 정리했습니다.', '')}
+    ${recordFilters(options,stage)}${items.length ? `<div class="process-list">${items.map((item,i)=>`<details class="process-case" ${items.length===1?'open':''}><summary><span class="case-stage">${options.find(([id])=>id===item.stage)[1]}</span><div><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.symptom)}</small></div><span class="expand-sign" aria-hidden="true"></span></summary><div class="process-case-body">${recordFields([['목표·설계 의도',item.goal],['문제 상황',item.symptom],['원인 분석·판단',item.analysis],['해결·선택 이유',item.action],['검증 결과',item.result]])}${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}${evidenceFor(project,item.evidence)}</div></details>`).join('')}</div>` : '<div class="record-empty"><h3>테스트 단계의 문제 해결 기록</h3><p>현재 정리한 문제 해결 사례는 설계·구현 단계입니다. 시험 절차와 확인 결과는 ‘동작·검증’ 탭에서 볼 수 있습니다.</p></div>'}</div>`;
+}

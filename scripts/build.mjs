@@ -22,7 +22,7 @@ content = { version: local.version, updatedAt: local.updatedAt, projects: local.
   return { id: versioned.id, title: versioned.title, images: versioned.images || [], topologies: versioned.topologies || [] };
 }) };
 await mkdir('dist', { recursive: true });
-for (const file of ['index.html', 'styles.css', 'app.js']) await copyFile(file, `dist/${file}`);
+for (const file of ['index.html', 'styles.css', 'project-records.js', 'app.js']) await copyFile(file, `dist/${file}`);
 await cp('assets', 'dist/assets', { recursive: true });
 await writeFile('dist/content.json', JSON.stringify(content));
 console.log('Portfolio 1.0.0 built successfully');

@@ -565,3 +565,51 @@ body.dialog-open { overflow: hidden; }
 @media screen and (max-width: 1050px) {
   .project-copy > .project-actions { position: static; margin: 8px 0 12px; }
 }
+
+/* Detail-only redesign: preserve the project listing and profile. */
+.process-record { min-width: 0; }
+.record-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.record-filters button { padding: 8px 15px; border: 1px solid #dbe4f3; border-radius: 7px; background: #fff; color: var(--body); font-size: 12px; font-weight: 650; }
+.record-filters button[aria-pressed=true] { color: #fff; background: var(--blue); border-color: var(--blue); }
+.process-list { display: grid; gap: 14px; margin-top: 22px; }
+.process-case { border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.process-case summary { display: flex; align-items: center; gap: 14px; padding: 20px; cursor: pointer; list-style: none; background: #f8faff; }
+.process-case summary::-webkit-details-marker { display: none; }
+.process-case summary > div { min-width: 0; }
+.process-case summary strong { font-size: 15px; line-height: 1.6; }
+.process-case summary small { display: block; margin-top: 5px; font-size: 12px; font-weight: 400; line-height: 1.7; color: var(--body); }
+.case-index,.case-stage { color: var(--blue); background: #eaf1ff; border-radius: 5px; padding: 4px 9px; flex-shrink: 0; font-size: 11px; font-weight: 750; }
+.expand-sign { margin-left: auto; flex-shrink: 0; color: var(--blue); }
+.expand-sign::after { content: '+'; font-size: 21px; }
+.process-case[open] .expand-sign::after { content: '−'; }
+.process-case-body { padding: 6px 22px 22px; }
+.process-fields { margin: 8px 0; }
+.process-fields > div { display: grid; grid-template-columns: 115px minmax(0,1fr); gap: 16px; padding: 15px 0; border-bottom: 1px solid #edf1f7; }
+.process-fields dt { color: var(--blue); font-size: 12px; font-weight: 750; }
+.process-fields dd { margin: 0; color: var(--body); font-size: 13px; line-height: 1.9; overflow-wrap: anywhere; }
+.scenario-list { display: grid; gap: 24px; }
+.scenario-card { padding: 24px; border: 1px solid var(--line); border-radius: 10px; }
+.scenario-topline { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--blue); font-size: 10px; font-weight: 750; letter-spacing: 1px; }
+.scenario-card > h3 { font-size: 19px; margin: 0 0 20px; line-height: 1.6; }
+.record-status { border-radius: 4px; padding: 4px 8px; background: #edf7f3; color: #2d715b; letter-spacing: 0; white-space: nowrap; }
+.record-status.pending { background: #fff5df; color: #85611e; }
+.workflow-path { margin: 0 0 20px; padding: 18px; display: flex; flex-wrap: wrap; gap: 12px 20px; list-style: none; border-radius: 8px; background: #f2f6fd; }
+.workflow-path li { position: relative; flex: 1 1 110px; min-width: 0; padding: 12px; border: 1px solid #d7e2f4; border-radius: 7px; background: #fff; font-size: 12px; line-height: 1.7; font-weight: 650; overflow-wrap: anywhere; }
+.workflow-path li:not(:last-child)::after { content: '→'; position: absolute; right: -17px; top: 24px; color: #7b96c0; }
+.workflow-path li span { display: block; color: #7290bc; font-size: 10px; font-weight: 700; margin-bottom: 5px; }
+.record-limit { color: #64758d; background: #f5f7fb; border-left: 3px solid #b4c5df; padding: 12px 14px; font-size: 12px; line-height: 1.8; margin: 18px 0; }
+.record-evidence { margin-top: 20px; }
+.record-evidence figure { align-self: start; }
+.record-empty { background: #f7f9fd; border: 1px solid var(--line); padding: 25px; border-radius: 9px; }
+.record-empty h3 { font-size: 16px; }
+.record-empty p { font-size: 13px; color: var(--body); line-height: 1.9; }
+@media(max-width:600px) {
+ .process-case summary { padding: 16px; gap: 9px; }
+ .process-case-body { padding: 4px 16px 16px; }
+ .scenario-card { padding: 17px; }
+ .process-fields > div { grid-template-columns: 1fr; gap: 5px; padding: 12px 0; }
+ .workflow-path { padding: 12px; gap: 12px 20px; }
+ .workflow-path li { flex-basis: calc(50% - 20px); }
+ .scenario-card > h3 { font-size: 17px; }
+ .record-filters button { font-size: 11px; padding: 8px 11px; }
+}
