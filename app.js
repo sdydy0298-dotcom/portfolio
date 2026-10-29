@@ -105,8 +105,20 @@ const compact = {
         "VLAN · OSPF · Static Route · DHCP · UDP Tunnel"
       ],
       [
-        "인프라",
-        "Linux · BIND DNS · Nginx–Tomcat · MariaDB · Linux 게임 서버"
+        "운영체제·서버",
+        "Rocky Linux · Windows · Nginx · Tomcat · MariaDB · BIND DNS"
+      ],
+      [
+        "웹 개발·배포",
+        "HTML · CSS · JavaScript · Java · WAR 배포"
+      ],
+      [
+        "런처 개발",
+        "C# · .NET 8"
+      ],
+      [
+        "게임 개발",
+        "Godot · GDScript · ENet/UDP · Linux Dedicated Server"
       ]
     ],
     "roleSummary": "5인 팀에서 한국 IDC 네트워크와 서버 구성을 맡았습니다. 게임 웹사이트·Windows 런처·Godot 게임을 개발하고 Linux 게임 서버의 2인 방 생성·참가·게임 시작 흐름을 검증했습니다.",
@@ -303,23 +315,27 @@ const compact = {
     "techAreas": [
       [
         "네트워크",
-        "Spine–Leaf · VLAN · OSPF · Static Route · DHCP · NAT/PAT · Site-to-Site VPN"
+        "Spine–Leaf · VLAN · OSPF · Static Route · DHCP · NAT/PAT · Site-to-Site IPsec VPN"
+      ],
+      [
+        "운영체제·서버",
+        "Rocky Linux · Ubuntu · Windows · Nginx · Tomcat · MariaDB"
+      ],
+      [
+        "웹 서비스·배포",
+        "Java · Tomcat · WAR 배포 · WEB–WAS–DB 연동"
       ],
       [
         "보안·이중화",
-        "pfSense FW/UTM · DMZ · Suricata IPS/IDS · HAProxy/Keepalived SLB · VRRP/VIP · WEB/WAS 다중 구성"
+        "pfSense · DMZ · Suricata IPS/IDS · HAProxy · Keepalived · VRRP/VIP"
       ],
       [
-        "쇼핑몰 서버",
-        "Rocky Linux · Ubuntu · Windows · WEB1~3(Nginx) · WAS1~2(Tomcat) · MariaDB"
+        "운영 서비스",
+        "BIND9 · Postfix · Dovecot · Chrony · rsyslog"
       ],
       [
-        "공통 서비스",
-        "BIND9 DNS · Postfix SMTP · Dovecot IMAP · Chrony NTP1 서버 시간 동기화 · rsyslog LOG1(TCP 514) 중앙 로그"
-      ],
-      [
-        "관리망",
-        "MGMT VLAN · Jump Server · PuTTY(SSH) · FileZilla(SFTP)"
+        "관리·접속",
+        "Jump Server · SSH · SFTP"
       ]
     ],
     "components": [
