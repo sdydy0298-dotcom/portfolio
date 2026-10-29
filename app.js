@@ -319,7 +319,7 @@ const compact = {
       ],
       [
         "관리망",
-        "MGMT VLAN · Jump Server 배치 · PuTTY(SSH) · FileZilla(SFTP) · 관리 접속 경유·ACL 검증 예정"
+        "MGMT VLAN · Jump Server · PuTTY(SSH) · FileZilla(SFTP)"
       ]
     ],
     "components": [
@@ -540,12 +540,17 @@ function recordResults(project,c) {
   <p class="execution-results-tip">관련 증빙은 ‘설계도’ 및 ‘실제 구현 화면’ 탭에서 확인할 수 있습니다.</p>`;
 }
 
+function recordToolSummary(c) {
+  const areas=c.techAreas.map(([label,value])=>`<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('');
+  return `<section class="execution-tech" aria-label="사용 기술·도구">
+    <dl class="technology-areas">${areas}<div><dt>사용 도구</dt><dd>${c.tools.map(escapeHTML).join(' · ')}</dd></div></dl>
+  </section>`;
+}
 function notes(project) {
   const c=compact[project.id];
   return `<div class="execution-record">
-    ${recordHeading('01','담당 역할','담당 범위와 역할 구분',recordRoles(c))}
-    ${recordHeading('02','주요 구현 내용','구현한 기능과 인프라를 영역별로 정리',recordImplementation(project,c))}
-
+    ${recordHeading('01','담당 역할','담당 범위와 팀 업무 분담',recordRoles(c))}
+    ${recordHeading('02','사용 기술·도구','',recordToolSummary(c))}
   </div>`;
 }
 
