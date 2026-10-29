@@ -41,7 +41,70 @@
           "title": "06 · Thunderbird에서 MX1 메일 수신 확인",
           "width": 1916,
           "height": 955,
-          "caption": "Windows 10 · Thunderbird: mailuser2@starmall.com이 mailuser1@starmall.com의 “MX1 test” 메일을 수신했습니다. 본문: Hello from SMDC-MX1!"
+          "caption": "Thunderbird에서 MX1 테스트 메일 수신 확인"
+        },
+        {
+          "url": "/assets/enterprise/proof/vpn-ipsec-connection.png",
+          "title": "IPsec VPN 연결 설정",
+          "caption": "Sophos UTM의 본사·지사 IPsec 연결 정책",
+          "width": 987,
+          "height": 695
+        },
+        {
+          "url": "/assets/enterprise/proof/vpn-ipsec-established.png",
+          "title": "IPsec 터널 연결 확인",
+          "caption": "1/1 IPsec SA 수립 및 VPN 터널 상태",
+          "width": 985,
+          "height": 696
+        },
+        {
+          "url": "/assets/enterprise/proof/vpn-branch-source-ip.png",
+          "title": "지사 PC 및 본사 서버 주소 확인",
+          "caption": "지사 클라이언트와 본사 개발 서버의 IP 정보",
+          "width": 1356,
+          "height": 432
+        },
+        {
+          "url": "/assets/enterprise/proof/vpn-branch-to-hq-ssh.png",
+          "title": "지사에서 본사 서버 SSH 접속",
+          "caption": "지사 업무망에서 본사 개발 서버로의 SSH 연결",
+          "width": 662,
+          "height": 422
+        },
+        {
+          "url": "/assets/enterprise/proof/fw-wan-rules.png",
+          "title": "pfSense WAN 접근 규칙",
+          "caption": "DNS·HTTP·메일·관리 SSH 접근 정책",
+          "width": 1267,
+          "height": 792
+        },
+        {
+          "url": "/assets/enterprise/proof/fw-nat.png",
+          "title": "pfSense NAT 포트 포워딩",
+          "caption": "외부 서비스 요청을 내부 서버로 전달하는 NAT 설정",
+          "width": 1262,
+          "height": 652
+        },
+        {
+          "url": "/assets/enterprise/proof/jump-ssh-allowed.png",
+          "title": "Jump Server SSH 접속 성공",
+          "caption": "허용된 내부망에서 Jump Server SSH 접속",
+          "width": 1326,
+          "height": 442
+        },
+        {
+          "url": "/assets/enterprise/proof/jump-ssh-denied.png",
+          "title": "Jump Server SSH 접속 시간 초과",
+          "caption": "다른 네트워크에서 관리 서버 접속 시도 결과",
+          "width": 1342,
+          "height": 462
+        },
+        {
+          "url": "/assets/enterprise/proof/jump-homepc-blocked.png",
+          "title": "외부 고객망 SSH 접속 시간 초과",
+          "caption": "고객망에서 관리 서버 SSH 접속 시도 결과",
+          "width": 1352,
+          "height": 461
         }
       ],
       "topologies": [

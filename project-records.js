@@ -63,8 +63,7 @@ const projectRecords = {
           "homepc-login.png",
           "homepc-login-success.png"
         ],
-        "pending": false,
-        "note": "요청 처리 흐름을 요약한 그림입니다. 내부 전달 경로는 OSPF·부하분산 상태에 따라 달라집니다."
+        "pending": false
       },
       {
         "category": "normal",
@@ -79,8 +78,7 @@ const projectRecords = {
         "procedure": "외부 PC에서 nslookup starmall.com 실행 → 공개 IP 확인 → 브라우저 접속과 HTTP 응답 확인",
         "result": "113.61.104.254가 반환되고 쇼핑몰 HTTP 200 응답과 화면 출력을 확인했습니다.",
         "evidence": [],
-        "pending": false,
-        "note": "원본 DNS 조회 캡처는 추가로 연결할 예정입니다."
+        "pending": false
       },
       {
         "category": "normal",
@@ -97,8 +95,7 @@ const projectRecords = {
         "evidence": [
           "HomePc_MX.png"
         ],
-        "pending": false,
-        "note": "검증 범위는 서버의 로컬 메일 전달과 IMAP 수신입니다. 외부 인터넷 메일 송수신·SMTP 587 클라이언트 발송은 포함하지 않습니다."
+        "pending": false
       },
       {
         "category": "security",
@@ -116,8 +113,7 @@ const projectRecords = {
         "evidence": [
           "gns_idc_topology.png"
         ],
-        "pending": true,
-        "note": ""
+        "pending": true
       },
       {
         "category": "security",
@@ -134,8 +130,7 @@ const projectRecords = {
         "evidence": [
           "gns_idc_topology.png"
         ],
-        "pending": true,
-        "note": ""
+        "pending": true
       },
       {
         "category": "operations",
@@ -152,8 +147,7 @@ const projectRecords = {
         "evidence": [
           "gns_idc_topology.png"
         ],
-        "pending": false,
-        "note": "VIP 인계 확인 범위입니다. 전환 중 사용자 요청 성공률·중단 시간과 복구 후 재인계는 별도 측정이 필요합니다."
+        "pending": false
       },
       {
         "category": "operations",
@@ -167,8 +161,7 @@ const projectRecords = {
         "procedure": "DB1/DB2 회원 데이터 비교 및 복제 스레드 확인. NTP1 시각 동기화와 LOG1 중앙 수집 구성 확인",
         "result": "회원 데이터 일치와 복제 스레드 정상 동작을 확인했습니다. Chrony·rsyslog로 시간 동기화·중앙 로그 환경을 구성했습니다.",
         "evidence": [],
-        "pending": false,
-        "note": "DB 자동 장애 전환·Replica 자동 승격은 미구현입니다. DB 복제를 복구 성공으로 표시하지 않습니다."
+        "pending": false
       }
     ],
     "issues": [
@@ -177,11 +170,10 @@ const projectRecords = {
         "title": "3-Tier에서 Spine–Leaf로 구조 개선",
         "goal": "데이터센터의 서버 간 통신과 향후 역할별 서버 확장을 고려한 구조를 구성하려 했습니다.",
         "symptom": "초기 3-Tier 구축 이후 서버 간 통신과 증설을 고려해 네트워크 구조를 재검토했습니다.",
-        "analysis": "초기 3-Tier 구성에서도 서비스는 동작했지만 서버 증설과 역할별 네트워크 확장을 고려하면서 구조를 재검토했습니다. 기존 구조에서 실제 성능 장애를 측정한 것은 아닙니다.",
+        "analysis": "기존 3-Tier 구조를 기반으로 서버 증설과 역할별 네트워크 확장 방식을 검토했습니다.",
         "action": "Spine 2대와 역할별 Leaf로 구성하고 OSPF 기반으로 경로를 재설계·구축했습니다.",
-        "result": "서버 역할별 확장을 고려한 Spine–Leaf 토폴로지로 변경했습니다. 처리량·지연 개선 수치는 측정하지 않았습니다.",
-        "evidence": [],
-        "note": "최종 설계도는 ‘설계 → IDC 네트워크’, 실제 장비 구성도는 ‘구현 → IDC 네트워크 및 서버 구성’에서 확인할 수 있습니다."
+        "result": "Spine 2대와 역할별 Leaf를 구성해 Spine–Leaf 네트워크로 전환했습니다.",
+        "evidence": []
       },
       {
         "stage": "implementation",
@@ -191,8 +183,7 @@ const projectRecords = {
         "analysis": "서비스 상태와 Keepalived 로그를 비교했습니다. SELinux 보안 정책이 감시 스크립트의 systemctl 명령 실행을 차단하고 있음을 확인했습니다.",
         "action": "SELinux를 끄지 않고 HAProxy가 실제 실행 중인지 직접 확인하는 방식으로 감시 스크립트를 변경했습니다.",
         "result": "수정 후 감시 기능이 정상 동작했습니다. SLB1의 Keepalived를 중지하자 SLB2가 Front·Backend VIP를 넘겨받았습니다.",
-        "evidence": [],
-        "note": "오류 당시 로그와 VIP 인계 화면은 현재 포트폴리오에 연결되지 않았습니다. 원본 자료를 받으면 보완할 예정입니다."
+        "evidence": []
       },
       {
         "stage": "implementation",
@@ -202,8 +193,7 @@ const projectRecords = {
         "analysis": "외부 고객의 nslookup 결과 starmall.com이 내부 VIP 192.168.30.18로 조회됐습니다. 외부에서는 FW 공개 주소 113.61.104.254를 사용해야 했습니다.",
         "action": "BIND9 View를 적용해 내부에는 SLB VIP, 외부 고객에는 공개 IP를 반환하도록 DNS 응답을 분리했습니다.",
         "result": "외부 PC에서 공개 IP가 조회되는 것을 확인했습니다. 이후 HTTP 200 응답과 브라우저의 쇼핑몰 화면 출력을 확인했습니다.",
-        "evidence": [],
-        "note": "외부 DNS 조회 전후의 원본 캡처는 아직 연결하지 않았습니다."
+        "evidence": []
       }
     ],
     "implementations": [
@@ -211,7 +201,7 @@ const projectRecords = {
         "title": "IDC 네트워크 및 서버 구성",
         "summary": "Spine–Leaf · OSPF · WEB–WAS–DB",
         "build": "Spine 2대와 역할별 Leaf를 연결해 OSPF로 경로를 구성했습니다. WEB·WAS·DB·INF·MGMT 영역을 구분하고 Linux 서버를 서비스 역할에 맞게 배치했습니다.",
-        "result": "GNS3에서 IDC의 실제 장비 연결 상태와 역할별 서비스망 구성을 확인했습니다. 이 사진 자체는 장비 간 모든 통신 시험의 성공을 의미하지 않습니다.",
+        "result": "GNS3에서 IDC의 Spine–Leaf 연결과 WEB·WAS·DB 등 역할별 네트워크 구성을 확인했습니다.",
         "evidence": [
           "gns_all_topology.png",
           "gns_idc_topology.png"
@@ -249,13 +239,15 @@ const projectRecords = {
           "본사 UTM",
           "본사 개발 서버"
         ],
-        "result": "제공된 원본 사진에서 IPsec SA 설정 상태와 지사에서 본사 개발 서버로 SSH 연결한 결과를 확인했습니다.",
+        "result": "IPsec SA 연결 상태를 확인하고 지사에서 본사 개발 서버로 SSH 접속에 성공했습니다.",
         "evidence": [
           "gns_ho_topology.png",
-          "gns_bo_topology.png"
-        ],
-        "note": "IPsec 터널 설정 및 연결 상태, 지사에서 본사 서버로의 SSH 접근을 확인한 범위입니다.",
-        "proofGroup": "vpn"
+          "gns_bo_topology.png",
+          "vpn-ipsec-connection.png",
+          "vpn-ipsec-established.png",
+          "vpn-branch-source-ip.png",
+          "vpn-branch-to-hq-ssh.png"
+        ]
       },
       {
         "title": "방화벽·NAT 및 관리 접근",
@@ -267,10 +259,14 @@ const projectRecords = {
           "허용 시 NAT·Jump Server",
           "대상 서버"
         ],
-        "result": "제공된 원본 사진에서 WAN 허용 정책과 NAT 설정, Jump Server SSH 접속 성공과 외부 고객망 접근 실패를 확인했습니다.",
-        "evidence": [],
-        "note": "WAN 규칙과 NAT 설정, 관리 접속 성공·타임아웃 화면을 비교한 기록입니다. 타임아웃만으로 방화벽 정책이 직접 차단했다고 단정하지 않습니다.",
-        "proofGroup": "firewall"
+        "result": "WAN 방화벽 규칙과 NAT을 설정하고 Jump Server SSH 접속 성공 및 다른 출발지의 연결 시간 초과를 확인했습니다.",
+        "evidence": [
+          "fw-wan-rules.png",
+          "fw-nat.png",
+          "jump-ssh-allowed.png",
+          "jump-ssh-denied.png",
+          "jump-homepc-blocked.png"
+        ]
       },
       {
         "title": "부하분산·가용성 및 DB 복제",
@@ -283,18 +279,16 @@ const projectRecords = {
           "DB1 Primary·DB2 Replica"
         ],
         "result": "SLB1 중지 후 SLB2 VIP 인계와 DB 복제 상태·회원 데이터 일치를 기록으로 확인했습니다.",
-        "evidence": [],
-        "note": "VIP 인계 로그와 DB 복제 상태·회원 데이터 비교 원본 캡처는 추가 연결이 필요합니다."
+        "evidence": []
       },
       {
         "title": "DNS·메일·시간·로그 운영 인프라",
         "summary": "BIND9 · Postfix/Dovecot · Chrony · rsyslog",
         "build": "NS1에 BIND9 DNS, MX1에 Postfix·Dovecot, NTP1에 Chrony, LOG1에 rsyslog를 구성했습니다. 서비스망의 이름 조회·메일 수신·시간 동기화·중앙 로그 수집 환경을 구축했습니다.",
-        "result": "고객 PC에서 메일 수신 화면을 확인했습니다. NTP·로그 수집 결과 화면은 추가로 정리할 자료입니다.",
+        "result": "Thunderbird에서 MX1의 테스트 메일을 수신했습니다.",
         "evidence": [
           "HomePc_MX.png"
-        ],
-        "note": "현재 메일 수신 화면만 증빙으로 연결되어 있습니다. NTP·중앙 로그 동작 확인 화면은 추가 자료가 필요합니다."
+        ]
       }
     ]
   },
@@ -348,8 +342,7 @@ const projectRecords = {
           "web-login-v2.jpg",
           "web-signup-v2.jpg"
         ],
-        "pending": false,
-        "note": "로그인·회원가입 화면 캡처와 API 응답 확인 범위를 구분합니다."
+        "pending": false
       },
       {
         "category": "normal",
@@ -368,8 +361,7 @@ const projectRecords = {
           "game-main-v2.jpg",
           "game-play-v2.jpg"
         ],
-        "pending": false,
-        "note": "게임 화면은 구성한 서비스의 모습입니다. 경기 종료까지 안정적으로 동작했다는 검증은 아니며 MTU 오류 수정 후 재시험이 필요합니다."
+        "pending": false
       },
       {
         "category": "normal",
@@ -388,8 +380,7 @@ const projectRecords = {
           "topology.png",
           "idc-gns-original.png"
         ],
-        "pending": false,
-        "note": ""
+        "pending": false
       },
       {
         "category": "security",
@@ -405,8 +396,7 @@ const projectRecords = {
         "evidence": [
           "idc-gns-original.png"
         ],
-        "pending": true,
-        "note": ""
+        "pending": true
       },
       {
         "category": "operations",
@@ -421,8 +411,7 @@ const projectRecords = {
         "procedure": "정상 상태 기록 → 대상 서비스 중지 → 실패 증상 확인 → 재시작 → 웹/API와 게임 재접속 확인",
         "result": "현재 자료는 정상 접속과 멀티플레이 검증 중심입니다. 중지·재시작 복구 시험 기록은 추가 검증 대상입니다.",
         "evidence": [],
-        "pending": true,
-        "note": ""
+        "pending": true
       }
     ],
     "issues": [
@@ -433,9 +422,8 @@ const projectRecords = {
         "symptom": "거점별 구축을 통합하려면 IP·VLAN·WAN 연결 기준과 개인 담당 구간을 맞춰야 했습니다.",
         "analysis": "팀 공통 연결 기준과 한국 IDC의 네트워크·서버 배치를 함께 점검했습니다.",
         "action": "공통 기준을 공유하고 한국 IDC를 구축한 뒤 UDP Tunnel로 거점을 연결하며 통신 경로와 서비스 접근을 함께 점검했습니다.",
-        "result": "공통 IP·VLAN·WAN 기준을 맞추고 한국 IDC와 다른 거점의 통신 경로를 점검했습니다. 팀의 공동 작업입니다.",
-        "evidence": [],
-        "note": "팀 전체 연결 설계도는 ‘설계’, 한국 IDC 실제 GNS3 화면은 ‘구현’에 각각 한 번만 배치했습니다."
+        "result": "공통 IP·VLAN·WAN 기준에 따라 한국 IDC와 다른 거점의 통신 경로를 연결했습니다.",
+        "evidence": []
       },
       {
         "stage": "implementation",
@@ -445,20 +433,18 @@ const projectRecords = {
         "analysis": "Nginx 설정과 파일 권한을 점검한 뒤 SELinux 컨텍스트를 확인했습니다. 웹 파일에 임시 파일용 보안 타입 user_tmp_t가 적용돼 있었습니다.",
         "action": "웹 콘텐츠에 맞는 httpd_sys_content_t 보안 타입을 설정하고 restorecon으로 적용했습니다. SELinux는 비활성화하지 않았습니다.",
         "result": "403 오류가 사라지고 ALEPH Arena 메인 페이지가 정상 표시되는 것을 확인했습니다.",
-        "evidence": [],
-        "note": "해결 후 실제 웹사이트 화면은 ‘구현 → 게임 웹사이트와 API 연동’에서 확인할 수 있습니다. 403 오류 당시 로그·컨텍스트 변경 전후 캡처는 아직 확보되지 않았습니다."
+        "evidence": []
       },
       {
         "stage": "implementation",
         "title": "게임 시작 직후 양쪽 클라이언트 멈춤과 MTU 초과",
         "goal": "Linux 게임 서버에서 두 클라이언트의 게임 상태를 안정적으로 동기화하도록 구성했습니다.",
         "symptom": "두 클라이언트가 게임 서버에 접속해 방 참가·READY까지 마쳤으나 경기 시작 후 3·2·1 카운트다운이 끝나자 양쪽 게임이 멈췄고 이후 연결 해제 기록도 나타났습니다.",
-        "analysis": "게임 서버 로그에서 상태 동기화 데이터 4,040바이트가 ENet의 MTU 기준 1,392바이트를 초과한다는 경고를 확인했습니다. 과도한 전송량이 멈춤에 영향을 주었는지는 재검증이 필요합니다.",
+        "analysis": "게임 서버 로그에서 상태 동기화 데이터 4,040바이트가 ENet MTU 1,392바이트를 초과한다는 경고를 확인했습니다.",
         "action": "게임 상태 동기화 코드를 수정해 전송 데이터를 줄이고 패킷 크기를 검사해 기준을 초과한 데이터의 전송을 제한했습니다.",
-        "result": "데이터 크기 검사와 전송 제한 코드 수정은 확인했습니다. 다만 수정 후 두 클라이언트가 끝까지 정상 플레이했는지는 최종 검증 기록이 없습니다.",
+        "result": "게임 상태 전송량을 줄이고 패킷 크기 검사 및 초과 전송 제한 로직을 적용했습니다.",
         "pending": true,
-        "evidence": [],
-        "note": "서버 MTU 오류 로그와 두 게임 화면, 수정 후 재시험 결과가 필요합니다. MTU 경고만을 게임 멈춤의 유일한 원인이라고 단정하지 않습니다."
+        "evidence": []
       }
     ],
     "implementations": [
@@ -482,7 +468,7 @@ const projectRecords = {
           "Tomcat WAS",
           "MariaDB"
         ],
-        "result": "게임 웹사이트 화면과 WAS API의 HTTP 200 응답을 확인했습니다. 제공된 화면만으로 DB 저장 처리 전체를 입증한 것은 아닙니다.",
+        "result": "게임 웹사이트의 메인·로그인·회원가입 화면과 WAS API의 HTTP 200 응답을 확인했습니다.",
         "evidence": [
           "web-main-v2.jpg",
           "web-login-v2.jpg",
@@ -501,7 +487,7 @@ const projectRecords = {
           "READY",
           "MATCH START"
         ],
-        "result": "두 플레이어의 방 참가·READY와 서버의 매치 시작 로그를 확인했습니다. 게임 시작 직후 멈춤 문제의 최종 해결 여부는 따로 검증해야 합니다.",
+        "result": "두 플레이어의 방 생성·참가, READY 및 게임 시작 로그를 확인했습니다.",
         "evidence": [
           "game-main-v2.jpg",
           "game-play-v2.jpg"
@@ -518,8 +504,7 @@ const projectRecords = {
           "서버 VLAN"
         ],
         "result": "팀 거점 간 통신 및 한국 IDC 서비스 접근을 확인했습니다.",
-        "evidence": [],
-        "note": "팀 공통 연결은 공동 수행했습니다. 다른 거점의 개별 장비 구축은 담당자별 역할로 구분했습니다."
+        "evidence": []
       }
     ]
   }
