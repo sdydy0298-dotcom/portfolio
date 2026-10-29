@@ -613,3 +613,16 @@ body.dialog-open { overflow: hidden; }
  .scenario-card > h3 { font-size: 17px; }
  .record-filters button { font-size: 11px; padding: 8px 11px; }
 }
+
+/* Project execution workflow: design, build and test. Images use existing asset URLs. */
+.process-overview { margin: 0 0 17px; color: var(--body); font-size: 13px; line-height: 1.85; }
+.process-record > .record-filters:first-of-type { border-bottom: 1px solid #dce7f6; padding: 0 0 16px; margin-bottom: 22px; }
+.process-record .process-case-body > .record-status { display: inline-block; margin: 10px 0 4px; }
+.process-record .process-list { margin-top: 12px; }
+.process-record .process-case .record-evidence { margin-top: 20px; }
+.process-record .process-case .record-evidence img { max-width: 100%; height: auto; }
+.process-record .process-case summary .record-status { margin-left: auto; }
+@media screen and (max-width: 700px) {
+  .process-record .process-case summary { flex-wrap: wrap; }
+  .process-record .process-case summary .record-status { margin-left: 0; }
+}
