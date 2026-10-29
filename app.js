@@ -596,6 +596,7 @@ function setDetailView(project, requestedView) {
   dialog.dataset.project = project.id;
   dialog.dataset.view = view;
   dialog.scrollTop = 0;
+  if (view === 'build') void attachUploadedProofs();
 }
 
 document.addEventListener('click', event => {
@@ -704,6 +705,26 @@ function designView(project) {
       </details>`).join('')}</div>
   </div>`;
 }
+// Actual PNG proof files are kept as separate static assets, never embedded as base64.
+const proofAssetGroups = {"vpn":[["vpn-ipsec-connection.png","지사 IPsec 연결 설정","Sophos UTM의 Site-to-Site IPsec 연결 설정"],["vpn-ipsec-established.png","IPsec 터널 연결 상태","1/1 IPsec SA가 수립된 실제 연결 화면"],["vpn-branch-source-ip.png","지사 PC 주소·SSH 확인","지사 PC IP와 본사 연결 점검 기록"],["vpn-branch-to-hq-ssh.png","지사에서 본사 서버 SSH","지사에서 본사 개발 서버로 접속한 터미널 화면"]],"firewall":[["fw-wan-rules.png","pfSense WAN 방화벽 규칙","DNS·HTTP·IMAPS·관리 SSH 접근 허용 규칙"],["fw-nat.png","pfSense NAT 포트 포워딩","외부 서비스 진입을 위한 NAT 설정"],["jump-ssh-allowed.png","Jump Server SSH 성공","허용 구간에서의 관리 서버 SSH 접속"],["jump-ssh-denied.png","Jump Server 접근 실패","비허용 접근 시 거부 화면"],["jump-homepc-blocked.png","외부 고객망 접근 거부","고객망에서 Jump Server SSH 접속 실패"]]};
+async function attachUploadedProofs() {
+  const slots=Array.from(document.querySelectorAll('[data-proof-group]'));
+  await Promise.all(slots.map(async slot=>{
+    const spec=proofAssetGroups[slot.dataset.proofGroup]||[];
+    const available=await Promise.all(spec.map(async ([filename,title,caption])=>{
+      const url='/assets/enterprise/proof/'+filename;
+      try {
+        const response=await fetch(url,{method:'HEAD'});
+        const type=response.headers.get('content-type')||'';
+        if (!response.ok || !type.startsWith('image/')) return null;
+        return {url,title,caption};
+      } catch {return null;}
+    }));
+    if (slot.isConnected && available.some(Boolean)) {
+      slot.innerHTML='<h4 class="proof-title">실제 설정·통신 증빙</h4><div class="gallery record-evidence">'+available.filter(Boolean).map(item=>imageFigure(item)).join('')+'</div>';
+    }
+  }));
+}
 function buildView(project) {
   const info=projectRecords[project.id];
   return `<div class="project-work">
@@ -721,6 +742,7 @@ function buildView(project) {
           ${workflowFor(entry.flow)}
           ${entry.result ? `<div class="work-result"><strong>동작·통신 확인</strong><p>${escapeHTML(entry.result)}</p></div>` : ''}
           ${evidenceFor(project,entry.evidence)}
+          ${entry.proofGroup ? `<div class="proof-slot" data-proof-group="${escapeHTML(entry.proofGroup)}"></div>` : ''}
           ${entry.note ? `<p class="work-caution">${escapeHTML(entry.note)}</p>` : ''}
         </div>
       </details>`).join('')}</div>

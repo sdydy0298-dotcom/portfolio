@@ -259,7 +259,8 @@ const projectRecords = {
           "gns_ho_topology.png",
           "gns_bo_topology.png"
         ],
-        "note": "VPN 터널 상태·SSH 연결의 원본 캡처는 사용자 ZIP에서 확인했으며 사이트 이미지로 연결하는 작업은 별도입니다."
+        "note": "실제 IPsec SA 수립과 지사→본사 SSH 연결을 확인한 범위입니다. 모든 거점의 장애 복구까지 검증한 것은 아닙니다.",
+        "proofGroup": "vpn"
       },
       {
         "title": "방화벽·NAT 및 관리 접근",
@@ -275,7 +276,8 @@ const projectRecords = {
         "evidence": [
           "gns_idc_topology.png"
         ],
-        "note": "방화벽·Jump Server 실제 설정 및 접근 테스트 캡처는 사용자 ZIP에서 확인했으며 사이트 이미지로 연결하는 작업은 별도입니다."
+        "note": "방화벽 규칙·NAT 및 관리 구간의 허용·비허용 SSH 테스트 범위입니다. 모든 포트의 차단을 검증했다는 의미는 아닙니다.",
+        "proofGroup": "firewall"
       },
       {
         "title": "부하분산·가용성 및 DB 복제",
