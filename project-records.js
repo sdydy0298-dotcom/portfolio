@@ -268,25 +268,31 @@ const projectRecords = {
         ]
       },
       {
-        "title": "부하분산·가용성 및 DB 복제",
-        "summary": "HAProxy · Keepalived · MariaDB Primary–Replica",
-        "build": "HAProxy로 서비스 요청을 분산하고 Keepalived를 통해 Front·Backend VIP 이중화를 구성했습니다. MariaDB DB1→DB2 복제를 설정했습니다.",
+        "title": "로드밸런싱 및 VIP 이중화",
+        "summary": "HAProxy · Round Robin · Keepalived · Front/Backend VIP",
+        "build": "HAProxy에 WEB1~3을 Round Robin 방식으로 구성하고, Keepalived에서 Front·Backend VRRP 인스턴스와 VIP를 설정했습니다.",
         "flow": [
-          "서비스 접속",
+          "고객 요청",
           "SLB Front VIP",
-          "가용한 WEB/WAS",
-          "DB1 Primary·DB2 Replica"
+          "HAProxy Round Robin",
+          "WEB1·WEB2·WEB3"
         ],
-        "result": "SLB1 중지 후 SLB2 VIP 인계와 DB 복제 상태·회원 데이터 일치를 기록으로 확인했습니다.",
-        "evidence": []
+        "result": "HAProxy 백엔드와 Keepalived VRRP 설정, SLB1의 Front·Backend VIP 할당 상태를 확인했습니다.",
+        "evidence": [
+          "slb_haproxy.png",
+          "slb_keepalived.png",
+          "slb_vip.png"
+        ]
       },
       {
         "title": "DNS·메일·시간·로그 운영 인프라",
         "summary": "BIND9 · Postfix/Dovecot · Chrony · rsyslog",
-        "build": "NS1에 BIND9 DNS, MX1에 Postfix·Dovecot, NTP1에 Chrony, LOG1에 rsyslog를 구성했습니다. 서비스망의 이름 조회·메일 수신·시간 동기화·중앙 로그 수집 환경을 구축했습니다.",
-        "result": "Thunderbird에서 MX1의 테스트 메일을 수신했습니다.",
+        "build": "NS1에 BIND9 DNS, MX1에 Postfix·Dovecot, NTP1에 Chrony, LOG1에 rsyslog를 구성했습니다. rsyslog는 IDC 서버 로그를 수집하고 호스트별 파일로 분리하도록 설정했습니다.",
+        "result": "Thunderbird에서 테스트 메일 수신을 확인하고, LOG1에 서버별 로그 파일이 생성된 것을 확인했습니다.",
         "evidence": [
-          "HomePc_MX.png"
+          "HomePc_MX.png",
+          "log_cfg.png",
+          "srv_logs.png"
         ]
       }
     ]

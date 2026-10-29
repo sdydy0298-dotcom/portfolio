@@ -98,6 +98,31 @@
           "caption": "고객망에서 관리 서버 SSH 접속 시도 결과",
           "width": 1352,
           "height": 461
+        },
+        {
+          "url": "/assets/enterprise/proof/slb_haproxy.png",
+          "title": "HAProxy 로드밸런싱 설정",
+          "caption": "WEB1~3 Round Robin 백엔드 구성"
+        },
+        {
+          "url": "/assets/enterprise/proof/slb_keepalived.png",
+          "title": "Keepalived 이중화 설정",
+          "caption": "Front·Backend VRRP 인스턴스 설정"
+        },
+        {
+          "url": "/assets/enterprise/proof/slb_vip.png",
+          "title": "SLB1 VIP 할당",
+          "caption": "Front·Backend VIP 적용 상태"
+        },
+        {
+          "url": "/assets/enterprise/proof/log_cfg.png",
+          "title": "rsyslog 중앙 수집 설정",
+          "caption": "서버별 로그 저장 경로 설정"
+        },
+        {
+          "url": "/assets/enterprise/proof/srv_logs.png",
+          "title": "중앙 로그 수집 결과",
+          "caption": "WEB·WAS·DB·SLB 등 서버별 로그 파일 확인"
         }
       ],
       "topologies": [
