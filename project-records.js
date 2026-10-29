@@ -194,6 +194,16 @@ const projectRecords = {
         "action": "BIND9 View를 적용해 내부에는 SLB VIP, 외부 고객에는 공개 IP를 반환하도록 DNS 응답을 분리했습니다.",
         "result": "외부 PC에서 공개 IP가 조회되는 것을 확인했습니다. 이후 HTTP 200 응답과 브라우저의 쇼핑몰 화면 출력을 확인했습니다.",
         "evidence": []
+      },
+      {
+        "stage": "planned",
+        "pending": true,
+        "title": "DB 이중화 및 장애 전환",
+        "symptom": "MariaDB 서버를 구성했으나, DB 장애 시 서비스를 계속 제공하기 위한 이중화 및 자동 장애 전환까지 구현하지 못했습니다.",
+        "analysis": "데이터 복제 상태 관리와 장애 전환 시 데이터 일관성, 장애 복구 절차를 함께 고려해야 해 구현 범위를 확장하지 못했습니다.",
+        "action": "향후 Primary–Replica 복제 구성부터 검증하고, 장애 감지·전환·복구 절차를 단계적으로 구현할 계획입니다.",
+        "result": "향후 개선 과제로 남겨두었습니다.",
+        "evidence": []
       }
     ],
     "implementations": [

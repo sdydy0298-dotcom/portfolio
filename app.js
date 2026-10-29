@@ -745,13 +745,13 @@ function issueView(project) {
       `<details class="work-case" ${i===0?'open':''}>
         <summary><span class="work-number">${String(i+1).padStart(2,'0')}</span>
           <span class="work-case-name">
-            <small class="work-tag">${entry.stage==='design'?'설계 개선':'장애 대응'}</small>
+            <small class="work-tag">${entry.stage==='planned'?'미완료 · 향후 개선':entry.stage==='design'?'설계 개선':'장애 대응'}</small>
             <strong>${escapeHTML(entry.title)}</strong>
             <small>${escapeHTML(entry.symptom)}</small>
           </span><span class="expand-sign" aria-hidden="true"></span>
         </summary>
         <div class="work-case-body">
-          ${recordFields([['문제 상황',entry.symptom],['원인 분석',entry.analysis],['해결 방법',entry.action],[entry.pending?'조치 결과':'검증 결과',entry.result]])}
+          ${recordFields(entry.stage==='planned'?[['미완료 내용',entry.symptom],['구현 과제',entry.analysis],['향후 계획',entry.action]]:[['문제 상황',entry.symptom],['원인 분석',entry.analysis],['해결 방법',entry.action],['검증 결과',entry.result]])}
           ${evidenceFor(project,entry.evidence)}
         </div>
       </details>`).join('')}</div>
