@@ -504,6 +504,7 @@ const projectRecords = {
         ],
         "result": "두 플레이어의 방 생성·참가, READY 및 게임 시작 로그를 확인했습니다.",
         "evidence": [
+          "launcher.png",
           "game-main-v2.jpg",
           "game-play-v2.jpg"
         ]

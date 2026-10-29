@@ -325,6 +325,13 @@
           "title": "05 · 인게임 플레이",
           "width": 1276,
           "height": 746
+        },
+        {
+          "url": "/assets/arena/launcher/launcher.png",
+          "title": "ALEPH Arena 런처 설치 화면",
+          "caption": "런처 UI 재현 이미지 · 게임 설치 진행 화면",
+          "width": 1574,
+          "height": 960
         }
       ],
       "topologies": [
