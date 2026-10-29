@@ -716,6 +716,10 @@ function processBuild(project, data) {
     ${evidenceFor(project,item.evidence)}</div>
   </details>`).join('')}</div>`;
 }
+function processFlow(items) {
+  if (!Array.isArray(items) || !items.length) return '';
+  return `<ol class="workflow-path" aria-label="시험 흐름">${items.map((item,i) => `<li><span>${String(i+1).padStart(2,'0')}</span>${escapeHTML(item)}</li>`).join('')}</ol>`;
+}
 function processTest(project, data, category) {
   const options=[['normal','정상 업무'],['security','보안 기능'],['operations','운영 및 복구 시험']];
   const items=data.scenarios.filter(item=>item.category===category);
@@ -725,7 +729,7 @@ function processTest(project, data, category) {
       <small>${escapeHTML(item.purpose)}</small></div>
       <span class="record-status ${item.pending?'pending':''}">${item.pending?'추가 검증 필요':'수행 기록'}</span>
       <span class="expand-sign" aria-hidden="true"></span></summary>
-      <div class="process-case-body">${recordFields([['검증 목적',item.purpose],['테스트 방법',item.procedure],['검증 결과',item.result]])}
+      <div class="process-case-body">${processFlow(item.flow)}${recordFields([['검증 목적',item.purpose],['테스트 방법',item.procedure],['검증 결과',item.result]])}
         ${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}
         ${evidenceFor(project,item.evidence)}
       </div>
