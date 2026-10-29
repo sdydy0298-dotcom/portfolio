@@ -626,3 +626,38 @@ body.dialog-open { overflow: hidden; }
   .process-record .process-case summary { flex-wrap: wrap; }
   .process-record .process-case summary .record-status { margin-left: 0; }
 }
+
+/* Project detailed sections — architecture, implementation, and problem solving */
+.project-work { min-width: 0; }
+.work-intro { margin: 0 0 24px; padding: 0 0 18px; border-bottom: 1px solid #dce5f1; }
+.work-intro h3 { font-size: 21px; letter-spacing: -.5px; margin: 0 0 7px; color: #153b70; }
+.work-intro p { margin: 0; color: #59708b; font-size: 12px; line-height: 1.85; }
+.work-sections { display: grid; gap: 12px; }
+.work-case { min-width: 0; border: 1px solid #dce5f2; border-radius: 10px; background: #fff; overflow: hidden; }
+.work-case > summary { display: flex; align-items: center; gap: 14px; cursor: pointer; list-style: none; padding: 17px 19px; }
+.work-case > summary::-webkit-details-marker { display: none; }
+.work-case[open] > summary { background: #f8faff; border-bottom: 1px solid #e3ebf5; }
+.work-number { flex: 0 0 28px; font-size: 11px; font-weight: 800; color: #3a6cb7; }
+.work-case-name { flex: 1 1 auto; min-width: 0; display: grid; gap: 3px; }
+.work-case-name strong { color: #193e70; font-size: 15px; line-height: 1.5; }
+.work-case-name small { color: #667d98; font-size: 11px; line-height: 1.65; font-weight: 400; }
+.work-case-name .work-tag { color: #2f66bb; font-size: 10px; font-weight: 700; }
+.work-case-body { min-width: 0; padding: 7px 21px 20px; }
+.work-case-body > .process-fields { margin-top: 0; }
+.work-case-body > .record-evidence { margin-top: 16px; }
+.work-case-body .gallery-figure { min-width: 0; }
+.work-case-body img { max-width: 100%; }
+.work-result { margin: 16px 0 12px; padding: 15px 17px; border-left: 3px solid #6d91d5; background: #f6f9fd; }
+.work-result strong { color: #235891; font-size: 12px; }
+.work-result p { color: #526a85; font-size: 12px; line-height: 1.85; margin: 6px 0 0; }
+.work-caution { border-left: 3px solid #b3bfd3; background: #f7f9fc; color: #62758d; font-size: 11px; line-height: 1.85; padding: 11px 14px; margin: 15px 0 0; }
+.flow-block { margin: 16px 0 20px; }
+.flow-label { font-size: 11px; font-weight: 800; letter-spacing: .3px; color: #3d618e; margin: 0 0 9px; }
+.flow-block .workflow-path { margin-bottom: 0; }
+@media screen and (max-width:700px) {
+  .work-case > summary { padding: 14px 12px; gap: 8px; }
+  .work-number { flex-basis: 22px; }
+  .work-case-name strong { font-size: 13px; }
+  .work-case-body { padding: 7px 14px 15px; }
+  .work-intro h3 { font-size: 19px; }
+}

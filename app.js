@@ -414,9 +414,9 @@ const technologyNames = {
 };
 const detailViews = [
   { id: 'notes', label: '수행 내용' },
-  { id: 'topology', label: '설계도' },
-  { id: 'images', label: '실제 구현 화면' },
-  { id: 'process', label: '수행 과정' }
+  { id: 'design', label: '설계' },
+  { id: 'build', label: '구현' },
+  { id: 'issues', label: '문제 및 해결' }
 ];
 let projects = [];
 let lastTrigger;
@@ -591,7 +591,7 @@ function setDetailView(project, requestedView) {
     <div class="detail-nav" role="tablist" aria-label="프로젝트 상세 선택">
       ${detailViews.map(item => `<button id="tab-${item.id}" type="button" role="tab" aria-selected="${view === item.id}" aria-controls="detail-panel" tabindex="${view === item.id ? 0 : -1}" data-detail-view="${item.id}">${item.label}${count(item.id) === null ? '' : ` ${count(item.id)}`}</button>`).join('')}
     </div>
-    <div id="detail-panel" role="tabpanel" aria-labelledby="tab-${view}" tabindex="0">${view === 'topology' ? topology(project) : view === 'images' ? gallery(project) : view === 'process' ? processView(project) : notes(project)}</div>
+    <div id="detail-panel" role="tabpanel" aria-labelledby="tab-${view}" tabindex="0">${view === 'design' ? designView(project) : view === 'build' ? buildView(project) : view === 'issues' ? issueView(project) : notes(project)}</div>
   </article>`;
   dialog.dataset.project = project.id;
   dialog.dataset.view = view;
@@ -609,24 +609,7 @@ document.addEventListener('click', event => {
     document.body.classList.add('dialog-open');
     document.querySelector('#close-dialog').focus();
   }
-  const phaseButton = event.target.closest('button[data-process-phase]');
-  if (phaseButton && dialog.dataset.view === 'process') {
-    const project = projects.find(item => item.id === dialog.dataset.project);
-    if (!project) return;
-    const phase = phaseButton.dataset.processPhase;
-    document.querySelector('#detail-panel').innerHTML = processView(project, phase);
-    document.querySelector(`[data-process-phase="${phase}"]`)?.focus();
-    return;
-  }
-  const categoryButton = event.target.closest('button[data-process-category]');
-  if (categoryButton && dialog.dataset.view === 'process') {
-    const project = projects.find(item => item.id === dialog.dataset.project);
-    if (!project) return;
-    const category = categoryButton.dataset.processCategory;
-    document.querySelector('#detail-panel').innerHTML = processView(project, 'test', category);
-    document.querySelector(`[data-process-category="${category}"]`)?.focus();
-    return;
-  }
+
   const tab = event.target.closest('[data-detail-view]');
   if (tab) {
     const project = projects.find(item => item.id === dialog.dataset.project);
@@ -680,68 +663,89 @@ fetch('/content.json')
     document.querySelector('#project-list').innerHTML = '<p class="loading-error">프로젝트를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>';
   });
 
-// Project detail records share the existing dialog and its keyboard navigation.
-function evidenceFor(project, names = []) {
+
+// Evidence is shown in the relevant context, never in a separate photo-only tab.
+// Only images registered in content.json are linked; unknown names cannot create broken images.
+function evidenceFor(project, names = [], kind = 'any') {
   const all = [...(project.images || []), ...(project.topologies || [])];
-  const items = names.map(name => all.find(item => item.url.split('/').pop() === name)).filter(Boolean);
-  return items.length ? `<div class="gallery record-evidence">${items.map(item => imageFigure(item)).join('')}</div>` : '';
+  const unique = [...new Set(names)];
+  const images = unique.map(name => all.find(item =>
+    item.url.split('/').pop() === name &&
+    (kind === 'any' || (kind === 'design' ? item.kind !== 'implementation' && (project.images || []).indexOf(item) === -1 : kind === 'implementation' ? item.kind === 'implementation' : true))
+  )).filter(Boolean);
+  return images.length ? `<div class="gallery record-evidence">${images.map(item => imageFigure(item, kind === 'design')).join('')}</div>` : '';
 }
 function recordFields(fields) {
-  return `<dl class="process-fields">${fields.map(([label, value]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('')}</dl>`;
+  return `<dl class="process-fields">${fields.filter(x=>x[1]).map(([label,value])=>
+    `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('')}</dl>`;
 }
-
-function processFilters(options, selected, attribute, label) {
-  return `<div class="record-filters" role="group" aria-label="${escapeHTML(label)}">${options.map(([id, title]) =>
-    `<button type="button" data-${attribute}="${id}" aria-pressed="${selected===id}">${escapeHTML(title)}</button>`).join('')}</div>`;
+function workflowFor(items) {
+  if(!Array.isArray(items)||!items.length) return '';
+  return `<div class="flow-block"><p class="flow-label">요청·처리 흐름</p>
+    <ol class="workflow-path">${items.map((step,i)=>
+      `<li><span>${String(i+1).padStart(2,'0')}</span>${escapeHTML(step)}</li>`).join('')}</ol></div>`;
 }
-function processDesign(project, data) {
-  return `<div class="process-list">${data.design.map((item,i) => `<details class="process-case" ${i===0?'open':''}>
-    <summary><span class="case-index">${String(i+1).padStart(2,'0')}</span><strong>${escapeHTML(item.title)}</strong><span class="expand-sign" aria-hidden="true"></span></summary>
-    <div class="process-case-body">${recordFields([
-      ['설계 이유',item.why],['구축 과정',item.build],
-      ...(item.decision?[['설계 판단',item.decision]]:[]),
-      ...(item.result?[['검증 결과',item.result]]:[])
-    ])}${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}
-    ${evidenceFor(project,item.images)}</div>
-  </details>`).join('')}</div>`;
+function designView(project) {
+  const info=projectRecords[project.id];
+  return `<div class="project-work">
+    <div class="work-intro"><h3>시스템 설계</h3>
+      <p>네트워크와 서버의 배치, 영역 간 연결 및 보안 경계를 최종 설계도와 함께 정리했습니다. 실제 장비 구성과 통신 검증은 ‘구현’에서 확인할 수 있습니다.</p>
+    </div>
+    <div class="work-sections">${info.design.map((entry,i)=>
+      `<details class="work-case" ${i===0?'open':''}>
+        <summary><span class="work-number">${String(i+1).padStart(2,'0')}</span>
+          <span class="work-case-name"><strong>${escapeHTML(entry.title)}</strong><small>${escapeHTML(entry.architecture || entry.why)}</small></span>
+          <span class="expand-sign" aria-hidden="true"></span>
+        </summary>
+        <div class="work-case-body">
+          ${recordFields([['설계 목적',entry.why],['설계 구성',entry.architecture || entry.build],...(entry.decision?[['판단 기준',entry.decision]]:[])])}
+          ${evidenceFor(project,entry.images,'design')}
+        </div>
+      </details>`).join('')}</div>
+  </div>`;
 }
-function processBuild(project, data) {
-  const items=data.issues.filter(item=>item.stage==='implementation');
-  return `<div class="process-list">${items.map((item,i) => `<details class="process-case" ${i===0?'open':''}>
-    <summary><span class="case-index">${String(i+1).padStart(2,'0')}</span><div><strong>${escapeHTML(item.title)}</strong>
-    <small>${escapeHTML(item.symptom)}</small></div><span class="expand-sign" aria-hidden="true"></span></summary>
-    <div class="process-case-body">${item.pending?'<span class="record-status pending">수정 후 재검증 필요</span>':''}
-    ${recordFields([['구축 목표',item.goal],['문제 발생',item.symptom],['원인 분석',item.analysis],['해결 방법',item.action],['검증 결과',item.result]])}
-    ${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}
-    ${evidenceFor(project,item.evidence)}</div>
-  </details>`).join('')}</div>`;
+function buildView(project) {
+  const info=projectRecords[project.id];
+  return `<div class="project-work">
+    <div class="work-intro"><h3>실제 구현 및 검증</h3>
+      <p>구성한 장비·서버와 연결 상태, 사용자 서비스 동작을 실제 GNS3 구성 및 테스트 사진으로 확인할 수 있습니다. 워크플로우는 요청 처리 순서를 설명할 필요가 있는 항목에만 넣었습니다.</p>
+    </div>
+    <div class="work-sections">${(info.implementations || []).map((entry,i)=>
+      `<details class="work-case" ${i===0?'open':''}>
+        <summary><span class="work-number">${String(i+1).padStart(2,'0')}</span>
+          <span class="work-case-name"><strong>${escapeHTML(entry.title)}</strong><small>${escapeHTML(entry.summary || entry.build)}</small></span>
+          <span class="expand-sign" aria-hidden="true"></span>
+        </summary>
+        <div class="work-case-body">
+          ${recordFields([['구현 내용',entry.build]])}
+          ${workflowFor(entry.flow)}
+          ${entry.result ? `<div class="work-result"><strong>동작·통신 확인</strong><p>${escapeHTML(entry.result)}</p></div>` : ''}
+          ${evidenceFor(project,entry.evidence)}
+          ${entry.note ? `<p class="work-caution">${escapeHTML(entry.note)}</p>` : ''}
+        </div>
+      </details>`).join('')}</div>
+  </div>`;
 }
-function processFlow(items) {
-  if (!Array.isArray(items) || !items.length) return '';
-  return `<ol class="workflow-path" aria-label="시험 흐름">${items.map((item,i) => `<li><span>${String(i+1).padStart(2,'0')}</span>${escapeHTML(item)}</li>`).join('')}</ol>`;
-}
-function processTest(project, data, category) {
-  const options=[['normal','정상 업무'],['security','보안 기능'],['operations','운영 및 복구 시험']];
-  const items=data.scenarios.filter(item=>item.category===category);
-  return `${processFilters(options,category,'process-category','검증 유형 선택')}
-    <div class="process-list">${items.map((item,i) => `<details class="process-case" ${i===0?'open':''}>
-      <summary><span class="case-index">${String(i+1).padStart(2,'0')}</span><div><strong>${escapeHTML(item.title)}</strong>
-      <small>${escapeHTML(item.purpose)}</small></div>
-      <span class="record-status ${item.pending?'pending':''}">${item.pending?'추가 검증 필요':'수행 기록'}</span>
-      <span class="expand-sign" aria-hidden="true"></span></summary>
-      <div class="process-case-body">${processFlow(item.flow)}${recordFields([['검증 목적',item.purpose],['테스트 방법',item.procedure],['검증 결과',item.result]])}
-        ${item.note?`<p class="record-limit">${escapeHTML(item.note)}</p>`:''}
-        ${evidenceFor(project,item.evidence)}
-      </div>
-    </details>`).join('')}</div>`;
-}
-function processView(project, phase='design', category='normal') {
-  const data=projectRecords[project.id];
-  const options=[['design','설계'],['build','구축'],['test','테스트']];
-  const active=options.some(([id])=>id===phase)?phase:'design';
-  return `<div class="process-record">
-    <p class="process-overview">설계 이유와 서버 구축 과정, 실제 장애 분석과 테스트 결과를 정리했습니다. 확인되지 않은 검증은 완료로 표시하지 않았습니다.</p>
-    ${processFilters(options,active,'process-phase','수행 과정 단계 선택')}
-    ${active==='design'?processDesign(project,data):active==='build'?processBuild(project,data):processTest(project,data,category)}
+function issueView(project) {
+  const info=projectRecords[project.id];
+  return `<div class="project-work">
+    <div class="work-intro"><h3>문제 및 해결</h3>
+      <p>설계 개선과 실제 장애 대응을 구분해 문제 상황, 원인 판단, 조치, 확인 결과 순서로 정리했습니다. 검증이 완료되지 않은 내용은 완료로 표시하지 않았습니다.</p>
+    </div>
+    <div class="work-sections">${info.issues.map((entry,i)=>
+      `<details class="work-case" ${i===0?'open':''}>
+        <summary><span class="work-number">${String(i+1).padStart(2,'0')}</span>
+          <span class="work-case-name">
+            <small class="work-tag">${entry.stage==='design'?'설계 개선':'장애 대응'}${entry.pending?' · 추가 검증 필요':''}</small>
+            <strong>${escapeHTML(entry.title)}</strong>
+            <small>${escapeHTML(entry.symptom)}</small>
+          </span><span class="expand-sign" aria-hidden="true"></span>
+        </summary>
+        <div class="work-case-body">
+          ${recordFields([['문제 상황',entry.symptom],['원인 분석',entry.analysis],['해결 방법',entry.action],['검증 결과',entry.result]])}
+          ${evidenceFor(project,entry.evidence)}
+          ${entry.note ? `<p class="work-caution">${escapeHTML(entry.note)}</p>` : ''}
+        </div>
+      </details>`).join('')}</div>
   </div>`;
 }

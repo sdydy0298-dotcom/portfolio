@@ -7,44 +7,43 @@ const projectRecords = {
         "why": "사내 업무 통신과 외부 고객의 쇼핑몰 접속을 한 환경에서 연결하고, 거점과 서비스의 경계를 구분했습니다.",
         "build": "본사·지사에 UTM과 업무망을 구성하고 Site-to-Site VPN으로 연결했습니다. IDC와 FTTH 고객망은 ISP/IX로 연결하고 Home Router의 WAN·LAN DHCP와 NAT/PAT를 구성했습니다.",
         "images": [
-          "gns_all_topology.png",
+          "topology.png",
           "topology-head-office.png",
-          "gns_ho_topology.png",
           "topology-branch-office.png",
-          "gns_bo_topology.png",
-          "topology-ftth.png",
-          "gns_home_topology.png"
-        ]
+          "topology-ftth.png"
+        ],
+        "architecture": "본사·지사 업무망, 쇼핑몰 IDC와 외부 고객망의 연결 경계를 정의했습니다. 본사와 지사는 VPN으로 연결하고 외부 고객은 WAN을 통해 서비스 진입 경계에 접근하도록 설계했습니다."
       },
       {
         "title": "IDC 네트워크와 서비스 배치",
-        "why": "초기에 3-Tier 데이터센터 네트워크를 구축했습니다. 이후 WEB–WAS–DB 사이의 통신과 서버 증설을 고려해 역할별로 확장할 수 있는 Spine–Leaf 구조를 선택했습니다.",
+        "why": "WEB·WAS·DB 서비스 그룹의 네트워크를 구분하고 서버 증설을 고려했습니다.",
         "build": "Spine 2대와 Border·FR·WEB·APP·DB·INF·MGMT Leaf를 구성했습니다. 역할별 Leaf에 서버망의 게이트웨이를 배치하고 OSPF로 장비 간 경로를 설정했습니다.",
         "images": [
-          "topology.png",
-          "topology-idc.png",
-          "gns_idc_topology.png"
+          "topology-idc.png"
         ],
-        "decision": "기존 집선 장비에 서버 연결이 집중되는 구조 대신 필요에 따라 Leaf를 추가할 수 있는 방식을 선택했습니다. 실제 성능 향상을 측정한 것은 아닙니다.",
-        "result": "기존 구조를 Spine–Leaf로 재구축하고 역할별 서버망의 통신 경로를 구성했습니다."
+        "decision": "VLAN과 Leaf 역할을 기준으로 서버망을 구분하고 외부에서 내부 DB에 직접 접근하지 않도록 경로를 분리했습니다.",
+        "result": "기존 구조를 Spine–Leaf로 재구축하고 역할별 서버망의 통신 경로를 구성했습니다.",
+        "architecture": "Spine 두 대와 역할별 Leaf, OSPF 기반 언더레이 라우팅, 서버별 VLAN·게이트웨이 및 서비스·DB 경계를 설계했습니다."
       },
       {
         "title": "보안 경계와 서비스 이중화",
         "why": "서비스 진입 구간과 DB 접근 경계를 분리하고, SLB 한 대의 장애에 대비하도록 구성했습니다.",
         "build": "FW·IPS와 IDS 관측 구간을 배치하고 DB-FW1으로 DB 경계를 분리했습니다. SLB1/2에 HAProxy·Keepalived와 Front·Backend VIP를 구성했습니다.",
         "images": [
-          "gns_idc_topology.png"
+          "topology-idc.png"
         ],
-        "result": "SLB1의 Keepalived를 중지했을 때 SLB2가 Front·Backend VIP를 넘겨받는 것을 확인했습니다."
+        "result": "SLB1의 Keepalived를 중지했을 때 SLB2가 Front·Backend VIP를 넘겨받는 것을 확인했습니다.",
+        "architecture": "외부 진입 FW와 IPS, DB 구간 방화벽, SLB1·SLB2의 Front/Backend VIP로 서비스 진입 및 장애 대응 구간을 설계했습니다."
       },
       {
         "title": "공통 인프라와 운영망",
         "why": "이름 조회·메일·시간 동기화·로그 수집을 공통 서비스로 제공하고 관리망을 분리했습니다.",
         "build": "BIND9 DNS·캐시 DNS, Postfix·Dovecot MX1, Chrony NTP1, rsyslog LOG1을 구성했습니다. 관리망에는 Jump Server를 배치했으며 경유 접속·ACL은 추가 검증 범위입니다.",
         "images": [
-          "gns_idc_topology.png"
+          "topology-idc.png"
         ],
-        "result": "Thunderbird에서 MX1 수신을 확인하고 Chrony 시간 동기화 및 rsyslog 중앙 로그 환경을 구성했습니다."
+        "result": "Thunderbird에서 MX1 수신을 확인하고 Chrony 시간 동기화 및 rsyslog 중앙 로그 환경을 구성했습니다.",
+        "architecture": "INF와 MGMT 영역을 분리해 DNS·메일·NTP·중앙 로그 및 Jump Server를 배치했습니다."
       }
     ],
     "scenarios": [
@@ -182,9 +181,9 @@ const projectRecords = {
         "title": "3-Tier에서 Spine–Leaf로 구조 개선",
         "goal": "데이터센터의 서버 간 통신과 향후 역할별 서버 확장을 고려한 구조를 구성하려 했습니다.",
         "symptom": "초기 3-Tier 구축 이후 서버 간 통신과 증설을 고려해 네트워크 구조를 재검토했습니다.",
-        "analysis": "기존 구조와 역할별 서버 배치를 바탕으로 Spine 2대와 Leaf 중심의 연결 구조로 재설계했습니다.",
-        "action": "역할별 Leaf와 OSPF 경로를 구성하고 기존 서버를 새 구조에 배치했습니다.",
-        "result": "Spine–Leaf 구조로 재구축했습니다. 처리량·지연 개선은 별도로 측정하지 않았습니다.",
+        "analysis": "초기 3-Tier 구성에서도 서비스는 동작했지만 서버 증설과 역할별 네트워크 확장을 고려하면서 구조를 재검토했습니다. 기존 구조에서 실제 성능 장애를 측정한 것은 아닙니다.",
+        "action": "Spine 2대와 역할별 Leaf로 구성하고 OSPF 기반으로 경로를 재설계·구축했습니다.",
+        "result": "서버 역할별 확장을 고려한 Spine–Leaf 토폴로지로 변경했습니다. 처리량·지연 개선 수치는 측정하지 않았습니다.",
         "evidence": [
           "topology-idc.png",
           "gns_idc_topology.png"
@@ -212,6 +211,98 @@ const projectRecords = {
         "evidence": [],
         "note": "외부 DNS 조회 전후의 원본 캡처는 아직 연결하지 않았습니다."
       }
+    ],
+    "implementations": [
+      {
+        "title": "IDC 네트워크 및 서버 구성",
+        "summary": "Spine–Leaf · OSPF · WEB–WAS–DB",
+        "build": "Spine 2대와 역할별 Leaf를 연결해 OSPF로 경로를 구성했습니다. WEB·WAS·DB·INF·MGMT 영역을 구분하고 Linux 서버를 서비스 역할에 맞게 배치했습니다.",
+        "result": "GNS3에서 IDC의 실제 장비 연결 상태와 역할별 서비스망 구성을 확인했습니다. 이 사진 자체는 장비 간 모든 통신 시험의 성공을 의미하지 않습니다.",
+        "evidence": [
+          "gns_idc_topology.png",
+          "gns_all_topology.png"
+        ]
+      },
+      {
+        "title": "쇼핑몰 서비스 및 고객 접속",
+        "summary": "WEB–WAS–DB 연동 · 외부 고객 접근 · 로그인",
+        "build": "WEB1~3에 Nginx, WAS1~2에 Tomcat, DB1·DB2에 MariaDB를 구성했습니다. 외부 고객 PC가 DHCP로 주소를 받아 쇼핑몰에 접속하고 회원가입·로그인을 진행하도록 연동했습니다.",
+        "flow": [
+          "가정 고객 PC",
+          "Home Router·WAN",
+          "IDC FW·SLB",
+          "WEB(Nginx)",
+          "WAS(Tomcat)",
+          "DB(MariaDB)"
+        ],
+        "result": "고객 PC의 IP 할당, 쇼핑몰 메인 화면, 회원가입·로그인 후 사용자명이 표시되는 것을 확인했습니다.",
+        "evidence": [
+          "homepc-dhcp.png",
+          "homepc-web.png",
+          "homepc-join.png",
+          "homepc-login-success.png"
+        ]
+      },
+      {
+        "title": "본사·지사 연결 및 IPsec VPN",
+        "summary": "Site-to-Site VPN · 거점 네트워크 · SSH",
+        "build": "본사·지사 업무망을 구분하고 Sophos UTM 기반 Site-to-Site IPsec VPN을 구성했습니다. 지사 클라이언트에서 본사 개발 서버에 접근하는 경로를 점검했습니다.",
+        "flow": [
+          "지사 PC",
+          "지사 UTM",
+          "IPsec VPN 터널",
+          "본사 UTM",
+          "본사 개발 서버"
+        ],
+        "result": "제공된 원본 사진에서 IPsec SA 설정 상태와 지사에서 본사 개발 서버로 SSH 연결한 결과를 확인했습니다.",
+        "evidence": [
+          "gns_ho_topology.png",
+          "gns_bo_topology.png"
+        ],
+        "note": "VPN 터널 상태·SSH 연결의 원본 캡처는 사용자 ZIP에서 확인했으며 사이트 이미지로 연결하는 작업은 별도입니다."
+      },
+      {
+        "title": "방화벽·NAT 및 관리 접근",
+        "summary": "pfSense WAN 정책 · Jump Server · 접근 통제",
+        "build": "pfSense에서 외부 HTTP·DNS·메일·관리 접근 정책과 NAT을 구성했습니다. 관리 접속은 Jump Server를 사용하도록 구간을 분리하고 허용·비허용 접근을 비교했습니다.",
+        "flow": [
+          "외부·관리 단말",
+          "FW 정책 검사",
+          "허용 시 NAT·Jump Server",
+          "대상 서버"
+        ],
+        "result": "제공된 원본 사진에서 WAN 허용 정책과 NAT 설정, Jump Server SSH 접속 성공과 외부 고객망 접근 실패를 확인했습니다.",
+        "evidence": [
+          "gns_idc_topology.png"
+        ],
+        "note": "방화벽·Jump Server 실제 설정 및 접근 테스트 캡처는 사용자 ZIP에서 확인했으며 사이트 이미지로 연결하는 작업은 별도입니다."
+      },
+      {
+        "title": "부하분산·가용성 및 DB 복제",
+        "summary": "HAProxy · Keepalived · MariaDB Primary–Replica",
+        "build": "HAProxy로 서비스 요청을 분산하고 Keepalived를 통해 Front·Backend VIP 이중화를 구성했습니다. MariaDB DB1→DB2 복제를 설정했습니다.",
+        "flow": [
+          "서비스 접속",
+          "SLB Front VIP",
+          "가용한 WEB/WAS",
+          "DB1 Primary·DB2 Replica"
+        ],
+        "result": "SLB1 중지 후 SLB2 VIP 인계와 DB 복제 상태·회원 데이터 일치를 기록으로 확인했습니다.",
+        "evidence": [
+          "gns_idc_topology.png"
+        ],
+        "note": "VIP 인계 로그와 DB Primary–Replica 설정 화면은 현재 사이트에 없어 증빙 보강이 필요합니다."
+      },
+      {
+        "title": "DNS·메일·시간·로그 운영 인프라",
+        "summary": "BIND9 · Postfix/Dovecot · Chrony · rsyslog",
+        "build": "NS1에 BIND9 DNS, MX1에 Postfix·Dovecot, NTP1에 Chrony, LOG1에 rsyslog를 구성했습니다. 서비스망의 이름 조회·메일 수신·시간 동기화·중앙 로그 수집 환경을 구축했습니다.",
+        "result": "고객 PC에서 메일 수신 화면을 확인했습니다. NTP·로그 수집 결과 화면은 추가로 정리할 자료입니다.",
+        "evidence": [
+          "HomePc_MX.png",
+          "gns_idc_topology.png"
+        ]
+      }
     ]
   },
   "aleph-arena": {
@@ -222,28 +313,29 @@ const projectRecords = {
         "build": "본사·개발/QA·한국 IDC·일본 지사·일본 IDC를 팀원이 나누어 구축했습니다. 공통 IP·VLAN·WAN 기준을 공유하고 UDP Tunnel로 연결했습니다. 본인 담당은 한국 IDC와 웹·런처·게임 개발입니다.",
         "images": [
           "topology.png"
-        ]
+        ],
+        "architecture": "한국·일본의 본사·지사·IDC와 개발/QA 거점 간 연결을 설계하고, 한국 IDC의 서비스 제공 역할과 공통 네트워크 기준을 정했습니다."
       },
       {
         "title": "한국 IDC의 역할별 망 분리",
         "why": "서비스 서버·DB·인프라·관리 단말의 역할을 구분하고 각 망 사이에 라우팅 경계를 구성했습니다.",
         "build": "IDC-Core1–Dist1/Dist2–Access를 연결했습니다. Acc1은 WEB/WAS/GAME, Acc2는 DB, Acc3은 NS1/CNS1, Acc4는 관리자 PC를 연결합니다. 초기 설계와 실제 주소·장비 배치에는 차이가 있어 실제 GNS3를 기준으로 설명합니다.",
         "images": [
-          "idc-gns-original.png",
           "idc-design-original.png"
         ],
-        "result": "한국 IDC의 네트워크와 서비스 서버를 연결하고 다른 팀 거점과의 통신 및 IDC 서비스 접근을 확인했습니다."
+        "result": "한국 IDC의 네트워크와 서비스 서버를 연결하고 다른 팀 거점과의 통신 및 IDC 서비스 접근을 확인했습니다.",
+        "architecture": "IDC-Core–Dist–Access의 계층 구조와 서버 역할별 VLAN을 설계했습니다. Acc1은 WEB·WAS·GAME, Acc2는 DB, Acc3은 NS·CNS, Acc4는 관리망 담당으로 구분했습니다."
       },
       {
         "title": "웹·런처·멀티플레이 서비스",
         "why": "웹 서비스와 게임 실행·접속까지 직접 구현해 구축한 IDC에서 서비스가 동작하는지 확인했습니다.",
         "build": "Nginx–Java WAS–MariaDB를 연동하고 C#/.NET 런처의 버전 조회·게임 ZIP 다운로드·실행을 구현했습니다. Godot 클라이언트와 Linux Dedicated Server로 2인 게임 흐름을 구성했습니다.",
         "images": [
-          "web-main-v2.jpg",
-          "game-main-v2.jpg"
+          "idc-design-original.png"
         ],
         "decision": "HTTP 기반 웹·API 요청과 UDP 기반 실시간 게임 상태 전송을 역할별 서버로 분리했습니다.",
-        "result": "Nginx–Tomcat API 응답과 Linux Dedicated Server의 두 플레이어 접속·준비·경기 시작 단계까지 확인했습니다."
+        "result": "Nginx–Tomcat API 응답과 Linux Dedicated Server의 두 플레이어 접속·준비·경기 시작 단계까지 확인했습니다.",
+        "architecture": "Linux 서버의 WEB·WAS·DB와 Godot Dedicated Server를 분리하고, Windows 런처를 통해 게임 파일을 받아 실행하는 이용 경로를 설계했습니다."
       }
     ],
     "scenarios": [
@@ -345,12 +437,12 @@ const projectRecords = {
     "issues": [
       {
         "stage": "design",
-        "title": "거점 연결을 위한 공통 네트워크 기준 조율",
+        "title": "5개 거점 간 네트워크 기준 조율",
         "goal": "팀원이 각각 구축한 5개 거점을 연결하고 한국 IDC 서비스를 제공하려 했습니다.",
         "symptom": "거점별 구축을 통합하려면 IP·VLAN·WAN 연결 기준과 개인 담당 구간을 맞춰야 했습니다.",
         "analysis": "팀 공통 연결 기준과 한국 IDC의 네트워크·서버 배치를 함께 점검했습니다.",
         "action": "공통 기준을 공유하고 한국 IDC를 구축한 뒤 UDP Tunnel로 거점을 연결하며 통신 경로와 서비스 접근을 함께 점검했습니다.",
-        "result": "거점 간 통신과 한국 IDC 서비스 접근을 확인했습니다. 다른 거점의 개별 구축은 팀원 담당입니다.",
+        "result": "공통 IP·VLAN·WAN 기준을 맞추고 한국 IDC와 다른 거점의 통신 경로를 점검했습니다. 팀의 공동 작업입니다.",
         "evidence": [
           "topology.png",
           "idc-gns-original.png"
@@ -380,6 +472,69 @@ const projectRecords = {
         "pending": true,
         "evidence": [],
         "note": "서버 MTU 오류 로그와 두 게임 화면, 수정 후 재시험 결과가 필요합니다. MTU 경고만을 게임 멈춤의 유일한 원인이라고 단정하지 않습니다."
+      }
+    ],
+    "implementations": [
+      {
+        "title": "한국 IDC 네트워크 및 서버 구성",
+        "summary": "GNS3 실제 토폴로지 · Core·Dist·Access · VLAN",
+        "build": "한국 IDC의 IDC-Core1, IDC-Dist1/2, Access 스위치를 구성하고 WEB·WAS·게임·DB·DNS와 관리망을 역할별 네트워크에 연결했습니다.",
+        "result": "실제 GNS3 구성 화면에서 서버 배치 및 장비 연결을 확인했습니다.",
+        "evidence": [
+          "idc-gns-original.png"
+        ]
+      },
+      {
+        "title": "게임 웹사이트와 API 연동",
+        "summary": "Nginx · Java WAS · MariaDB · 웹 로그인",
+        "build": "웹 서버에 게임 소개·회원가입·로그인 페이지를 배포하고 Nginx /api/ 요청을 Tomcat WAS로 전달하도록 연동했습니다.",
+        "flow": [
+          "사용자 웹 브라우저",
+          "Nginx WEB",
+          "/api/ 요청",
+          "Tomcat WAS",
+          "MariaDB"
+        ],
+        "result": "게임 웹사이트 화면과 WAS API의 HTTP 200 응답을 확인했습니다. 제공된 화면만으로 DB 저장 처리 전체를 입증한 것은 아닙니다.",
+        "evidence": [
+          "web-main-v2.jpg",
+          "web-login-v2.jpg",
+          "web-signup-v2.jpg"
+        ]
+      },
+      {
+        "title": "Windows 런처·Godot 멀티플레이",
+        "summary": "C#/.NET 런처 · Dedicated Server · 두 플레이어",
+        "build": "C#/.NET 런처와 Godot 클라이언트, Linux Dedicated Server를 구성했습니다. 서버에서 방 생성·참가·READY·게임 시작을 처리하도록 제작했습니다.",
+        "flow": [
+          "런처 설치·실행",
+          "게임 파일 다운로드",
+          "게임 서버 접속",
+          "방 생성·참가",
+          "READY",
+          "MATCH START"
+        ],
+        "result": "두 플레이어의 방 참가·READY와 서버의 매치 시작 로그를 확인했습니다. 게임 시작 직후 멈춤 문제의 최종 해결 여부는 따로 검증해야 합니다.",
+        "evidence": [
+          "game-main-v2.jpg",
+          "game-play-v2.jpg"
+        ]
+      },
+      {
+        "title": "거점 간 연결 및 서비스 접근",
+        "summary": "5개 거점 연결 · 한국 IDC 서비스 접근",
+        "build": "한국·일본에 분산된 팀별 거점의 공통 IP·VLAN·WAN 연결 기준을 맞추고 한국 IDC 네트워크를 다른 거점과 연결했습니다.",
+        "flow": [
+          "거점별 접속망",
+          "WAN·UDP 터널",
+          "한국 IDC Core",
+          "서버 VLAN"
+        ],
+        "result": "팀 거점 간 통신 및 한국 IDC 서비스 접근을 확인했습니다.",
+        "evidence": [
+          "idc-gns-original.png"
+        ],
+        "note": "팀 공통 연결은 공동 수행했습니다. 다른 거점의 개별 장비 구축은 담당자별 역할로 구분했습니다."
       }
     ]
   }
