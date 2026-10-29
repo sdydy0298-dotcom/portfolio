@@ -311,7 +311,7 @@ const compact = {
       ],
       [
         "쇼핑몰 서버",
-        "Rocky Linux · Ubuntu · Windows · WEB1~3(Nginx) · WAS1~2(Tomcat) · MariaDB DB1 Primary/DB2 Replica"
+        "Rocky Linux · Ubuntu · Windows · WEB1~3(Nginx) · WAS1~2(Tomcat) · MariaDB"
       ],
       [
         "공통 서비스",
