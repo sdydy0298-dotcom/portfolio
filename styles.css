@@ -661,3 +661,27 @@ body.dialog-open { overflow: hidden; }
   .work-case-body { padding: 7px 14px 15px; }
   .work-intro h3 { font-size: 19px; }
 }
+
+/* Large GNS3 proof screenshots: display once per project, full-width. */
+.work-case-body .record-evidence .network-evidence {
+  grid-column: 1 / -1;
+}
+.work-case-body .record-evidence .network-evidence > .topology-image {
+  height: clamp(310px, 45vw, 530px);
+  aspect-ratio: auto;
+  background: #f9fbff;
+}
+.work-case-body .record-evidence .network-evidence .topology-image img {
+  object-fit: contain;
+}
+.proof-slot .proof-title {
+  margin: 18px 0 10px;
+  color: #214d82;
+  font-size: 12px;
+  font-weight: 750;
+}
+@media screen and (max-width: 700px) {
+  .work-case-body .record-evidence .network-evidence > .topology-image {
+    height: clamp(210px, 67vw, 360px);
+  }
+}

@@ -29,9 +29,7 @@ const projectRecords = {
         "title": "보안 경계와 서비스 이중화",
         "why": "서비스 진입 구간과 DB 접근 경계를 분리하고, SLB 한 대의 장애에 대비하도록 구성했습니다.",
         "build": "FW·IPS와 IDS 관측 구간을 배치하고 DB-FW1으로 DB 경계를 분리했습니다. SLB1/2에 HAProxy·Keepalived와 Front·Backend VIP를 구성했습니다.",
-        "images": [
-          "topology-idc.png"
-        ],
+        "images": [],
         "result": "SLB1의 Keepalived를 중지했을 때 SLB2가 Front·Backend VIP를 넘겨받는 것을 확인했습니다.",
         "architecture": "외부 진입 FW와 IPS, DB 구간 방화벽, SLB1·SLB2의 Front/Backend VIP로 서비스 진입 및 장애 대응 구간을 설계했습니다."
       },
@@ -39,9 +37,7 @@ const projectRecords = {
         "title": "공통 인프라와 운영망",
         "why": "이름 조회·메일·시간 동기화·로그 수집을 공통 서비스로 제공하고 관리망을 분리했습니다.",
         "build": "BIND9 DNS·캐시 DNS, Postfix·Dovecot MX1, Chrony NTP1, rsyslog LOG1을 구성했습니다. 관리망에는 Jump Server를 배치했으며 경유 접속·ACL은 추가 검증 범위입니다.",
-        "images": [
-          "topology-idc.png"
-        ],
+        "images": [],
         "result": "Thunderbird에서 MX1 수신을 확인하고 Chrony 시간 동기화 및 rsyslog 중앙 로그 환경을 구성했습니다.",
         "architecture": "INF와 MGMT 영역을 분리해 DNS·메일·NTP·중앙 로그 및 Jump Server를 배치했습니다."
       }
@@ -184,10 +180,8 @@ const projectRecords = {
         "analysis": "초기 3-Tier 구성에서도 서비스는 동작했지만 서버 증설과 역할별 네트워크 확장을 고려하면서 구조를 재검토했습니다. 기존 구조에서 실제 성능 장애를 측정한 것은 아닙니다.",
         "action": "Spine 2대와 역할별 Leaf로 구성하고 OSPF 기반으로 경로를 재설계·구축했습니다.",
         "result": "서버 역할별 확장을 고려한 Spine–Leaf 토폴로지로 변경했습니다. 처리량·지연 개선 수치는 측정하지 않았습니다.",
-        "evidence": [
-          "topology-idc.png",
-          "gns_idc_topology.png"
-        ]
+        "evidence": [],
+        "note": "최종 설계도는 ‘설계 → IDC 네트워크’, 실제 장비 구성도는 ‘구현 → IDC 네트워크 및 서버 구성’에서 확인할 수 있습니다."
       },
       {
         "stage": "implementation",
@@ -219,8 +213,8 @@ const projectRecords = {
         "build": "Spine 2대와 역할별 Leaf를 연결해 OSPF로 경로를 구성했습니다. WEB·WAS·DB·INF·MGMT 영역을 구분하고 Linux 서버를 서비스 역할에 맞게 배치했습니다.",
         "result": "GNS3에서 IDC의 실제 장비 연결 상태와 역할별 서비스망 구성을 확인했습니다. 이 사진 자체는 장비 간 모든 통신 시험의 성공을 의미하지 않습니다.",
         "evidence": [
-          "gns_idc_topology.png",
-          "gns_all_topology.png"
+          "gns_all_topology.png",
+          "gns_idc_topology.png"
         ]
       },
       {
@@ -237,6 +231,7 @@ const projectRecords = {
         ],
         "result": "고객 PC의 IP 할당, 쇼핑몰 메인 화면, 회원가입·로그인 후 사용자명이 표시되는 것을 확인했습니다.",
         "evidence": [
+          "gns_home_topology.png",
           "homepc-dhcp.png",
           "homepc-web.png",
           "homepc-join.png",
@@ -259,7 +254,7 @@ const projectRecords = {
           "gns_ho_topology.png",
           "gns_bo_topology.png"
         ],
-        "note": "실제 IPsec SA 수립과 지사→본사 SSH 연결을 확인한 범위입니다. 모든 거점의 장애 복구까지 검증한 것은 아닙니다.",
+        "note": "IPsec 터널 설정 및 연결 상태, 지사에서 본사 서버로의 SSH 접근을 확인한 범위입니다.",
         "proofGroup": "vpn"
       },
       {
@@ -273,10 +268,8 @@ const projectRecords = {
           "대상 서버"
         ],
         "result": "제공된 원본 사진에서 WAN 허용 정책과 NAT 설정, Jump Server SSH 접속 성공과 외부 고객망 접근 실패를 확인했습니다.",
-        "evidence": [
-          "gns_idc_topology.png"
-        ],
-        "note": "방화벽 규칙·NAT 및 관리 구간의 허용·비허용 SSH 테스트 범위입니다. 모든 포트의 차단을 검증했다는 의미는 아닙니다.",
+        "evidence": [],
+        "note": "WAN 규칙과 NAT 설정, 관리 접속 성공·타임아웃 화면을 비교한 기록입니다. 타임아웃만으로 방화벽 정책이 직접 차단했다고 단정하지 않습니다.",
         "proofGroup": "firewall"
       },
       {
@@ -290,10 +283,8 @@ const projectRecords = {
           "DB1 Primary·DB2 Replica"
         ],
         "result": "SLB1 중지 후 SLB2 VIP 인계와 DB 복제 상태·회원 데이터 일치를 기록으로 확인했습니다.",
-        "evidence": [
-          "gns_idc_topology.png"
-        ],
-        "note": "VIP 인계 로그와 DB Primary–Replica 설정 화면은 현재 사이트에 없어 증빙 보강이 필요합니다."
+        "evidence": [],
+        "note": "VIP 인계 로그와 DB 복제 상태·회원 데이터 비교 원본 캡처는 추가 연결이 필요합니다."
       },
       {
         "title": "DNS·메일·시간·로그 운영 인프라",
@@ -301,9 +292,9 @@ const projectRecords = {
         "build": "NS1에 BIND9 DNS, MX1에 Postfix·Dovecot, NTP1에 Chrony, LOG1에 rsyslog를 구성했습니다. 서비스망의 이름 조회·메일 수신·시간 동기화·중앙 로그 수집 환경을 구축했습니다.",
         "result": "고객 PC에서 메일 수신 화면을 확인했습니다. NTP·로그 수집 결과 화면은 추가로 정리할 자료입니다.",
         "evidence": [
-          "HomePc_MX.png",
-          "gns_idc_topology.png"
-        ]
+          "HomePc_MX.png"
+        ],
+        "note": "현재 메일 수신 화면만 증빙으로 연결되어 있습니다. NTP·중앙 로그 동작 확인 화면은 추가 자료가 필요합니다."
       }
     ]
   },
@@ -332,9 +323,7 @@ const projectRecords = {
         "title": "웹·런처·멀티플레이 서비스",
         "why": "웹 서비스와 게임 실행·접속까지 직접 구현해 구축한 IDC에서 서비스가 동작하는지 확인했습니다.",
         "build": "Nginx–Java WAS–MariaDB를 연동하고 C#/.NET 런처의 버전 조회·게임 ZIP 다운로드·실행을 구현했습니다. Godot 클라이언트와 Linux Dedicated Server로 2인 게임 흐름을 구성했습니다.",
-        "images": [
-          "idc-design-original.png"
-        ],
+        "images": [],
         "decision": "HTTP 기반 웹·API 요청과 UDP 기반 실시간 게임 상태 전송을 역할별 서버로 분리했습니다.",
         "result": "Nginx–Tomcat API 응답과 Linux Dedicated Server의 두 플레이어 접속·준비·경기 시작 단계까지 확인했습니다.",
         "architecture": "Linux 서버의 WEB·WAS·DB와 Godot Dedicated Server를 분리하고, Windows 런처를 통해 게임 파일을 받아 실행하는 이용 경로를 설계했습니다."
@@ -445,10 +434,8 @@ const projectRecords = {
         "analysis": "팀 공통 연결 기준과 한국 IDC의 네트워크·서버 배치를 함께 점검했습니다.",
         "action": "공통 기준을 공유하고 한국 IDC를 구축한 뒤 UDP Tunnel로 거점을 연결하며 통신 경로와 서비스 접근을 함께 점검했습니다.",
         "result": "공통 IP·VLAN·WAN 기준을 맞추고 한국 IDC와 다른 거점의 통신 경로를 점검했습니다. 팀의 공동 작업입니다.",
-        "evidence": [
-          "topology.png",
-          "idc-gns-original.png"
-        ]
+        "evidence": [],
+        "note": "팀 전체 연결 설계도는 ‘설계’, 한국 IDC 실제 GNS3 화면은 ‘구현’에 각각 한 번만 배치했습니다."
       },
       {
         "stage": "implementation",
@@ -458,10 +445,8 @@ const projectRecords = {
         "analysis": "Nginx 설정과 파일 권한을 점검한 뒤 SELinux 컨텍스트를 확인했습니다. 웹 파일에 임시 파일용 보안 타입 user_tmp_t가 적용돼 있었습니다.",
         "action": "웹 콘텐츠에 맞는 httpd_sys_content_t 보안 타입을 설정하고 restorecon으로 적용했습니다. SELinux는 비활성화하지 않았습니다.",
         "result": "403 오류가 사라지고 ALEPH Arena 메인 페이지가 정상 표시되는 것을 확인했습니다.",
-        "evidence": [
-          "web-main-v2.jpg"
-        ],
-        "note": "기존 사진은 해결 후 사이트 화면입니다. 원인 당시의 SELinux 컨텍스트·웹 오류 화면은 추가 자료가 필요합니다."
+        "evidence": [],
+        "note": "해결 후 실제 웹사이트 화면은 ‘구현 → 게임 웹사이트와 API 연동’에서 확인할 수 있습니다. 403 오류 당시 로그·컨텍스트 변경 전후 캡처는 아직 확보되지 않았습니다."
       },
       {
         "stage": "implementation",
@@ -533,9 +518,7 @@ const projectRecords = {
           "서버 VLAN"
         ],
         "result": "팀 거점 간 통신 및 한국 IDC 서비스 접근을 확인했습니다.",
-        "evidence": [
-          "idc-gns-original.png"
-        ],
+        "evidence": [],
         "note": "팀 공통 연결은 공동 수행했습니다. 다른 거점의 개별 장비 구축은 담당자별 역할로 구분했습니다."
       }
     ]

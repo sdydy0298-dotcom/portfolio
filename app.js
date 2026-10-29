@@ -674,7 +674,11 @@ function evidenceFor(project, names = [], kind = 'any') {
     item.url.split('/').pop() === name &&
     (kind === 'any' || (kind === 'design' ? item.kind !== 'implementation' && (project.images || []).indexOf(item) === -1 : kind === 'implementation' ? item.kind === 'implementation' : true))
   )).filter(Boolean);
-  return images.length ? `<div class="gallery record-evidence">${images.map(item => imageFigure(item, kind === 'design')).join('')}</div>` : '';
+  return images.length ? `<div class="gallery record-evidence">${images.map(item => {
+    const isNetwork = item.kind === 'implementation';
+    const figure = imageFigure(item, kind === 'design' || isNetwork);
+    return isNetwork ? figure.replace('class="topology-figure', 'class="topology-figure network-evidence') : figure;
+  }).join('')}</div>` : '';
 }
 function recordFields(fields) {
   return `<dl class="process-fields">${fields.filter(x=>x[1]).map(([label,value])=>
