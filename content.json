@@ -59,17 +59,10 @@
         },
         {
           "url": "/assets/enterprise/proof/vpn-branch-source-ip.png",
-          "title": "지사 PC 및 본사 서버 주소 확인",
-          "caption": "지사 클라이언트와 본사 개발 서버의 IP 정보",
-          "width": 1356,
-          "height": 432
-        },
-        {
-          "url": "/assets/enterprise/proof/vpn-branch-to-hq-ssh.png",
           "title": "지사에서 본사 서버 SSH 접속",
           "caption": "지사 업무망에서 본사 개발 서버로의 SSH 연결",
-          "width": 662,
-          "height": 422
+          "width": 1356,
+          "height": 432
         },
         {
           "url": "/assets/enterprise/proof/fw-wan-rules.png",

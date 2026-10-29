@@ -245,8 +245,7 @@ const projectRecords = {
           "gns_bo_topology.png",
           "vpn-ipsec-connection.png",
           "vpn-ipsec-established.png",
-          "vpn-branch-source-ip.png",
-          "vpn-branch-to-hq-ssh.png"
+          "vpn-branch-source-ip.png"
         ]
       },
       {
